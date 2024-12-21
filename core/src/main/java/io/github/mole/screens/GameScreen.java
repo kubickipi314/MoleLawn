@@ -1,37 +1,29 @@
-package io.github.mole;
+package io.github.mole.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import io.github.mole.presenter.GamePresenter;
 
 /** First screen of the application. Displayed after the application is created. */
-public class FirstScreen implements Screen {
-
-    SpriteBatch batch;
-    Sprite sprite;
-
-    public FirstScreen(){
-        batch = new SpriteBatch();
-        sprite = new Sprite(new Texture("ui/uiskin.png"));
-        sprite.setSize(1000,1000);
-        sprite.setPosition(0,0);
+public class GameScreen implements Screen {
+    private final GamePresenter gamePresenter;
+    public GameScreen(GamePresenter gamePresenter){
+        this.gamePresenter = gamePresenter;
     }
+
     @Override
     public void show() {
-        // Prepare your screen here.
+        Gdx.gl.glClearColor(0.12f, 0.12f, 0.12f, 1);
     }
 
     @Override
-    public void render(float delta) {;
-        batch.begin();
+    public void render(float delta) {
+        gamePresenter.update();
 
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        sprite.draw(batch);
-        batch.end();
+        gamePresenter.render();
     }
 
     @Override
