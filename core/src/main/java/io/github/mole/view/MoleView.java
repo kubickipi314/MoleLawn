@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import io.github.mole.presenter.MoveDirection;
+import io.github.mole.presenter.MoveStyle;
 
 public class MoleView {
     Sprite moleSprite;
@@ -19,5 +21,8 @@ public class MoleView {
 
     public void draw(SpriteBatch batch) {
         moleSprite.draw(batch);
+    }
+
+    public void setAnimationFrames(MoveDirection direction, MoveStyle style) {
     }
 }

@@ -6,15 +6,21 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.mole.view.TileView;
 import io.github.mole.CONST;
 
+import static io.github.mole.presenter.TileType.*;
+
 public class BoardPresenter {
     TileView[][] board;
     private final int height = CONST.BOARD_HEIGHT;
     private final int width = CONST.BOARD_WIDTH;
 
+    Texture dirt;
+    Texture tunnel;
+    Texture grass;
+
     public BoardPresenter(){
-        Texture dirt = new Texture("textures/tiles/grass.png");
-        Texture tunnel = new Texture("textures/tiles/tunnel.png");
-        Texture grass = new Texture("textures/tiles/grass.png");
+        dirt = new Texture("textures/tiles/grass.png");
+        tunnel = new Texture("textures/tiles/tunnel.png");
+        grass = new Texture("textures/tiles/grass.png");
         board = new TileView[height][width];
         for (int i = 0; i<height; i++){
             for (int j = 0; j<width; j++){
@@ -34,5 +40,12 @@ public class BoardPresenter {
                 board[i][j].draw(batch);
             }
         }
+    }
+
+    public void changeTile(BoardPosition destination, TileType tileType) {
+        if (tileType == DIRT)
+            board[CONST.BOARD_HEIGHT-destination.y()-1][destination.x()].setTexture(dirt);
+        if (tileType == TUNNEL)
+            board[CONST.BOARD_HEIGHT-destination.y()-1][destination.x()].setTexture(tunnel);
     }
 }

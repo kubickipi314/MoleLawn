@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import io.github.mole.presenter.MoveDirection;
+import static io.github.mole.presenter.TileType.*;
 
 public class GamePresenter {
     MolePresenter molePresenter;
@@ -23,7 +23,10 @@ public class GamePresenter {
     }
 
     public void update() {
-        handleInput();
+        if (!molePresenter.isActive()){
+            handleInput();
+        }
+        molePresenter.update();
     }
 
     public void render() {
@@ -35,12 +38,21 @@ public class GamePresenter {
     }
 
     private void handleInput(){
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            molePresenter.moveMole(MoveDirection.LEFT);
+        BoardPosition molePosition = molePresenter.getMolePosition();
+        int xOffset = 0;
+        int yOffset = 0;
+        boolean action = false;
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {xOffset--; action = true;}
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {xOffset++; action = true;}
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {yOffset++; action = true;}
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {yOffset--; action = true;}
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {action = true;}
+
+        if (action) {
+            BoardPosition destination = new BoardPosition(molePosition.x() + xOffset, molePosition.y() + yOffset);
+            molePresenter.moveMole(destination, MoveStyle.NORMAL);
+            boardPresenter.changeTile(destination, TUNNEL);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) molePresenter.moveMole(MoveDirection.RIGHT);
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) molePresenter.moveMole(MoveDirection.UP);
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) molePresenter.moveMole(MoveDirection.DOWN);
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) molePresenter.moveMole(MoveDirection.NONE);
+        action = false;
     }
 }
