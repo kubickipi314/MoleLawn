@@ -1,0 +1,10 @@
+package io.github.mole;
+
+public final class CONST {
+    private CONST() {
+        throw new UnsupportedOperationException("This is a constants class and cannot be instantiated");
+    }
+
+    public static final int BOARD_WIDTH = 10;
+    public static final int BOARD_HEIGHT = 5;
+}
