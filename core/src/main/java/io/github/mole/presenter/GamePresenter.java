@@ -9,17 +9,17 @@ import static io.github.mole.presenter.TileType.*;
 public class GamePresenter {
     MolePresenter molePresenter;
     BoardPresenter boardPresenter;
-
     ObjectsPresenter objectsPresenter;
+    BackgroundPresenter backgroundPresenter;
     SpriteBatch batch;
 
     public GamePresenter(){
-
-        batch = new SpriteBatch();
-
         molePresenter = new MolePresenter();
         boardPresenter = new BoardPresenter();
         objectsPresenter = new ObjectsPresenter();
+        backgroundPresenter = new BackgroundPresenter();
+
+        batch = new SpriteBatch();
     }
 
     public void update() {
@@ -53,6 +53,5 @@ public class GamePresenter {
             molePresenter.moveMole(destination, MoveStyle.NORMAL);
             boardPresenter.changeTile(destination, TUNNEL);
         }
-        action = false;
     }
 }

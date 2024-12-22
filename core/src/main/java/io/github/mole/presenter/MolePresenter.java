@@ -3,6 +3,7 @@ package io.github.mole.presenter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import io.github.mole.helpers.MoleTextureLoader;
 import io.github.mole.view.MoleView;
 
 import static io.github.mole.presenter.MoveDirection.*;
@@ -21,6 +22,7 @@ public class MolePresenter implements MolePresenterInterface{
         positionX = 2;
         positionY = 3;
         moleView = new MoleView(calculatePosition(positionX, positionY));
+        moleView.setTexture(NONE);
         isMoving = false;
     }
 
@@ -31,7 +33,7 @@ public class MolePresenter implements MolePresenterInterface{
     @Override
     public void moveMole(BoardPosition destination, MoveStyle style) {
         MoveDirection direction = getDirection(destination);
-        moleView.setAnimationFrames(direction, style);
+        moleView.setTexture(direction);
 
         startMoveAnimation(destination);
     }
@@ -39,8 +41,8 @@ public class MolePresenter implements MolePresenterInterface{
     private MoveDirection getDirection(BoardPosition destination){
         if (destination.x() == positionX - 1) return LEFT;
         if (destination.x() == positionX + 1) return RIGHT;
-        if (destination.y() == positionY + 1) return DOWN;
-        if (destination.y() == positionY - 1) return UP;
+        if (destination.y() == positionY - 1) return DOWN;
+        if (destination.y() == positionY + 1) return UP;
         return NONE;
     }
 
@@ -62,6 +64,7 @@ public class MolePresenter implements MolePresenterInterface{
             updateState();
         }
     }
+
     public void updateMoveAnimation(){
         movementTime += Gdx.graphics.getDeltaTime();
         float animationDuration = 0.5f;
@@ -79,9 +82,7 @@ public class MolePresenter implements MolePresenterInterface{
     }
 
     private void updateState(){
-        //TODO: calculate cuclic state changing to call MoleView if there's a time
     }
-
 
     private Vector2 calculatePosition(int posX, int posY){
         return new Vector2(posX*50 + 50 , posY*50 + 50);

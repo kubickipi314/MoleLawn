@@ -3,35 +3,32 @@ package io.github.mole.presenter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import io.github.mole.helpers.TileTextureLoader;
 import io.github.mole.view.TileView;
 import io.github.mole.CONST;
 
 import static io.github.mole.presenter.TileType.*;
 
 public class BoardPresenter {
+    TileTextureLoader loader;
     TileView[][] board;
     private final int height = CONST.BOARD_HEIGHT;
     private final int width = CONST.BOARD_WIDTH;
-
-    Texture dirt;
-    Texture tunnel;
-    Texture grass;
-
     public BoardPresenter(){
-        dirt = new Texture("textures/tiles/grass.png");
-        tunnel = new Texture("textures/tiles/tunnel.png");
-        grass = new Texture("textures/tiles/grass.png");
+        loader = new TileTextureLoader();
+
         board = new TileView[height][width];
         for (int i = 0; i<height; i++){
             for (int j = 0; j<width; j++){
-                board[i][j] = new TileView(new Vector2(j*50 + 50, (height-i)*50));
-                if (i == 0) board[i][j].setTexture(grass);
+                board[i][j] = new TileView(loader, new Vector2(j*50 + 50, (height-i)*50));
+                if (i == 0) board[i][j].setTexture(GRASS);
+                else board[i][j].setTexture(DIRT);
             }
         }
-        board[1][2].setTexture(tunnel);
-        board[2][2].setTexture(tunnel);
-        board[3][2].setTexture(tunnel);
-        board[3][1].setTexture(tunnel);
+        board[1][2].setTexture(TUNNEL);
+        board[2][2].setTexture(TUNNEL);
+        board[3][2].setTexture(TUNNEL);
+        board[3][1].setTexture(TUNNEL);
     }
 
     public void render(SpriteBatch batch){
@@ -44,8 +41,8 @@ public class BoardPresenter {
 
     public void changeTile(BoardPosition destination, TileType tileType) {
         if (tileType == DIRT)
-            board[CONST.BOARD_HEIGHT-destination.y()-1][destination.x()].setTexture(dirt);
+            board[CONST.BOARD_HEIGHT-destination.y()-1][destination.x()].setTexture(DIRT);
         if (tileType == TUNNEL)
-            board[CONST.BOARD_HEIGHT-destination.y()-1][destination.x()].setTexture(tunnel);
+            board[CONST.BOARD_HEIGHT-destination.y()-1][destination.x()].setTexture(TUNNEL);
     }
 }

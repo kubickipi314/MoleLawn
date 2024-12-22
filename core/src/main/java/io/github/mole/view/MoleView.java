@@ -1,28 +1,34 @@
 package io.github.mole.view;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import io.github.mole.helpers.MoleTextureLoader;
 import io.github.mole.presenter.MoveDirection;
 import io.github.mole.presenter.MoveStyle;
 
+import static io.github.mole.presenter.MoveDirection.*;
+
 public class MoleView {
+    MoleTextureLoader loader;
     Sprite moleSprite;
-    public MoleView(Vector2 position){
-        moleSprite = new Sprite(new Texture("textures/mole/normal_left.png"));
+
+    public MoleView(Vector2 position) {
+        loader = new MoleTextureLoader();
+        moleSprite = new Sprite(loader.getTextures(NONE));
         moleSprite.setPosition(position.x, position.y);
-        moleSprite.setSize(50,50);
+        moleSprite.setSize(50, 50);
     }
 
-    public void setPosition(Vector2 position){
+    public void setPosition(Vector2 position) {
         moleSprite.setPosition(position.x, position.y);
+    }
+
+    public void setTexture(MoveDirection direction) {
+        moleSprite.setTexture(loader.getTextures(direction));
     }
 
     public void draw(SpriteBatch batch) {
         moleSprite.draw(batch);
-    }
-
-    public void setAnimationFrames(MoveDirection direction, MoveStyle style) {
     }
 }
