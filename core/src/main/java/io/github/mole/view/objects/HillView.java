@@ -1,4 +1,4 @@
-package io.github.mole.view;
+package io.github.mole.view.objects;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;

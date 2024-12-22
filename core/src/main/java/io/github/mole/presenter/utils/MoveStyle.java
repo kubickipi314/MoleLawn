@@ -1,7 +1,7 @@
-package io.github.mole.presenter;
+package io.github.mole.presenter.utils;
 
 public enum MoveStyle {
     DIGGING,
-    NORMAL,
+    FREE,
     DYING
 }
