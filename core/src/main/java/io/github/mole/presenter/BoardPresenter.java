@@ -84,9 +84,11 @@ public class BoardPresenter {
 
     public void changeTile(BoardPosition destination, MoveDirection direction, TileType type) {
         TileView tile = board[CONST.BOARD_HEIGHT-destination.y()-1][destination.x()];
-        if (tile.getMotive().equals(DIRT)) {
-            tile.setArisingMotive(direction, type);
-            animatedTiles.add(tile);
-        }
+        tile.setArisingMotive(direction, type);
+        animatedTiles.add(tile);
+    }
+
+    public boolean isTunnel(BoardPosition position) {
+        return board[CONST.BOARD_HEIGHT-position.y()-1][position.x()].getMotive().equals(TUNNEL);
     }
 }
