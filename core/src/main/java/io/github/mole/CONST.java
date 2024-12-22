@@ -5,6 +5,6 @@ public final class CONST {
         throw new UnsupportedOperationException("This is a constants class and cannot be instantiated");
     }
 
-    public static final int BOARD_WIDTH = 10;
-    public static final int BOARD_HEIGHT = 5;
+    public static final int BOARD_WIDTH = 12;
+    public static final int BOARD_HEIGHT = 6;
 }

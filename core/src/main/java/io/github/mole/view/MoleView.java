@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import io.github.mole.helpers.MoleTextureLoader;
 import io.github.mole.presenter.MoveDirection;
-import io.github.mole.presenter.MoveStyle;
 
 import static io.github.mole.presenter.MoveDirection.*;
 

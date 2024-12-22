@@ -11,7 +11,7 @@ public class ObjectsPresenter {
     public ObjectsPresenter(){
         Texture t = new Texture("textures/objects/hill.png");
 
-        hill = new HillView(new Vector2(100,250));
+        hill = new HillView(new Vector2(100,300));
         hill.setTexture(t);
     }
 

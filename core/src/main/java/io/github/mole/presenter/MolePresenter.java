@@ -3,7 +3,6 @@ package io.github.mole.presenter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import io.github.mole.helpers.MoleTextureLoader;
 import io.github.mole.view.MoleView;
 
 import static io.github.mole.presenter.MoveDirection.*;

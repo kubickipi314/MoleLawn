@@ -31,6 +31,7 @@ public class GamePresenter {
 
     public void render() {
         batch.begin();
+        backgroundPresenter.render(batch);
         boardPresenter.render(batch);
         molePresenter.render(batch);
         objectsPresenter.render(batch);
@@ -51,7 +52,7 @@ public class GamePresenter {
         if (action) {
             BoardPosition destination = new BoardPosition(molePosition.x() + xOffset, molePosition.y() + yOffset);
             molePresenter.moveMole(destination, MoveStyle.NORMAL);
-            boardPresenter.changeTile(destination, TUNNEL);
+            if (destination.y() < 4)boardPresenter.changeTile(destination, TUNNEL);
         }
     }
 }
