@@ -10,7 +10,6 @@ import io.github.mole.presenter.utils.TileType;
 
 import java.util.List;
 
-import static io.github.mole.presenter.utils.MoveDirection.*;
 import static io.github.mole.presenter.utils.TileType.*;
 
 public class TileView {
@@ -18,27 +17,43 @@ public class TileView {
     List<Texture> textures;
     Sprite tileSprite;
     TileType actualMotive;
+    boolean isStill;
 
     public TileView(TileTextureLoader loader, Vector2 position){
         this.loader = loader;
         textures = loader.getStillMotive(DIRT);
-        tileSprite = new Sprite(textures.get(0));
+        int randomIndex = (int) (Math.random() * textures.size());
+        tileSprite = new Sprite(textures.get(randomIndex));
         tileSprite.setPosition(position.x, position.y);
         tileSprite.setSize(50,50);
+        isStill = true;
     }
 
     public void setStillMotive(TileType type){
+        isStill = true;
         actualMotive = type;
         textures = loader.getStillMotive(type);
-        tileSprite.setTexture(textures.get(0));
+        int randomIndex = (int) (Math.random() * textures.size());
+        tileSprite.setTexture(textures.get(randomIndex));
     }
 
     public void setStillMotive(){
+        isStill = true;
         textures = loader.getStillMotive(actualMotive);
-        tileSprite.setTexture(textures.get(0));
+        int randomIndex = (int) (Math.random() * textures.size());
+        tileSprite.setTexture(textures.get(randomIndex));
     }
+
+    public void updateStillMotive(){
+        if (isStill){
+            int randomIndex = (int) (Math.random() * textures.size());
+            tileSprite.setTexture(textures.get(randomIndex));
+        }
+    }
+
     public void setArisingMotive(MoveDirection direction, TileType type){
         actualMotive = type;
+        isStill = false;
         textures = loader.getArisingMotive(type,direction);
     }
 

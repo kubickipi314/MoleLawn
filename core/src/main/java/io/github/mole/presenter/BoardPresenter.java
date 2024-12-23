@@ -22,15 +22,17 @@ public class BoardPresenter {
     private final int width = CONST.BOARD_WIDTH;
     boolean isMoving;
     float movementTime;
+    float updateTime;
     List<TileView> animatedTiles;
-    public BoardPresenter(){
+
+    public BoardPresenter() {
         loader = new TileTextureLoader();
         animatedTiles = new ArrayList<>();
 
         board = new TileView[height][width];
-        for (int i = 0; i<height; i++){
-            for (int j = 0; j<width; j++){
-                board[i][j] = new TileView(loader, new Vector2(j*50 + 50, (height-i)*50));
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                board[i][j] = new TileView(loader, new Vector2(j * 50 + 50, (height - i) * 50));
                 if (i == 0) board[i][j].setStillMotive(GRASS);
                 else board[i][j].setStillMotive(DIRT);
             }
@@ -42,22 +44,33 @@ public class BoardPresenter {
 
         isMoving = false;
         movementTime = 0;
+        updateTime = 0;
     }
 
-    public void startAnimation(){
+    public void startAnimation() {
         isMoving = true;
         movementTime = 0;
     }
 
-    public void update(){
-        if (isMoving){
+    public void update() {
+        if (isMoving) {
             updateAnimatedTiles();
         }
-        //updateRandomTile();
+        updateRandomTile();
     }
 
-    private void updateAnimatedTiles(){
-        movementTime+= Gdx.graphics.getDeltaTime();
+    private void updateRandomTile() {
+        updateTime += Gdx.graphics.getDeltaTime();
+        if (updateTime >= 0.2f) {
+            int i = (int) (Math.random() * 5);
+            int j = (int) (Math.random() * 12);
+            board[i][j].updateStillMotive();
+            updateTime = 0;
+        }
+    }
+
+    private void updateAnimatedTiles() {
+        movementTime += Gdx.graphics.getDeltaTime();
         float animationDuration = 0.5f;
         float progress = Math.min(1.0f, movementTime / animationDuration);
 
@@ -67,28 +80,28 @@ public class BoardPresenter {
         for (var tile : animatedTiles) tile.updateArisingMotive(progress);
     }
 
-    private void endAnimation(){
+    private void endAnimation() {
         for (var tile : animatedTiles) tile.setStillMotive();
         animatedTiles.clear();
         isMoving = false;
         movementTime = 0;
     }
 
-    public void render(SpriteBatch batch){
-        for (int i = 0; i<height; i++){
-            for (int j = 0; j<width; j++){
+    public void render(SpriteBatch batch) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
                 board[i][j].draw(batch);
             }
         }
     }
 
     public void changeTile(BoardPosition destination, MoveDirection direction, TileType type) {
-        TileView tile = board[CONST.BOARD_HEIGHT-destination.y()-1][destination.x()];
+        TileView tile = board[CONST.BOARD_HEIGHT - destination.y() - 1][destination.x()];
         tile.setArisingMotive(direction, type);
         animatedTiles.add(tile);
     }
 
     public boolean isTunnel(BoardPosition position) {
-        return board[CONST.BOARD_HEIGHT-position.y()-1][position.x()].getMotive().equals(TUNNEL);
+        return board[CONST.BOARD_HEIGHT - position.y() - 1][position.x()].getMotive().equals(TUNNEL);
     }
 }

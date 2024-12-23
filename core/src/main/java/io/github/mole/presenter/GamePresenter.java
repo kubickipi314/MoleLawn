@@ -87,7 +87,7 @@ public class GamePresenter {
                             boardPresenter.changeTile(new BoardPosition(destination.x(), destination.y() + 1), UP, DIRT);
                         }
                         if (destination.y() - 1 >= 0) {
-                            boardPresenter.changeTile(new BoardPosition(destination.x(), destination.y() - 1), UP, DIRT);
+                            boardPresenter.changeTile(new BoardPosition(destination.x(), destination.y() - 1), DOWN, DIRT);
                         }
                     }
                     if (direction.equals(RIGHT)) {
@@ -95,23 +95,23 @@ public class GamePresenter {
                             boardPresenter.changeTile(new BoardPosition(destination.x(), destination.y() + 1), UP, DIRT);
                         }
                         if (destination.y() - 1 >= 0) {
-                            boardPresenter.changeTile(new BoardPosition(destination.x(), destination.y() - 1), UP, DIRT);
+                            boardPresenter.changeTile(new BoardPosition(destination.x(), destination.y() - 1), DOWN, DIRT);
                         }
                     }
                     if (direction.equals(UP)) {
                         if (destination.x() + 1 < 12) {
-                            boardPresenter.changeTile(new BoardPosition(destination.x()+1, destination.y()), UP, DIRT);
+                            boardPresenter.changeTile(new BoardPosition(destination.x()+1, destination.y()), RIGHT, DIRT);
                         }
                         if (destination.x() - 1 >= 0) {
-                            boardPresenter.changeTile(new BoardPosition(destination.x()-1, destination.y()), UP, DIRT);
+                            boardPresenter.changeTile(new BoardPosition(destination.x()-1, destination.y()), LEFT, DIRT);
                         }
                     }
                     if (direction.equals(DOWN)) {
                         if (destination.x() + 1 < 12) {
-                            boardPresenter.changeTile(new BoardPosition(destination.x()+1, destination.y()), UP, DIRT);
+                            boardPresenter.changeTile(new BoardPosition(destination.x()+1, destination.y()), RIGHT, DIRT);
                         }
                         if (destination.x() - 1 >= 0) {
-                            boardPresenter.changeTile(new BoardPosition(destination.x()-1, destination.y()), UP, DIRT);
+                            boardPresenter.changeTile(new BoardPosition(destination.x()-1, destination.y()), LEFT, DIRT);
                         }
                     }
                 }
