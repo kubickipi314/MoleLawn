@@ -17,15 +17,19 @@ public class MolePresenter implements MolePresenterInterface{
     Vector2 startPosition;
     Vector2 endPosition;
 
+    MoveDirection actualDirection;
+
     boolean isMoving;
     float movementTime;
+    float updatePoint;
 
     public MolePresenter(){
         positionX = 2;
         positionY = 3;
         moleView = new MoleView(calculatePosition(positionX, positionY));
-        moleView.setTexture(NONE);
+        moleView.setNormalMotive(NONE);
         isMoving = false;
+        actualDirection = NONE;
     }
 
     public void render(SpriteBatch batch) {
@@ -34,16 +38,9 @@ public class MolePresenter implements MolePresenterInterface{
 
     @Override
     public void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style) {
-        moleView.setTexture(direction);
+        actualDirection = direction;
+        moleView.setDiggingMotive(actualDirection);
         startMoveAnimation(destination);
-    }
-
-    private MoveDirection getDirection(BoardPosition destination){
-        if (destination.x() == positionX - 1) return LEFT;
-        if (destination.x() == positionX + 1) return RIGHT;
-        if (destination.y() == positionY - 1) return DOWN;
-        if (destination.y() == positionY + 1) return UP;
-        return NONE;
     }
 
     public void startMoveAnimation(BoardPosition destination){
@@ -54,6 +51,7 @@ public class MolePresenter implements MolePresenterInterface{
         positionY = destination.y();
         isMoving = true;
         movementTime = 0;
+        updatePoint = 0.2f;
     }
 
     public void update(){
@@ -73,18 +71,25 @@ public class MolePresenter implements MolePresenterInterface{
         float currentX = startPosition.x + (endPosition.x - startPosition.x) * progress;
         float currentY = startPosition.y + (endPosition.y - startPosition.y) * progress;
         Vector2 currentPosition = new Vector2(currentX, currentY);
+
         moleView.setPosition(currentPosition);
+
+        if (movementTime >= updatePoint){
+            moleView.updateMotive();
+            updatePoint += 0.2f;
+        }
 
         if (progress >= 1.0f) {
             isMoving = false;
             movementTime = 0;
+            moleView.setNormalMotive(actualDirection);
         }
     }
 
     private void updateState(){
         movementTime += Gdx.graphics.getDeltaTime();
         if (movementTime >= 1.0f) {
-            //System.out.println("update Mole texture");
+            moleView.updateMotive();
             movementTime = 0;
         }
     }
