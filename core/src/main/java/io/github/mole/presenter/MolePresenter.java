@@ -3,9 +3,12 @@ package io.github.mole.presenter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import io.github.mole.presenter.utils.BoardPosition;
+import io.github.mole.presenter.utils.MoveDirection;
+import io.github.mole.presenter.utils.MoveStyle;
 import io.github.mole.view.MoleView;
 
-import static io.github.mole.presenter.MoveDirection.*;
+import static io.github.mole.presenter.utils.MoveDirection.*;
 
 public class MolePresenter implements MolePresenterInterface{
     MoleView moleView;
@@ -30,10 +33,8 @@ public class MolePresenter implements MolePresenterInterface{
     }
 
     @Override
-    public void moveMole(BoardPosition destination, MoveStyle style) {
-        MoveDirection direction = getDirection(destination);
+    public void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style) {
         moleView.setTexture(direction);
-
         startMoveAnimation(destination);
     }
 
@@ -76,11 +77,16 @@ public class MolePresenter implements MolePresenterInterface{
 
         if (progress >= 1.0f) {
             isMoving = false;
-
+            movementTime = 0;
         }
     }
 
     private void updateState(){
+        movementTime += Gdx.graphics.getDeltaTime();
+        if (movementTime >= 1.0f) {
+            //System.out.println("update Mole texture");
+            movementTime = 0;
+        }
     }
 
     private Vector2 calculatePosition(int posX, int posY){

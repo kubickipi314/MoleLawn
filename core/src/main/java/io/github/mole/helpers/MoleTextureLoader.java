@@ -1,12 +1,12 @@
 package io.github.mole.helpers;
 
 import com.badlogic.gdx.graphics.Texture;
-import io.github.mole.presenter.MoveDirection;
+import io.github.mole.presenter.utils.MoveDirection;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-import static io.github.mole.presenter.MoveDirection.*;
+import static io.github.mole.presenter.utils.MoveDirection.*;
 
 public class MoleTextureLoader {
     private final Map<MoveDirection, Texture> moves;

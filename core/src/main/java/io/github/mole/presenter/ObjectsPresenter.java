@@ -3,7 +3,7 @@ package io.github.mole.presenter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import io.github.mole.view.HillView;
+import io.github.mole.view.objects.HillView;
 
 public class ObjectsPresenter {
     HillView hill;
