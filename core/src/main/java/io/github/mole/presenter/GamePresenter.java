@@ -3,11 +3,15 @@ package io.github.mole.presenter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import io.github.mole.presenter.specialities.BackgroundPresenter;
+import io.github.mole.presenter.specialities.BoardPresenter;
+import io.github.mole.presenter.specialities.MolePresenter;
+import io.github.mole.presenter.specialities.ObjectsPresenter;
 import io.github.mole.presenter.utils.BoardPosition;
 import io.github.mole.presenter.utils.MoveDirection;
 
 import static io.github.mole.presenter.utils.MoveDirection.*;
-import static io.github.mole.presenter.utils.MoveStyle.FREE;
+import static io.github.mole.presenter.utils.MoveStyle.*;
 import static io.github.mole.presenter.utils.TileType.*;
 
 public class GamePresenter {
@@ -32,6 +36,8 @@ public class GamePresenter {
         }
         molePresenter.update();
         boardPresenter.update();
+        objectsPresenter.update();
+        //foregroundPresenter.update();
     }
 
     public void render() {
@@ -40,6 +46,7 @@ public class GamePresenter {
         boardPresenter.render(batch);
         molePresenter.render(batch);
         objectsPresenter.render(batch);
+        //foregroundPresenter.render(batch);
         batch.end();
     }
 

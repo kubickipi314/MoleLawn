@@ -1,8 +1,9 @@
-package io.github.mole.presenter;
+package io.github.mole.presenter.specialities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import io.github.mole.presenter.MolePresenterInterface;
 import io.github.mole.presenter.utils.BoardPosition;
 import io.github.mole.presenter.utils.MoveDirection;
 import io.github.mole.presenter.utils.MoveStyle;
@@ -10,7 +11,7 @@ import io.github.mole.view.MoleView;
 
 import static io.github.mole.presenter.utils.MoveDirection.*;
 
-public class MolePresenter implements MolePresenterInterface{
+public class MolePresenter implements MolePresenterInterface {
     MoleView moleView;
     int positionX;
     int positionY;

@@ -1,4 +1,4 @@
-package io.github.mole.presenter;
+package io.github.mole.presenter.specialities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

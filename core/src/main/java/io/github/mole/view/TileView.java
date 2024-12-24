@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import io.github.mole.helpers.TileTextureLoader;
+import io.github.mole.presenter.helpers.TileTextureLoader;
 import io.github.mole.presenter.utils.MoveDirection;
 import io.github.mole.presenter.utils.TileType;
 
