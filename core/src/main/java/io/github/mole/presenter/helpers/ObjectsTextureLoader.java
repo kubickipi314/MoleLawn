@@ -3,7 +3,6 @@ package io.github.mole.presenter.helpers;
 import com.badlogic.gdx.graphics.Texture;
 import io.github.mole.presenter.utils.ObjectType;
 
-
 import java.util.EnumMap;
 import java.util.List;
 
@@ -15,7 +14,7 @@ public class ObjectsTextureLoader {
     EnumMap<ObjectType, List<Texture>> insertedObjects;
     EnumMap<ObjectType, List<Texture>> deletedObjects;
 
-    public ObjectsTextureLoader(){
+    public ObjectsTextureLoader() {
         stillObjects = new EnumMap<>(ObjectType.class);
         insertedObjects = new EnumMap<>(ObjectType.class);
         deletedObjects = new EnumMap<>(ObjectType.class);
@@ -56,15 +55,15 @@ public class ObjectsTextureLoader {
             new Texture("textures/objects/worm/delete_2.png")));
     }
 
-    public List<Texture> getSillMotive(ObjectType type){
+    public List<Texture> getSillMotive(ObjectType type) {
         return stillObjects.get(type);
     }
 
-    public List<Texture> getInsertMotive(ObjectType type){
+    public List<Texture> getInsertMotive(ObjectType type) {
         return insertedObjects.get(type);
     }
 
-    public List<Texture> getDeleteMotive(ObjectType type){
+    public List<Texture> getDeleteMotive(ObjectType type) {
         return deletedObjects.get(type);
     }
 }

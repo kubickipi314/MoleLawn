@@ -8,14 +8,16 @@ import io.github.mole.presenter.utils.BoardPosition;
 import io.github.mole.presenter.utils.ObjectType;
 import io.github.mole.view.ObjectView;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ObjectsPresenter {
     ObjectsTextureLoader loader;
     CoordinatesCalculator calculator;
     EnumMap<ObjectType, List<SingleObject>> objects;
 
-    public ObjectsPresenter(){
+    public ObjectsPresenter() {
         objects = new EnumMap<>(ObjectType.class);
         for (var value : ObjectType.values()) {
             objects.put(value, new LinkedList<>());
@@ -24,7 +26,7 @@ public class ObjectsPresenter {
         loader = new ObjectsTextureLoader();
     }
 
-    public void insertObject(ObjectType type, BoardPosition boardPosition){
+    public void insertObject(ObjectType type, BoardPosition boardPosition) {
         Vector2 position = calculator.getObjectCoordinates(type, boardPosition);
         Vector2 size = calculator.getObjectSize(type);
         ObjectView newObjectView = new ObjectView(type, position, size, loader);
@@ -32,26 +34,26 @@ public class ObjectsPresenter {
         objects.get(type).add(newObject);
     }
 
-    public void deleteObject(ObjectType type, BoardPosition boardPosition){
-        for (var object : objects.get(type)){
-            if (object.getPosition().equals(boardPosition)){
+    public void deleteObject(ObjectType type, BoardPosition boardPosition) {
+        for (var object : objects.get(type)) {
+            if (object.getPosition().equals(boardPosition)) {
                 object.delete();
             }
         }
     }
 
     public void update() {
-        for (var list : objects.values()){
+        for (var list : objects.values()) {
             list.removeIf(SingleObject::isDeleted);
-            for (var object : list){
-                    object.update();
+            for (var object : list) {
+                object.update();
             }
         }
     }
 
-    public void render(SpriteBatch batch){
-        for (var list : objects.values()){
-            for (var object : list){
+    public void render(SpriteBatch batch) {
+        for (var list : objects.values()) {
+            for (var object : list) {
                 object.render(batch);
             }
         }

@@ -10,7 +10,7 @@ import io.github.mole.presenter.utils.TileType;
 
 import java.util.List;
 
-import static io.github.mole.presenter.utils.TileType.*;
+import static io.github.mole.presenter.utils.TileType.DIRT;
 
 public class TileView {
     TileTextureLoader loader;
@@ -19,17 +19,17 @@ public class TileView {
     TileType actualMotive;
     boolean isStill;
 
-    public TileView(TileTextureLoader loader, Vector2 position){
+    public TileView(TileTextureLoader loader, Vector2 position) {
         this.loader = loader;
         textures = loader.getStillMotive(DIRT);
         int randomIndex = (int) (Math.random() * textures.size());
         tileSprite = new Sprite(textures.get(randomIndex));
         tileSprite.setPosition(position.x, position.y);
-        tileSprite.setSize(50,50);
+        tileSprite.setSize(50, 50);
         isStill = true;
     }
 
-    public void setStillMotive(TileType type){
+    public void setStillMotive(TileType type) {
         isStill = true;
         actualMotive = type;
         textures = loader.getStillMotive(type);
@@ -37,32 +37,32 @@ public class TileView {
         tileSprite.setTexture(textures.get(randomIndex));
     }
 
-    public void setStillMotive(){
+    public void setStillMotive() {
         isStill = true;
         textures = loader.getStillMotive(actualMotive);
         int randomIndex = (int) (Math.random() * textures.size());
         tileSprite.setTexture(textures.get(randomIndex));
     }
 
-    public void updateStillMotive(){
-        if (isStill){
+    public void updateStillMotive() {
+        if (isStill) {
             int randomIndex = (int) (Math.random() * textures.size());
             tileSprite.setTexture(textures.get(randomIndex));
         }
     }
 
-    public void setArisingMotive(MoveDirection direction, TileType type){
+    public void setArisingMotive(MoveDirection direction, TileType type) {
         actualMotive = type;
         isStill = false;
-        textures = loader.getArisingMotive(type,direction);
+        textures = loader.getArisingMotive(type, direction);
     }
 
-    public void updateArisingMotive(float progress){
+    public void updateArisingMotive(float progress) {
         int motiveSize = textures.size();
-        tileSprite.setTexture(textures.get((int)(motiveSize * progress)));
+        tileSprite.setTexture(textures.get((int) (motiveSize * progress)));
     }
 
-    public TileType getMotive(){
+    public TileType getMotive() {
         return actualMotive;
     }
 

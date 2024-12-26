@@ -3,13 +3,13 @@ package io.github.mole.presenter.specialities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import io.github.mole.CONST;
 import io.github.mole.presenter.helpers.CoordinatesCalculator;
 import io.github.mole.presenter.helpers.TileTextureLoader;
 import io.github.mole.presenter.utils.BoardPosition;
 import io.github.mole.presenter.utils.MoveDirection;
 import io.github.mole.presenter.utils.TileType;
 import io.github.mole.view.TileView;
-import io.github.mole.CONST;
 
 import java.util.ArrayList;
 import java.util.List;

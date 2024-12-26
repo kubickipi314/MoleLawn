@@ -7,6 +7,8 @@ import io.github.mole.presenter.utils.MoveStyle;
 
 public interface MolePresenterInterface {
     void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style);
+
     void update();
+
     void render(SpriteBatch batch);
 }

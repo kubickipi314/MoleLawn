@@ -11,9 +11,10 @@ import io.github.mole.presenter.utils.BoardPosition;
 import io.github.mole.presenter.utils.MoveDirection;
 
 import static io.github.mole.presenter.utils.MoveDirection.*;
-import static io.github.mole.presenter.utils.MoveStyle.*;
-import static io.github.mole.presenter.utils.ObjectType.*;
-import static io.github.mole.presenter.utils.TileType.*;
+import static io.github.mole.presenter.utils.MoveStyle.DIGGING;
+import static io.github.mole.presenter.utils.ObjectType.SPADE;
+import static io.github.mole.presenter.utils.TileType.DIRT;
+import static io.github.mole.presenter.utils.TileType.TUNNEL;
 
 public class GamePresenter {
     MolePresenter molePresenter;
@@ -65,23 +66,19 @@ public class GamePresenter {
             xOffset--;
             action = true;
             direction = LEFT;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             xOffset++;
             action = true;
             direction = RIGHT;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             yOffset++;
             action = true;
             direction = UP;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             yOffset--;
             action = true;
             direction = DOWN;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             action = true;
             direction = NONE;
         }
@@ -101,24 +98,21 @@ public class GamePresenter {
                         if (destination.y() - 1 >= 0) {
                             boardPresenter.changeTile(new BoardPosition(destination.x(), destination.y() - 1), DOWN, DIRT);
                         }
-                    }
-                    if (direction.equals(RIGHT)) {
+                    } else if (direction.equals(RIGHT)) {
                         if (destination.y() + 1 < 5) {
                             boardPresenter.changeTile(new BoardPosition(destination.x(), destination.y() + 1), UP, DIRT);
                         }
                         if (destination.y() - 1 >= 0) {
                             boardPresenter.changeTile(new BoardPosition(destination.x(), destination.y() - 1), DOWN, DIRT);
                         }
-                    }
-                    if (direction.equals(UP)) {
+                    } else if (direction.equals(UP)) {
                         if (destination.x() + 1 < 12) {
                             boardPresenter.changeTile(new BoardPosition(destination.x() + 1, destination.y()), RIGHT, DIRT);
                         }
                         if (destination.x() - 1 >= 0) {
                             boardPresenter.changeTile(new BoardPosition(destination.x() - 1, destination.y()), LEFT, DIRT);
                         }
-                    }
-                    if (direction.equals(DOWN)) {
+                    } else if (direction.equals(DOWN)) {
                         if (destination.x() + 1 < 12) {
                             boardPresenter.changeTile(new BoardPosition(destination.x() + 1, destination.y()), RIGHT, DIRT);
                         }
@@ -133,11 +127,10 @@ public class GamePresenter {
 
             if (true) {
                 if (hillSwitch) {
-                    objectsPresenter.insertObject(WORM, new BoardPosition(2, 1));
+                    objectsPresenter.insertObject(SPADE, new BoardPosition(2, 1));
                     hillSwitch = !hillSwitch;
-                }
-                else {
-                    objectsPresenter.deleteObject(WORM, new BoardPosition(2, 1));
+                } else {
+                    objectsPresenter.deleteObject(SPADE, new BoardPosition(2, 1));
                     hillSwitch = !hillSwitch;
                 }
             }

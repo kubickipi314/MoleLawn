@@ -9,13 +9,13 @@ public class BackgroundPresenter {
     BackgroundView background1;
     BackgroundView background2;
 
-    public BackgroundPresenter(){
+    public BackgroundPresenter() {
         Texture fence = new Texture("textures/background/fence.png");
-        background1 = new BackgroundView(new Vector2(50,300), fence);
-        background2 = new BackgroundView(new Vector2(350,300), fence);
+        background1 = new BackgroundView(new Vector2(50, 300), fence);
+        background2 = new BackgroundView(new Vector2(350, 300), fence);
     }
 
-    public void render(SpriteBatch batch){
+    public void render(SpriteBatch batch) {
         background1.draw(batch);
         background2.draw(batch);
     }

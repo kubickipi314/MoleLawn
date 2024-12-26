@@ -16,35 +16,38 @@ public class ObjectView {
     ObjectType type;
     int actualFrame;
     int frameSwitch;
-    public ObjectView(ObjectType type, Vector2 position, Vector2 size, ObjectsTextureLoader loader){
+
+    public ObjectView(ObjectType type, Vector2 position, Vector2 size, ObjectsTextureLoader loader) {
         textures = loader.getInsertMotive(type);
         objectSprite = new Sprite(textures.get(0));
         objectSprite.setPosition(position.x, position.y);
-        objectSprite.setSize(size.x,size.y);
+        objectSprite.setSize(size.x, size.y);
         this.loader = loader;
         this.type = type;
         frameSwitch = 0;
         actualFrame = 0;
     }
 
-    public void setStillMotive(){
+    public void setStillMotive() {
         actualFrame = 0;
         textures = loader.getSillMotive(type);
         objectSprite.setTexture(textures.get(0));
     }
-    public void setInsertMotive(){
+
+    public void setInsertMotive() {
         actualFrame = 0;
         textures = loader.getInsertMotive(type);
         objectSprite.setTexture(textures.get(0));
     }
-    public void setDeleteMotive(){
+
+    public void setDeleteMotive() {
         textures = loader.getDeleteMotive(type);
         objectSprite.setTexture(textures.get(0));
     }
 
-    public void updateAnimationMotive(float progress){
+    public void updateAnimationMotive(float progress) {
         int motiveSize = textures.size();
-        if (actualFrame != (int)(motiveSize * progress)) {
+        if (actualFrame != (int) (motiveSize * progress)) {
             actualFrame++;
             objectSprite.setTexture(textures.get((int) (motiveSize * progress)));
         }

@@ -10,7 +10,7 @@ import io.github.mole.presenter.utils.MoveDirection;
 
 import java.util.List;
 
-import static io.github.mole.presenter.utils.MoveDirection.*;
+import static io.github.mole.presenter.utils.MoveDirection.NONE;
 
 public class MoleView {
     MoleTextureLoader loader;
