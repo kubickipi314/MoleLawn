@@ -3,6 +3,7 @@ package io.github.mole.presenter.specialities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import io.github.mole.CONST;
 import io.github.mole.presenter.MolePresenterInterface;
 import io.github.mole.presenter.utils.BoardPosition;
 import io.github.mole.presenter.utils.MoveDirection;
@@ -66,7 +67,7 @@ public class MolePresenter implements MolePresenterInterface {
 
     public void updateMoveAnimation(){
         movementTime += Gdx.graphics.getDeltaTime();
-        float animationDuration = 0.5f;
+        float animationDuration = CONST.ANIMATION_DURATION;
         float progress = Math.min(1.0f, movementTime / animationDuration);
 
         float currentX = startPosition.x + (endPosition.x - startPosition.x) * progress;

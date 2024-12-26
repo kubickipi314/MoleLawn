@@ -12,6 +12,7 @@ import io.github.mole.presenter.utils.MoveDirection;
 
 import static io.github.mole.presenter.utils.MoveDirection.*;
 import static io.github.mole.presenter.utils.MoveStyle.*;
+import static io.github.mole.presenter.utils.ObjectType.*;
 import static io.github.mole.presenter.utils.TileType.*;
 
 public class GamePresenter {
@@ -21,6 +22,8 @@ public class GamePresenter {
     BackgroundPresenter backgroundPresenter;
     SpriteBatch batch;
 
+    boolean hillSwitch;
+
     public GamePresenter() {
         molePresenter = new MolePresenter();
         boardPresenter = new BoardPresenter();
@@ -28,6 +31,8 @@ public class GamePresenter {
         backgroundPresenter = new BackgroundPresenter();
 
         batch = new SpriteBatch();
+
+        hillSwitch = true;
     }
 
     public void update() {
@@ -84,7 +89,7 @@ public class GamePresenter {
         if (action) {
             BoardPosition destination = new BoardPosition(molePosition.x() + xOffset, molePosition.y() + yOffset);
 
-            molePresenter.moveMole(destination, direction, FREE);
+            molePresenter.moveMole(destination, direction, DIGGING);
             if (destination.y() < 5) {
                 if (!boardPresenter.isTunnel(destination)) {
                     boardPresenter.changeTile(destination, direction, TUNNEL);
@@ -107,23 +112,34 @@ public class GamePresenter {
                     }
                     if (direction.equals(UP)) {
                         if (destination.x() + 1 < 12) {
-                            boardPresenter.changeTile(new BoardPosition(destination.x()+1, destination.y()), RIGHT, DIRT);
+                            boardPresenter.changeTile(new BoardPosition(destination.x() + 1, destination.y()), RIGHT, DIRT);
                         }
                         if (destination.x() - 1 >= 0) {
-                            boardPresenter.changeTile(new BoardPosition(destination.x()-1, destination.y()), LEFT, DIRT);
+                            boardPresenter.changeTile(new BoardPosition(destination.x() - 1, destination.y()), LEFT, DIRT);
                         }
                     }
                     if (direction.equals(DOWN)) {
                         if (destination.x() + 1 < 12) {
-                            boardPresenter.changeTile(new BoardPosition(destination.x()+1, destination.y()), RIGHT, DIRT);
+                            boardPresenter.changeTile(new BoardPosition(destination.x() + 1, destination.y()), RIGHT, DIRT);
                         }
                         if (destination.x() - 1 >= 0) {
-                            boardPresenter.changeTile(new BoardPosition(destination.x()-1, destination.y()), LEFT, DIRT);
+                            boardPresenter.changeTile(new BoardPosition(destination.x() - 1, destination.y()), LEFT, DIRT);
                         }
                     }
                 }
 
                 boardPresenter.startAnimation();
+            }
+
+            if (true) {
+                if (hillSwitch) {
+                    objectsPresenter.insertObject(WORM, new BoardPosition(2, 1));
+                    hillSwitch = !hillSwitch;
+                }
+                else {
+                    objectsPresenter.deleteObject(WORM, new BoardPosition(2, 1));
+                    hillSwitch = !hillSwitch;
+                }
             }
         }
     }
