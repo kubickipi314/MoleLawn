@@ -29,13 +29,13 @@ public class ObjectView {
     }
 
     public void setStillMotive() {
-        actualFrame = 0;
+        actualFrame = -1;
         textures = loader.getSillMotive(type);
         objectSprite.setTexture(textures.get(0));
     }
 
     public void setInsertMotive() {
-        actualFrame = 0;
+        actualFrame = -1;
         textures = loader.getInsertMotive(type);
         objectSprite.setTexture(textures.get(0));
     }

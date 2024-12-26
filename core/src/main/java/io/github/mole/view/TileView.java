@@ -18,6 +18,7 @@ public class TileView {
     Sprite tileSprite;
     TileType actualMotive;
     boolean isStill;
+    int actualFrame = 0;
 
     public TileView(TileTextureLoader loader, Vector2 position) {
         this.loader = loader;
@@ -27,6 +28,7 @@ public class TileView {
         tileSprite.setPosition(position.x, position.y);
         tileSprite.setSize(50, 50);
         isStill = true;
+        actualFrame = -1;
     }
 
     public void setStillMotive(TileType type) {
@@ -52,6 +54,7 @@ public class TileView {
     }
 
     public void setArisingMotive(MoveDirection direction, TileType type) {
+        actualFrame = -1;
         actualMotive = type;
         isStill = false;
         textures = loader.getArisingMotive(type, direction);
@@ -59,7 +62,10 @@ public class TileView {
 
     public void updateArisingMotive(float progress) {
         int motiveSize = textures.size();
-        tileSprite.setTexture(textures.get((int) (motiveSize * progress)));
+        if (actualFrame != (int) (motiveSize * progress)) {
+            actualFrame++;
+            tileSprite.setTexture(textures.get(actualFrame));
+        }
     }
 
     public TileType getMotive() {
