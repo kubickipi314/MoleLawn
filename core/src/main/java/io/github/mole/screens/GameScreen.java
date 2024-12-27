@@ -5,10 +5,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import io.github.mole.presenter.GamePresenter;
 
-/** First screen of the application. Displayed after the application is created. */
+/**
+ * First screen of the application. Displayed after the application is created.
+ */
 public class GameScreen implements Screen {
     private final GamePresenter gamePresenter;
-    public GameScreen(GamePresenter gamePresenter){
+
+    public GameScreen(GamePresenter gamePresenter) {
         this.gamePresenter = gamePresenter;
     }
 

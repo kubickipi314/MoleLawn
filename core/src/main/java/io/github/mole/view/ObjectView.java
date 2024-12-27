@@ -4,25 +4,61 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import io.github.mole.presenter.utils.BoardPosition;
+import io.github.mole.presenter.helpers.ObjectsTextureLoader;
+import io.github.mole.presenter.utils.ObjectType;
+
+import java.util.List;
 
 public class ObjectView {
-    Sprite tileSprite;
-    public ObjectView(Vector2 position){
-        tileSprite = new Sprite(new Texture("textures/objects/hill.png"));
-        tileSprite.setPosition(position.x, position.y);
-        tileSprite.setSize(150,50);
+    Sprite objectSprite;
+    List<Texture> textures;
+    ObjectsTextureLoader loader;
+    ObjectType type;
+    int actualFrame;
+    int frameSwitch;
+
+    public ObjectView(ObjectType type, Vector2 position, Vector2 size, ObjectsTextureLoader loader) {
+        textures = loader.getInsertMotive(type);
+        objectSprite = new Sprite(textures.get(0));
+        objectSprite.setPosition(position.x, position.y);
+        objectSprite.setSize(size.x, size.y);
+        this.loader = loader;
+        this.type = type;
+        frameSwitch = 0;
+        actualFrame = 0;
     }
 
-    public void setTexture(Texture texture){
-        tileSprite.setTexture(texture);
+    public void setStillMotive() {
+        actualFrame = -1;
+        textures = loader.getSillMotive(type);
+        objectSprite.setTexture(textures.get(0));
+    }
+
+    public void setInsertMotive() {
+        actualFrame = -1;
+        textures = loader.getInsertMotive(type);
+        objectSprite.setTexture(textures.get(0));
+    }
+
+    public void setDeleteMotive() {
+        textures = loader.getDeleteMotive(type);
+        objectSprite.setTexture(textures.get(0));
+    }
+
+    public void updateAnimationMotive(float progress) {
+        int motiveSize = textures.size();
+        if (actualFrame != (int) (motiveSize * progress)) {
+            actualFrame++;
+            objectSprite.setTexture(textures.get((int) (motiveSize * progress)));
+        }
+    }
+
+    public void updateMotive() {
+        frameSwitch = (frameSwitch + 1) % textures.size();
+        objectSprite.setTexture(textures.get(frameSwitch));
     }
 
     public void draw(SpriteBatch batch) {
-        tileSprite.draw(batch);
-    }
-
-    public BoardPosition getPosition() {
-        return null;
+        objectSprite.draw(batch);
     }
 }

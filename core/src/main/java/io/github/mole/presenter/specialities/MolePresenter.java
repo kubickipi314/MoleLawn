@@ -3,13 +3,14 @@ package io.github.mole.presenter.specialities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import io.github.mole.CONST;
 import io.github.mole.presenter.MolePresenterInterface;
 import io.github.mole.presenter.utils.BoardPosition;
 import io.github.mole.presenter.utils.MoveDirection;
 import io.github.mole.presenter.utils.MoveStyle;
 import io.github.mole.view.MoleView;
 
-import static io.github.mole.presenter.utils.MoveDirection.*;
+import static io.github.mole.presenter.utils.MoveDirection.NONE;
 
 public class MolePresenter implements MolePresenterInterface {
     MoleView moleView;
@@ -24,7 +25,7 @@ public class MolePresenter implements MolePresenterInterface {
     float movementTime;
     float updatePoint;
 
-    public MolePresenter(){
+    public MolePresenter() {
         positionX = 2;
         positionY = 3;
         moleView = new MoleView(calculatePosition(positionX, positionY));
@@ -44,7 +45,7 @@ public class MolePresenter implements MolePresenterInterface {
         startMoveAnimation(destination);
     }
 
-    public void startMoveAnimation(BoardPosition destination){
+    public void startMoveAnimation(BoardPosition destination) {
         startPosition = calculatePosition(positionX, positionY);
         endPosition = calculatePosition(destination.x(), destination.y());
 
@@ -55,18 +56,17 @@ public class MolePresenter implements MolePresenterInterface {
         updatePoint = 0.2f;
     }
 
-    public void update(){
-        if (isMoving){
+    public void update() {
+        if (isMoving) {
             updateMoveAnimation();
-        }
-        else {
+        } else {
             updateState();
         }
     }
 
-    public void updateMoveAnimation(){
+    public void updateMoveAnimation() {
         movementTime += Gdx.graphics.getDeltaTime();
-        float animationDuration = 0.5f;
+        float animationDuration = CONST.ANIMATION_DURATION;
         float progress = Math.min(1.0f, movementTime / animationDuration);
 
         float currentX = startPosition.x + (endPosition.x - startPosition.x) * progress;
@@ -75,7 +75,7 @@ public class MolePresenter implements MolePresenterInterface {
 
         moleView.setPosition(currentPosition);
 
-        if (movementTime >= updatePoint){
+        if (movementTime >= updatePoint) {
             moleView.updateMotive();
             updatePoint += 0.2f;
         }
@@ -87,7 +87,7 @@ public class MolePresenter implements MolePresenterInterface {
         }
     }
 
-    private void updateState(){
+    private void updateState() {
         movementTime += Gdx.graphics.getDeltaTime();
         if (movementTime >= 1.0f) {
             moleView.updateMotive();
@@ -95,15 +95,15 @@ public class MolePresenter implements MolePresenterInterface {
         }
     }
 
-    private Vector2 calculatePosition(int posX, int posY){
-        return new Vector2(posX*50 + 50 , posY*50 + 50);
+    private Vector2 calculatePosition(int posX, int posY) {
+        return new Vector2(posX * 50 + 50, posY * 50 + 50);
     }
 
-    public BoardPosition getMolePosition(){
-        return new BoardPosition(positionX,positionY);
+    public BoardPosition getMolePosition() {
+        return new BoardPosition(positionX, positionY);
     }
 
-    public boolean isActive(){
+    public boolean isActive() {
         return isMoving;
     }
 

@@ -3,12 +3,13 @@ package io.github.mole.presenter.specialities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import io.github.mole.CONST;
+import io.github.mole.presenter.helpers.CoordinatesCalculator;
 import io.github.mole.presenter.helpers.TileTextureLoader;
 import io.github.mole.presenter.utils.BoardPosition;
 import io.github.mole.presenter.utils.MoveDirection;
 import io.github.mole.presenter.utils.TileType;
 import io.github.mole.view.TileView;
-import io.github.mole.CONST;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 import static io.github.mole.presenter.utils.TileType.*;
 
 public class BoardPresenter {
+    CoordinatesCalculator calculator;
     TileTextureLoader loader;
     TileView[][] board;
     private final int height = CONST.BOARD_HEIGHT;
@@ -26,13 +28,15 @@ public class BoardPresenter {
     List<TileView> animatedTiles;
 
     public BoardPresenter() {
+        calculator = new CoordinatesCalculator();
         loader = new TileTextureLoader();
         animatedTiles = new ArrayList<>();
 
         board = new TileView[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                board[i][j] = new TileView(loader, new Vector2(j * 50 + 50, (height - i) * 50));
+                Vector2 position = calculator.getCoordinates(j, i);
+                board[i][j] = new TileView(loader, position);
                 if (i == 0) board[i][j].setStillMotive(GRASS);
                 else board[i][j].setStillMotive(DIRT);
             }
@@ -61,7 +65,7 @@ public class BoardPresenter {
 
     private void updateRandomTile() {
         updateTime += Gdx.graphics.getDeltaTime();
-        if (updateTime >= 0.2f) {
+        if (updateTime >= 0.5f) {
             int i = (int) (Math.random() * 5);
             int j = (int) (Math.random() * 12);
             board[i][j].updateStillMotive();
@@ -71,7 +75,7 @@ public class BoardPresenter {
 
     private void updateAnimatedTiles() {
         movementTime += Gdx.graphics.getDeltaTime();
-        float animationDuration = 0.5f;
+        float animationDuration = CONST.ANIMATION_DURATION;
         float progress = Math.min(1.0f, movementTime / animationDuration);
 
         if (progress >= 1.0f)
