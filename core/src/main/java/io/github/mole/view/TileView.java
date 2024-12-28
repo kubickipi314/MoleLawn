@@ -18,7 +18,7 @@ public class TileView {
     Sprite tileSprite;
     TileType actualMotive;
     boolean isStill;
-    int actualFrame = 0;
+    int actualFrame;
 
     public TileView(TileTextureLoader loader, Vector2 position) {
         this.loader = loader;

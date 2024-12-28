@@ -11,10 +11,9 @@ import io.github.mole.presenter.utils.BoardPosition;
 import io.github.mole.presenter.utils.MoveDirection;
 
 import static io.github.mole.presenter.utils.MoveDirection.*;
-import static io.github.mole.presenter.utils.MoveStyle.DIGGING;
-import static io.github.mole.presenter.utils.ObjectType.SPADE;
-import static io.github.mole.presenter.utils.TileType.DIRT;
-import static io.github.mole.presenter.utils.TileType.TUNNEL;
+import static io.github.mole.presenter.utils.MoveStyle.*;
+import static io.github.mole.presenter.utils.ObjectType.*;
+import static io.github.mole.presenter.utils.TileType.*;
 
 public class GamePresenter {
     MolePresenter molePresenter;
@@ -80,7 +79,6 @@ public class GamePresenter {
             direction = DOWN;
         } else if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             action = true;
-            direction = NONE;
         }
 
         if (action) {
@@ -125,12 +123,12 @@ public class GamePresenter {
                 boardPresenter.startAnimation();
             }
 
-            if (true) {
+            if (direction.equals(UP)) {
                 if (hillSwitch) {
-                    objectsPresenter.insertObject(SPADE, new BoardPosition(2, 1));
+                    objectsPresenter.insertObject(HILL, new BoardPosition(2, 0));
                     hillSwitch = !hillSwitch;
                 } else {
-                    objectsPresenter.deleteObject(SPADE, new BoardPosition(2, 1));
+                    objectsPresenter.deleteObject(HILL, new BoardPosition(2, 0));
                     hillSwitch = !hillSwitch;
                 }
             }

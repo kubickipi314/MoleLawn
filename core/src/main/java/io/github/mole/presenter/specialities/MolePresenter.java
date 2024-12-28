@@ -89,7 +89,7 @@ public class MolePresenter implements MolePresenterInterface {
 
     private void updateState() {
         movementTime += Gdx.graphics.getDeltaTime();
-        if (movementTime >= 1.0f) {
+        if (movementTime >= 0.9f) {
             moleView.updateMotive();
             movementTime = 0;
         }
