@@ -1,14 +1,14 @@
 package io.github.mole.presenter.helpers;
 
 import com.badlogic.gdx.graphics.Texture;
-import io.github.mole.presenter.utils.MoveDirection;
-import io.github.mole.presenter.utils.TileType;
+import io.github.mole.utils.MoveDirection;
+import io.github.mole.utils.TileType;
 
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.github.mole.presenter.utils.TileType.*;
+import static io.github.mole.utils.TileType.*;
 
 public class TileTextureLoader {
     private final Map<TileType, List<Texture>> stillTiles;
@@ -26,7 +26,7 @@ public class TileTextureLoader {
         stillTiles.put(TUNNEL, List.of(new Texture("textures/tiles/tunnel/tunnel_0.png"),
             new Texture("textures/tiles/tunnel/tunnel_1.png"),
             new Texture("textures/tiles/tunnel/tunnel_2.png")));
-        stillTiles.put(GRASS, List.of(new Texture("textures/tiles/grass.png")));
+        stillTiles.put(AIR, List.of(new Texture("textures/tiles/grass.png")));
 
         leftArisingTiles = new EnumMap<>(TileType.class);
         leftArisingTiles.put(DIRT, List.of(new Texture("textures/tiles/dirt/dirt_left_0.png"),
@@ -37,7 +37,7 @@ public class TileTextureLoader {
             new Texture("textures/tiles/tunnel/tunnel_left_1.png"),
             new Texture("textures/tiles/tunnel/tunnel_left_2.png"),
             new Texture("textures/tiles/tunnel/tunnel_left_3.png")));
-        leftArisingTiles.put(GRASS, List.of(new Texture("textures/tiles/grass.png")));
+        leftArisingTiles.put(AIR, List.of(new Texture("textures/tiles/grass.png")));
 
         rightArisingTiles = new EnumMap<>(TileType.class);
         rightArisingTiles.put(DIRT, List.of(new Texture("textures/tiles/dirt/dirt_right_0.png"),
@@ -48,7 +48,7 @@ public class TileTextureLoader {
             new Texture("textures/tiles/tunnel/tunnel_right_1.png"),
             new Texture("textures/tiles/tunnel/tunnel_right_2.png"),
             new Texture("textures/tiles/tunnel/tunnel_right_3.png")));
-        rightArisingTiles.put(GRASS, List.of(new Texture("textures/tiles/grass.png")));
+        rightArisingTiles.put(AIR, List.of(new Texture("textures/tiles/grass.png")));
 
         upArisingTiles = new EnumMap<>(TileType.class);
         upArisingTiles.put(DIRT, List.of(new Texture("textures/tiles/dirt/dirt_up_0.png"),
@@ -59,7 +59,7 @@ public class TileTextureLoader {
             new Texture("textures/tiles/tunnel/tunnel_up_1.png"),
             new Texture("textures/tiles/tunnel/tunnel_up_2.png"),
             new Texture("textures/tiles/tunnel/tunnel_up_3.png")));
-        upArisingTiles.put(GRASS, List.of(new Texture("textures/tiles/grass.png")));
+        upArisingTiles.put(AIR, List.of(new Texture("textures/tiles/grass.png")));
 
         downArisingTiles = new EnumMap<>(TileType.class);
         downArisingTiles.put(DIRT, List.of(new Texture("textures/tiles/dirt/dirt_down_0.png"),
@@ -70,7 +70,7 @@ public class TileTextureLoader {
             new Texture("textures/tiles/tunnel/tunnel_down_1.png"),
             new Texture("textures/tiles/tunnel/tunnel_down_2.png"),
             new Texture("textures/tiles/tunnel/tunnel_down_3.png")));
-        downArisingTiles.put(GRASS, List.of(new Texture("textures/tiles/grass.png")));
+        downArisingTiles.put(AIR, List.of(new Texture("textures/tiles/grass.png")));
     }
 
     public List<Texture> getStillMotive(TileType type) {

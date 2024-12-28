@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import io.github.mole.presenter.helpers.ObjectsTextureLoader;
-import io.github.mole.presenter.utils.ObjectType;
+import io.github.mole.utils.ObjectType;
 
 import java.util.List;
 

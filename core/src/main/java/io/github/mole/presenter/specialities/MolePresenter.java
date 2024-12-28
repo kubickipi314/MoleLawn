@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import io.github.mole.CONST;
 import io.github.mole.presenter.MolePresenterInterface;
-import io.github.mole.presenter.utils.BoardPosition;
-import io.github.mole.presenter.utils.MoveDirection;
-import io.github.mole.presenter.utils.MoveStyle;
+import io.github.mole.utils.BoardPosition;
+import io.github.mole.utils.MoveDirection;
+import io.github.mole.utils.MoveStyle;
 import io.github.mole.view.MoleView;
 
-import static io.github.mole.presenter.utils.MoveDirection.NONE;
+import static io.github.mole.utils.MoveDirection.NONE;
 
 public class MolePresenter implements MolePresenterInterface {
     MoleView moleView;
@@ -26,12 +26,16 @@ public class MolePresenter implements MolePresenterInterface {
     float updatePoint;
 
     public MolePresenter() {
-        positionX = 2;
-        positionY = 3;
-        moleView = new MoleView(calculatePosition(positionX, positionY));
+        moleView = new MoleView();
         moleView.setNormalMotive(NONE);
         isMoving = false;
         actualDirection = NONE;
+    }
+
+    public void setMolePosition(BoardPosition position) {
+        positionX = position.x();
+        positionY = position.y();
+        moleView.setPosition(calculatePosition(positionX, positionY));
     }
 
     public void render(SpriteBatch batch) {
@@ -97,10 +101,6 @@ public class MolePresenter implements MolePresenterInterface {
 
     private Vector2 calculatePosition(int posX, int posY) {
         return new Vector2(posX * 50 + 50, posY * 50 + 50);
-    }
-
-    public BoardPosition getMolePosition() {
-        return new BoardPosition(positionX, positionY);
     }
 
     public boolean isActive() {

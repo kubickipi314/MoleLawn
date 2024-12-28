@@ -6,15 +6,13 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.mole.CONST;
 import io.github.mole.presenter.helpers.CoordinatesCalculator;
 import io.github.mole.presenter.helpers.TileTextureLoader;
-import io.github.mole.presenter.utils.BoardPosition;
-import io.github.mole.presenter.utils.MoveDirection;
-import io.github.mole.presenter.utils.TileType;
+import io.github.mole.utils.BoardPosition;
+import io.github.mole.utils.MoveDirection;
+import io.github.mole.utils.TileType;
 import io.github.mole.view.TileView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static io.github.mole.presenter.utils.TileType.*;
 
 public class BoardPresenter {
     CoordinatesCalculator calculator;
@@ -37,23 +35,12 @@ public class BoardPresenter {
             for (int j = 0; j < width; j++) {
                 Vector2 position = calculator.getCoordinates(j, i);
                 board[i][j] = new TileView(loader, position);
-                if (i == 0) board[i][j].setStillMotive(GRASS);
-                else board[i][j].setStillMotive(DIRT);
             }
         }
-        board[1][2].setStillMotive(TUNNEL);
-        board[2][2].setStillMotive(TUNNEL);
-        board[3][2].setStillMotive(TUNNEL);
-        board[3][1].setStillMotive(TUNNEL);
 
         isMoving = false;
         movementTime = 0;
         updateTime = 0;
-    }
-
-    public void startAnimation() {
-        isMoving = true;
-        movementTime = 0;
     }
 
     public void update() {
@@ -90,6 +77,16 @@ public class BoardPresenter {
         isMoving = false;
         movementTime = 0;
     }
+    public void changeTile(BoardPosition destination, MoveDirection direction, TileType type) {
+        TileView tile = board[CONST.BOARD_HEIGHT - destination.y() - 1][destination.x()];
+        tile.setArisingMotive(direction, type);
+        animatedTiles.add(tile);
+    }
+
+    public void setTile(BoardPosition boardPosition, TileType type) {
+        int x = boardPosition.x(), y = boardPosition.y();
+        board[y][x].setStillMotive(type);
+    }
 
     public void render(SpriteBatch batch) {
         for (int i = 0; i < height; i++) {
@@ -99,13 +96,4 @@ public class BoardPresenter {
         }
     }
 
-    public void changeTile(BoardPosition destination, MoveDirection direction, TileType type) {
-        TileView tile = board[CONST.BOARD_HEIGHT - destination.y() - 1][destination.x()];
-        tile.setArisingMotive(direction, type);
-        animatedTiles.add(tile);
-    }
-
-    public boolean isTunnel(BoardPosition position) {
-        return board[CONST.BOARD_HEIGHT - position.y() - 1][position.x()].getMotive().equals(TUNNEL);
-    }
 }

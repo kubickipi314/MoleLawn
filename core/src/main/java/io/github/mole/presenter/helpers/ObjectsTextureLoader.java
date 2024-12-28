@@ -1,12 +1,12 @@
 package io.github.mole.presenter.helpers;
 
 import com.badlogic.gdx.graphics.Texture;
-import io.github.mole.presenter.utils.ObjectType;
+import io.github.mole.utils.ObjectType;
 
 import java.util.EnumMap;
 import java.util.List;
 
-import static io.github.mole.presenter.utils.ObjectType.*;
+import static io.github.mole.utils.ObjectType.*;
 
 public class ObjectsTextureLoader {
 
