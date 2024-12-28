@@ -30,6 +30,16 @@ public class ObjectsTextureLoader {
             new Texture("textures/objects/hill/delete_2.png"),
             new Texture("textures/objects/hill/delete_3.png")));
 
+        stillObjects.put(CANAL, List.of(new Texture("textures/objects/canal/still_0.png"),
+            new Texture("textures/objects/canal/still_1.png")));
+        insertedObjects.put(CANAL, List.of(new Texture("textures/objects/canal/insert_0.png"),
+            new Texture("textures/objects/canal/insert_1.png"),
+            new Texture("textures/objects/canal/insert_2.png"),
+            new Texture("textures/objects/canal/insert_3.png"),
+            new Texture("textures/objects/canal/insert_4.png")));
+        deletedObjects.put(CANAL, List.of(new Texture("textures/objects/canal/delete_0.png"),
+            new Texture("textures/objects/canal/delete_1.png")));
+
         stillObjects.put(SPADE, List.of(new Texture("textures/objects/spade/still_0.png"),
             new Texture("textures/objects/spade/still_1.png")));
         insertedObjects.put(SPADE, List.of(new Texture("textures/objects/spade/delete_5.png"),

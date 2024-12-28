@@ -14,6 +14,8 @@ import io.github.mole.view.TileView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.github.mole.CONST.ONE;
+
 public class BoardPresenter {
     CoordinatesCalculator calculator;
     TileTextureLoader loader;
@@ -41,6 +43,11 @@ public class BoardPresenter {
         isMoving = false;
         movementTime = 0;
         updateTime = 0;
+    }
+
+    public void startAnimation(){
+        isMoving = true;
+        movementTime = 0;
     }
 
     public void update() {
@@ -88,10 +95,12 @@ public class BoardPresenter {
         board[y][x].setStillMotive(type);
     }
 
-    public void render(SpriteBatch batch) {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                board[i][j].draw(batch);
+    public void render(SpriteBatch batch, int stageNumber) {
+        if (stageNumber == ONE) {
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    board[i][j].draw(batch);
+                }
             }
         }
     }

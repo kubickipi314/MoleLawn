@@ -10,9 +10,10 @@ import io.github.mole.utils.MoveDirection;
 import io.github.mole.utils.MoveStyle;
 import io.github.mole.view.MoleView;
 
+import static io.github.mole.CONST.ONE;
 import static io.github.mole.utils.MoveDirection.NONE;
 
-public class MolePresenter implements MolePresenterInterface {
+public class MolePresenter {
     MoleView moleView;
     int positionX;
     int positionY;
@@ -38,11 +39,6 @@ public class MolePresenter implements MolePresenterInterface {
         moleView.setPosition(calculatePosition(positionX, positionY));
     }
 
-    public void render(SpriteBatch batch) {
-        moleView.draw(batch);
-    }
-
-    @Override
     public void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style) {
         actualDirection = direction;
         moleView.setDiggingMotive(actualDirection);
@@ -107,4 +103,7 @@ public class MolePresenter implements MolePresenterInterface {
         return isMoving;
     }
 
+    public void render(SpriteBatch batch, int stageNumber) {
+        if (stageNumber == ONE) moleView.draw(batch);
+    }
 }

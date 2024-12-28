@@ -12,6 +12,8 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import static io.github.mole.CONST.ONE;
+
 public class ObjectsPresenter {
     ObjectsTextureLoader loader;
     CoordinatesCalculator calculator;
@@ -51,10 +53,12 @@ public class ObjectsPresenter {
         }
     }
 
-    public void render(SpriteBatch batch) {
-        for (var list : objects.values()) {
-            for (var object : list) {
-                object.render(batch);
+    public void render(SpriteBatch batch, int stageNumber) {
+        if (stageNumber == ONE){
+            for (var list : objects.values()) {
+                for (var object : list) {
+                    object.render(batch);
+                }
             }
         }
     }

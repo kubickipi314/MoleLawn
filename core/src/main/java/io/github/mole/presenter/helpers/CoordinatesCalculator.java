@@ -38,7 +38,7 @@ public class CoordinatesCalculator {
 
     public Vector2 getObjectCoordinates(ObjectType type, BoardPosition boardPosition) {
         return switch (type) {
-            case HILL, CANAL -> getCoordinates(boardPosition.x() - 1, boardPosition.y());
+            case HILL, CANAL -> getCoordinates(boardPosition.x() - 1, 0);
             default -> getCoordinates(boardPosition);
         };
     }

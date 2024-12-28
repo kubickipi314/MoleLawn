@@ -11,6 +11,8 @@ import io.github.mole.presenter.specialities.MolePresenter;
 import io.github.mole.presenter.specialities.ObjectsPresenter;
 import io.github.mole.utils.*;
 
+import static io.github.mole.CONST.ONE;
+import static io.github.mole.CONST.TWO;
 import static io.github.mole.utils.MoveDirection.*;
 
 public class GamePresenter implements GamePresentable {
@@ -19,8 +21,9 @@ public class GamePresenter implements GamePresentable {
     MolePresenter molePresenter;
     BoardPresenter boardPresenter;
     ObjectsPresenter objectsPresenter;
-    BackgroundPresenter backgroundPresenter;
+    BackgroundPresenter sightPresenter;
     SpriteBatch batch;
+
 
     public GamePresenter(GameControllable controllable) {
         this.controllerInput = controllable;
@@ -28,7 +31,7 @@ public class GamePresenter implements GamePresentable {
         molePresenter = new MolePresenter();
         boardPresenter = new BoardPresenter();
         objectsPresenter = new ObjectsPresenter();
-        backgroundPresenter = new BackgroundPresenter();
+        sightPresenter = new BackgroundPresenter();
 
         batch = new SpriteBatch();
     }
@@ -44,19 +47,23 @@ public class GamePresenter implements GamePresentable {
 
     public void render() {
         batch.begin();
-        backgroundPresenter.render(batch);
-        boardPresenter.render(batch);
-        molePresenter.render(batch);
-        objectsPresenter.render(batch);
+        sightPresenter.render(batch, TWO);
+        boardPresenter.render(batch, ONE);
+        molePresenter.render(batch, ONE);
+        objectsPresenter.render(batch, ONE);
+        sightPresenter.render(batch, ONE);
+
         batch.end();
     }
 
     public void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style) {
         molePresenter.moveMole(destination, direction, style);
+        boardPresenter.startAnimation();
     }
 
     public void changeTile(BoardPosition position, MoveDirection direction, TileType type){
         boardPresenter.changeTile(position, direction, type);
+        System.out.println("hey");
     }
 
     public void insertObject(ObjectType type, BoardPosition position){
