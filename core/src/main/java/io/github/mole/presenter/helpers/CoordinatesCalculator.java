@@ -2,8 +2,8 @@ package io.github.mole.presenter.helpers;
 
 import com.badlogic.gdx.math.Vector2;
 import io.github.mole.CONST;
-import io.github.mole.presenter.utils.BoardPosition;
-import io.github.mole.presenter.utils.ObjectType;
+import io.github.mole.utils.BoardPosition;
+import io.github.mole.utils.ObjectType;
 
 public class CoordinatesCalculator {
     final static float tileSize = 50;
@@ -38,7 +38,7 @@ public class CoordinatesCalculator {
 
     public Vector2 getObjectCoordinates(ObjectType type, BoardPosition boardPosition) {
         return switch (type) {
-            case HILL, CANAL -> getCoordinates(boardPosition.x() - 1, boardPosition.y());
+            case HILL, CANAL -> getCoordinates(boardPosition.x() - 1, 0);
             default -> getCoordinates(boardPosition);
         };
     }

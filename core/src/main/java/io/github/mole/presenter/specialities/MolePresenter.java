@@ -5,14 +5,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import io.github.mole.CONST;
 import io.github.mole.presenter.MolePresenterInterface;
-import io.github.mole.presenter.utils.BoardPosition;
-import io.github.mole.presenter.utils.MoveDirection;
-import io.github.mole.presenter.utils.MoveStyle;
+import io.github.mole.utils.BoardPosition;
+import io.github.mole.utils.MoveDirection;
+import io.github.mole.utils.MoveStyle;
 import io.github.mole.view.MoleView;
 
-import static io.github.mole.presenter.utils.MoveDirection.NONE;
+import static io.github.mole.CONST.ONE;
+import static io.github.mole.utils.MoveDirection.NONE;
 
-public class MolePresenter implements MolePresenterInterface {
+public class MolePresenter {
     MoleView moleView;
     int positionX;
     int positionY;
@@ -26,19 +27,18 @@ public class MolePresenter implements MolePresenterInterface {
     float updatePoint;
 
     public MolePresenter() {
-        positionX = 2;
-        positionY = 3;
-        moleView = new MoleView(calculatePosition(positionX, positionY));
+        moleView = new MoleView();
         moleView.setNormalMotive(NONE);
         isMoving = false;
         actualDirection = NONE;
     }
 
-    public void render(SpriteBatch batch) {
-        moleView.draw(batch);
+    public void setMolePosition(BoardPosition position) {
+        positionX = position.x();
+        positionY = position.y();
+        moleView.setPosition(calculatePosition(positionX, positionY));
     }
 
-    @Override
     public void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style) {
         actualDirection = direction;
         moleView.setDiggingMotive(actualDirection);
@@ -89,7 +89,7 @@ public class MolePresenter implements MolePresenterInterface {
 
     private void updateState() {
         movementTime += Gdx.graphics.getDeltaTime();
-        if (movementTime >= 1.0f) {
+        if (movementTime >= 0.9f) {
             moleView.updateMotive();
             movementTime = 0;
         }
@@ -99,12 +99,11 @@ public class MolePresenter implements MolePresenterInterface {
         return new Vector2(posX * 50 + 50, posY * 50 + 50);
     }
 
-    public BoardPosition getMolePosition() {
-        return new BoardPosition(positionX, positionY);
-    }
-
     public boolean isActive() {
         return isMoving;
     }
 
+    public void render(SpriteBatch batch, int stageNumber) {
+        if (stageNumber == ONE) moleView.draw(batch);
+    }
 }

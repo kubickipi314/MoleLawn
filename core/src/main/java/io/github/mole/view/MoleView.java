@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import io.github.mole.presenter.helpers.CoordinatesCalculator;
 import io.github.mole.presenter.helpers.MoleTextureLoader;
-import io.github.mole.presenter.utils.MoveDirection;
+import io.github.mole.utils.MoveDirection;
 
 import java.util.List;
 
-import static io.github.mole.presenter.utils.MoveDirection.NONE;
+import static io.github.mole.utils.MoveDirection.NONE;
 
 public class MoleView {
     MoleTextureLoader loader;
@@ -18,11 +18,10 @@ public class MoleView {
     List<Texture> textures;
     int frameSwitch;
 
-    public MoleView(Vector2 position) {
+    public MoleView() {
         loader = new MoleTextureLoader();
         textures = loader.getNormalMotive(NONE);
         moleSprite = new Sprite(textures.get(0));
-        moleSprite.setPosition(position.x, position.y);
         CoordinatesCalculator calculator = new CoordinatesCalculator();
         Vector2 size = calculator.getMoleSize();
         moleSprite.setSize(size.x, size.y);

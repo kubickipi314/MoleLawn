@@ -1,12 +1,12 @@
 package io.github.mole.presenter.helpers;
 
 import com.badlogic.gdx.graphics.Texture;
-import io.github.mole.presenter.utils.ObjectType;
+import io.github.mole.utils.ObjectType;
 
 import java.util.EnumMap;
 import java.util.List;
 
-import static io.github.mole.presenter.utils.ObjectType.*;
+import static io.github.mole.utils.ObjectType.*;
 
 public class ObjectsTextureLoader {
 
@@ -29,6 +29,16 @@ public class ObjectsTextureLoader {
             new Texture("textures/objects/hill/delete_1.png"),
             new Texture("textures/objects/hill/delete_2.png"),
             new Texture("textures/objects/hill/delete_3.png")));
+
+        stillObjects.put(CANAL, List.of(new Texture("textures/objects/canal/still_0.png"),
+            new Texture("textures/objects/canal/still_1.png")));
+        insertedObjects.put(CANAL, List.of(new Texture("textures/objects/canal/insert_0.png"),
+            new Texture("textures/objects/canal/insert_1.png"),
+            new Texture("textures/objects/canal/insert_2.png"),
+            new Texture("textures/objects/canal/insert_3.png"),
+            new Texture("textures/objects/canal/insert_4.png")));
+        deletedObjects.put(CANAL, List.of(new Texture("textures/objects/canal/delete_0.png"),
+            new Texture("textures/objects/canal/delete_1.png")));
 
         stillObjects.put(SPADE, List.of(new Texture("textures/objects/spade/still_0.png"),
             new Texture("textures/objects/spade/still_1.png")));

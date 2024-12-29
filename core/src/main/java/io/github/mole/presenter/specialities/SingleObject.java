@@ -3,8 +3,8 @@ package io.github.mole.presenter.specialities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.github.mole.CONST;
-import io.github.mole.presenter.utils.BoardPosition;
-import io.github.mole.presenter.utils.ObjectType;
+import io.github.mole.utils.BoardPosition;
+import io.github.mole.utils.ObjectType;
 import io.github.mole.view.ObjectView;
 
 public class SingleObject {

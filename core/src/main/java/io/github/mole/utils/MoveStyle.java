@@ -1,4 +1,4 @@
-package io.github.mole.presenter.utils;
+package io.github.mole.utils;
 
 public enum MoveStyle {
     DIGGING,

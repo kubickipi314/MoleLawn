@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import io.github.mole.presenter.helpers.TileTextureLoader;
-import io.github.mole.presenter.utils.MoveDirection;
-import io.github.mole.presenter.utils.TileType;
+import io.github.mole.utils.MoveDirection;
+import io.github.mole.utils.TileType;
 
 import java.util.List;
 
-import static io.github.mole.presenter.utils.TileType.DIRT;
+import static io.github.mole.utils.TileType.DIRT;
 
 public class TileView {
     TileTextureLoader loader;
@@ -18,7 +18,7 @@ public class TileView {
     Sprite tileSprite;
     TileType actualMotive;
     boolean isStill;
-    int actualFrame = 0;
+    int actualFrame;
 
     public TileView(TileTextureLoader loader, Vector2 position) {
         this.loader = loader;
