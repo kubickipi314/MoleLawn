@@ -64,7 +64,6 @@ public class GamePresenter implements GamePresentable {
 
     public void changeTile(BoardPosition position, MoveDirection direction, TileType type){
         boardPresenter.changeTile(position, direction, type);
-        System.out.println("hey");
     }
 
     public void insertObject(ObjectType type, BoardPosition position){

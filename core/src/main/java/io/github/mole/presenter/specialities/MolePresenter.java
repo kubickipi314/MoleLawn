@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import io.github.mole.CONST;
 import io.github.mole.presenter.MolePresenterInterface;
+import io.github.mole.presenter.helpers.CoordinatesCalculator;
 import io.github.mole.utils.BoardPosition;
 import io.github.mole.utils.MoveDirection;
 import io.github.mole.utils.MoveStyle;
@@ -14,6 +15,7 @@ import static io.github.mole.CONST.ONE;
 import static io.github.mole.utils.MoveDirection.NONE;
 
 public class MolePresenter {
+    CoordinatesCalculator calculator;
     MoleView moleView;
     int positionX;
     int positionY;
@@ -27,6 +29,7 @@ public class MolePresenter {
     float updatePoint;
 
     public MolePresenter() {
+        calculator = new CoordinatesCalculator();
         moleView = new MoleView();
         moleView.setNormalMotive(NONE);
         isMoving = false;
@@ -36,7 +39,7 @@ public class MolePresenter {
     public void setMolePosition(BoardPosition position) {
         positionX = position.x();
         positionY = position.y();
-        moleView.setPosition(calculatePosition(positionX, positionY));
+        moleView.setPosition(calculator.getCoordinates(positionX, positionY));
     }
 
     public void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style) {
@@ -46,8 +49,8 @@ public class MolePresenter {
     }
 
     public void startMoveAnimation(BoardPosition destination) {
-        startPosition = calculatePosition(positionX, positionY);
-        endPosition = calculatePosition(destination.x(), destination.y());
+        startPosition = calculator.getCoordinates(positionX, positionY);
+        endPosition = calculator.getCoordinates(destination.x(), destination.y());
 
         positionX = destination.x();
         positionY = destination.y();
@@ -94,11 +97,6 @@ public class MolePresenter {
             movementTime = 0;
         }
     }
-
-    private Vector2 calculatePosition(int posX, int posY) {
-        return new Vector2(posX * 50 + 50, posY * 50 + 50);
-    }
-
     public boolean isActive() {
         return isMoving;
     }

@@ -36,7 +36,7 @@ public class BoardPresenter {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Vector2 position = calculator.getCoordinates(x, y);
-                board[height - 1 - y][x] = new TileView(loader, position);
+                board[y][x] = new TileView(loader, position);
             }
         }
 
@@ -85,21 +85,22 @@ public class BoardPresenter {
         movementTime = 0;
     }
     public void changeTile(BoardPosition destination, MoveDirection direction, TileType type) {
-        TileView tile = board[CONST.BOARD_HEIGHT - destination.y() - 1][destination.x()];
+        TileView tile = board[destination.y()][destination.x()];
         tile.setArisingMotive(direction, type);
         animatedTiles.add(tile);
     }
 
     public void setTile(BoardPosition boardPosition, TileType type) {
-        int x = boardPosition.x(), y = boardPosition.y();
-        board[height - 1 - y][x].setStillMotive(type);
+        int x = boardPosition.x();
+        int y = boardPosition.y();
+        board[y][x].setStillMotive(type);
     }
 
     public void render(SpriteBatch batch, int stageNumber) {
         if (stageNumber == ONE) {
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    board[i][j].draw(batch);
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    board[y][x].draw(batch);
                 }
             }
         }

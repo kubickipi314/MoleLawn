@@ -13,8 +13,8 @@ public class Helper {
     int width = CONST.BOARD_WIDTH;
     public BoardPosition getLeftPosition(int moleX, int moleY, MoveDirection direction) {
         return switch (direction) {
-            case LEFT -> new BoardPosition(moleX, moleY - 1);
-            case RIGHT -> new BoardPosition(moleX, moleY + 1);
+            case LEFT -> new BoardPosition(moleX, moleY + 1);
+            case RIGHT -> new BoardPosition(moleX, moleY - 1);
             case UP -> new BoardPosition(moleX - 1, moleY);
             case DOWN -> new BoardPosition(moleX + 1, moleY);
             default -> null;
@@ -23,8 +23,8 @@ public class Helper {
 
     public BoardPosition getRightPosition(int moleX, int moleY, MoveDirection direction) {
         return switch (direction) {
-            case LEFT -> new BoardPosition(moleX, moleY + 1);
-            case RIGHT -> new BoardPosition(moleX, moleY - 1);
+            case LEFT -> new BoardPosition(moleX, moleY - 1);
+            case RIGHT -> new BoardPosition(moleX, moleY + 1);
             case UP -> new BoardPosition(moleX + 1, moleY);
             case DOWN -> new BoardPosition(moleX - 1, moleY);
             default -> null;
@@ -35,16 +35,15 @@ public class Helper {
         return switch (direction) {
             case LEFT -> new BoardPosition(moleX - 1, moleY);
             case RIGHT -> new BoardPosition(moleX + 1, moleY);
-            case UP -> new BoardPosition(moleX, moleY + 1);
-            case DOWN -> new BoardPosition(moleX, moleY - 1);
+            case UP -> new BoardPosition(moleX, moleY - 1);
+            case DOWN -> new BoardPosition(moleX, moleY + 1);
             default -> null;
         };
     }
 
     public BoardPosition getUpperPosition(int moleX, int moleY) {
-        return new BoardPosition(moleX, moleY + 1);
+        return new BoardPosition(moleX, moleY - 1);
     }
-
     public MoveDirection getLeftDirection(MoveDirection direction) {
         return switch (direction) {
             case LEFT -> DOWN;

@@ -1,4 +1,4 @@
-package io.github.mole.controller;
+package io.github.mole.model;
 
 import io.github.mole.CONST;
 import io.github.mole.model.Tile;
@@ -19,48 +19,48 @@ public class Board {
             for (int x = 0; x < width; x++) {
                 TileType type = DIRT;
                 if (y == 0) type = AIR;
-                board[height - 1 - y][x] = new Tile(type);
+                board[y][x] = new Tile(type);
             }
         }
     }
 
     public TileType getType(int x, int y){
-        return board[height - 1 - y][x].getType();
+        return board[y][x].getType();
     }
 
     public TileType getType(BoardPosition position){
-        return board[height - 1 - position.y()][position.x()].getType();
+        return board[position.y()][position.x()].getType();
     }
 
     public void setType(int x, int y, TileType type){
-        board[height - 1 - y][x].setType(type);
+        board[y][x].setType(type);
     }
 
     public void setType(BoardPosition position, TileType type){
-        board[height - 1 - position.y()][position.x()].setType(type);
+        board[position.y()][position.x()].setType(type);
     }
 
     public boolean isObject(int x, int y, ObjectType type){
-        return board[height - 1 - y][x].isObject(type);
+        return board[y][x].isObject(type);
     }
 
     public boolean isObject(BoardPosition position, ObjectType type){
-        return board[height - 1 - position.y()][position.x()].isObject(type);
+        return board[position.y()][position.x()].isObject(type);
     }
 
     public void addObject(int x, int y, ObjectType type){
-        board[height - 1 - y][x].addObject(type);
+        board[y][x].addObject(type);
     }
 
     public void addObject(BoardPosition position, ObjectType type){
-        board[height - 1 - position.y()][position.x()].addObject(type);
+        board[position.y()][position.x()].addObject(type);
     }
 
     public void removeObject(int x, int y, ObjectType type){
-        board[height - 1 - y][x].removeObject(type);
+        board[y][x].removeObject(type);
     }
 
     public void removeObject(BoardPosition position, ObjectType type){
-        board[height - 1 - position.y()][position.x()].removeObject(type);
+        board[position.y()][position.x()].removeObject(type);
     }
 }

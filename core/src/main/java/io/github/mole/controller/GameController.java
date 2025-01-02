@@ -5,7 +5,9 @@ import io.github.mole.controller.interfaces.GameControllable;
 import io.github.mole.controller.interfaces.GamePresentable;
 import io.github.mole.controller.specialities.HillsController;
 import io.github.mole.controller.specialities.SpadeController;
+import io.github.mole.controller.specialities.TilesController;
 import io.github.mole.controller.specialities.WormsController;
+import io.github.mole.model.Board;
 import io.github.mole.utils.*;
 
 import java.util.Random;
@@ -24,19 +26,21 @@ public class GameController implements GameControllable {
     int moleX;
     int moleY;
     int energyLevel;
-
+    TilesController tilesController;
     SpadeController spadeController;
     HillsController hillsController;
     WormsController wormsController;
     Helper helper;
 
     public GameController() {
-        spadeController = new SpadeController();
-        hillsController = new HillsController();
-        wormsController = new WormsController();
+        board = new Board();
         helper = new Helper();
 
-        board = new Board();
+        tilesController = new TilesController(board, helper);
+        spadeController = new SpadeController(board);
+        hillsController = new HillsController(board);
+        wormsController = new WormsController(board);
+
         moleX = CONST.MOLE_POSITION_X;
         moleY = CONST.MOLE_POSITION_Y;
         energyLevel = CONST.ENERGY_LEVEL;
@@ -44,6 +48,7 @@ public class GameController implements GameControllable {
 
     public void setPresentable(GamePresentable gamePresentable) {
         this.gamePresentable = gamePresentable;
+        tilesController.setPresentable(gamePresentable);
         spadeController.setPresentable(gamePresentable);
         hillsController.setPresentable(gamePresentable);
         wormsController.setPresentable(gamePresentable);
@@ -76,10 +81,10 @@ public class GameController implements GameControllable {
                 destinationX++;
                 break;
             case UP:
-                destinationY++;
+                destinationY--;
                 break;
             case DOWN:
-                destinationY--;
+                destinationY++;
                 break;
         }
 
@@ -91,7 +96,7 @@ public class GameController implements GameControllable {
             //DIGGING
             if (board.getType(moleX,moleY).equals(DIRT)) {
                 moveStyle = DIGGING;
-                handleDigging(direction);
+                tilesController.handleDigging(moleX, moleY, direction);
             }
             //FREE MOVE
             else {
@@ -118,70 +123,6 @@ public class GameController implements GameControllable {
         if (board.getType(destinationX,destinationY).equals(STONE)) return false;
         return true;
     }
-
-    private void handleDigging(MoveDirection direction){
-        BoardPosition position = new BoardPosition(moleX, moleY);
-        board.setType(moleX, moleY, TUNNEL);
-        gamePresentable.changeTile(position, direction, TUNNEL);
-
-        BoardPosition left = helper.getLeftPosition(moleX, moleY, direction);
-        if (helper.isPositionOnBoard(left)) {
-            if (board.getType(left).equals(TUNNEL)) {
-                board.setType(left, DIRT);
-                gamePresentable.changeTile(left, helper.getLeftDirection(direction), DIRT);
-            }
-            if (board.getType(left).equals(AIR)) {
-                if (!board.isObject(left, CANAL)
-                    && !board.isObject(left, HILL)) {
-                    board.addObject(left, CANAL);
-                    gamePresentable.insertObject(CANAL, left);
-                }
-            }
-        }
-
-        BoardPosition right = helper.getRightPosition(moleX, moleY, direction);
-        if (helper.isPositionOnBoard(right)) {
-            if (board.getType(right).equals(TUNNEL)) {
-                board.setType(right.x(), right.y(), DIRT);
-                gamePresentable.changeTile(right, helper.getRightDirection(direction), DIRT);
-            }
-            if (board.getType(right).equals(AIR)) {
-                if (!board.isObject(right, CANAL)
-                && !board.isObject(right, HILL)) {
-                    board.addObject(right, CANAL);
-                    gamePresentable.insertObject(CANAL, left);
-                }
-            }
-        }
-
-        BoardPosition front = helper.getFrontPosition(moleX, moleY, direction);
-        if (helper.isPositionOnBoard(front) && front.y()<height-1) {
-            if (board.getType(front).equals(TUNNEL)) {
-                board.setType(front, DIRT);
-                gamePresentable.changeTile(front, direction, DIRT);
-            }
-        }
-
-        if (direction.equals(UP)){
-            BoardPosition upper = helper.getUpperPosition(moleX, moleY);
-            if (helper.isPositionOnBoard(upper)){
-
-                if (board.getType(upper).equals(AIR)) {
-                    if (!board.isObject(upper, HILL)) {
-                        board.addObject(upper, HILL);
-                        gamePresentable.insertObject(HILL, upper);
-
-
-                        if (board.isObject(upper, CANAL)) {
-                            board.removeObject(upper, CANAL);
-                            gamePresentable.deleteObject(CANAL, upper);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 
 
     private void insertRandomWorm(){

@@ -1,11 +1,11 @@
 package io.github.mole.controller.specialities;
 
-import com.badlogic.gdx.Game;
 import io.github.mole.controller.interfaces.GamePresentable;
+import io.github.mole.model.Board;
 
 public class HillsController {
     GamePresentable gamePresentable;
-    public HillsController() {
+    public HillsController(Board board) {
     }
 
     public void setPresentable(GamePresentable gamePresentable){
