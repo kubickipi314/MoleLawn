@@ -49,11 +49,6 @@ public class Helper {
         int[] OffsetsY = {0, 0, -1, 1};
         return getPosition(OffsetsX, OffsetsY, direction);
     }
-
-    public BoardPosition getUpperPosition() {
-        return new BoardPosition(mole.getX(), mole.getY() - 1);
-    }
-
     public BoardPosition getBottomPosition() {
         return new BoardPosition(mole.getX(), Math.min((mole.getY() + 1), height - 1));
     }

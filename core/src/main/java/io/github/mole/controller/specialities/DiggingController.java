@@ -7,7 +7,6 @@ import io.github.mole.model.Mole;
 import io.github.mole.utils.BoardPosition;
 import io.github.mole.utils.MoveDirection;
 
-import static io.github.mole.utils.MoveDirection.*;
 import static io.github.mole.utils.ObjectType.*;
 import static io.github.mole.utils.TileType.*;
 
@@ -89,7 +88,6 @@ public class DiggingController {
             }
         }
     }
-
 
     public void setSpade(SpadeController spadeController) {
         this.spadeController = spadeController;
