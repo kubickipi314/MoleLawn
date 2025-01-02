@@ -3,6 +3,7 @@ package io.github.mole.controller.specialities;
 import io.github.mole.controller.Helper;
 import io.github.mole.controller.interfaces.GamePresentable;
 import io.github.mole.model.Board;
+import io.github.mole.model.Mole;
 import io.github.mole.utils.BoardPosition;
 import io.github.mole.utils.MoveDirection;
 
@@ -11,13 +12,15 @@ import static io.github.mole.utils.ObjectType.CANAL;
 import static io.github.mole.utils.ObjectType.HILL;
 import static io.github.mole.utils.TileType.*;
 
-public class TilesController {
+public class DiggingController {
 
     Board board;
+    Mole mole;
     Helper helper;
     GamePresentable gamePresentable;
-    public TilesController(Board board, Helper helper) {
+    public DiggingController(Board board, Mole mole, Helper helper) {
         this.board = board;
+        this.mole = mole;
         this.helper = helper;
     }
 
@@ -25,12 +28,11 @@ public class TilesController {
         this.gamePresentable = gamePresentable;
     }
 
-    public void handleDigging(int moleX, int moleY, MoveDirection direction){
-        BoardPosition position = new BoardPosition(moleX, moleY);
-        board.setType(moleX, moleY, TUNNEL);
-        gamePresentable.changeTile(position, direction, TUNNEL);
+    public void handleDigging(MoveDirection direction){
+        board.setType(mole.getPosition(), TUNNEL);
+        gamePresentable.changeTile(mole.getPosition(), direction, TUNNEL);
 
-        BoardPosition left = helper.getLeftPosition(moleX, moleY, direction);
+        BoardPosition left = helper.getLeftPosition(direction);
         if (helper.isPositionOnBoard(left)) {
             if (board.getType(left).equals(TUNNEL)) {
                 board.setType(left, DIRT);
@@ -45,7 +47,7 @@ public class TilesController {
             }
         }
 
-        BoardPosition right = helper.getRightPosition(moleX, moleY, direction);
+        BoardPosition right = helper.getRightPosition(direction);
         if (helper.isPositionOnBoard(right)) {
             if (board.getType(right).equals(TUNNEL)) {
                 board.setType(right.x(), right.y(), DIRT);
@@ -60,7 +62,7 @@ public class TilesController {
             }
         }
 
-        BoardPosition front = helper.getFrontPosition(moleX, moleY, direction);
+        BoardPosition front = helper.getFrontPosition(direction);
         if (helper.isPositionOnBoard(front) && front.y()>0) {
             if (board.getType(front).equals(TUNNEL)) {
                 board.setType(front, DIRT);
@@ -69,7 +71,7 @@ public class TilesController {
         }
 
         if (direction.equals(UP)){
-            BoardPosition upper = helper.getUpperPosition(moleX, moleY);
+            BoardPosition upper = helper.getUpperPosition();
             if (helper.isPositionOnBoard(upper)){
 
                 if (board.getType(upper).equals(AIR)) {
@@ -86,6 +88,7 @@ public class TilesController {
                 }
             }
         }
+
     }
 
 }

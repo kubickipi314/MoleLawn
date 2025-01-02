@@ -5,12 +5,12 @@ import io.github.mole.controller.interfaces.GameControllable;
 import io.github.mole.controller.interfaces.GamePresentable;
 import io.github.mole.controller.specialities.HillsController;
 import io.github.mole.controller.specialities.SpadeController;
-import io.github.mole.controller.specialities.TilesController;
+import io.github.mole.controller.specialities.DiggingController;
 import io.github.mole.controller.specialities.WormsController;
 import io.github.mole.model.Board;
+import io.github.mole.model.Mole;
 import io.github.mole.utils.*;
 
-import java.util.Random;
 
 import static io.github.mole.utils.MoveDirection.*;
 import static io.github.mole.utils.MoveStyle.*;
@@ -23,34 +23,27 @@ public class GameController implements GameControllable {
     int width = CONST.BOARD_WIDTH;
 
     Board board;
-    int moleX;
-    int moleY;
-    int energyLevel;
-    TilesController tilesController;
+    Mole mole;
+
+    DiggingController diggingController;
     SpadeController spadeController;
-    HillsController hillsController;
     WormsController wormsController;
     Helper helper;
 
     public GameController() {
         board = new Board();
-        helper = new Helper();
+        mole = new Mole();
 
-        tilesController = new TilesController(board, helper);
-        spadeController = new SpadeController(board);
-        hillsController = new HillsController(board);
-        wormsController = new WormsController(board);
-
-        moleX = CONST.MOLE_POSITION_X;
-        moleY = CONST.MOLE_POSITION_Y;
-        energyLevel = CONST.ENERGY_LEVEL;
+        helper = new Helper(board, mole);
+        diggingController = new DiggingController(board, mole, helper);
+        spadeController = new SpadeController(board, mole);
+        wormsController = new WormsController(board, mole);
     }
 
     public void setPresentable(GamePresentable gamePresentable) {
         this.gamePresentable = gamePresentable;
-        tilesController.setPresentable(gamePresentable);
+        diggingController.setPresentable(gamePresentable);
         spadeController.setPresentable(gamePresentable);
-        hillsController.setPresentable(gamePresentable);
         wormsController.setPresentable(gamePresentable);
     }
 
@@ -62,16 +55,13 @@ public class GameController implements GameControllable {
                 gamePresentable.setTile(position, type);
             }
         }
-        BoardPosition molePosition = new BoardPosition(moleX, moleY);
-        gamePresentable.setMolePosition(molePosition);
+        gamePresentable.setMolePosition(mole.getPosition());
     }
 
     public void makeMove(MoveDirection direction) {
 
-        int destinationX = moleX;
-        int destinationY = moleY;
-
-        MoveStyle moveStyle;
+        int destinationX = mole.getX();
+        int destinationY = mole.getY();
 
         switch (direction) {
             case LEFT:
@@ -88,32 +78,28 @@ public class GameController implements GameControllable {
                 break;
         }
 
-        //MOVING
+        MoveStyle moveStyle;
         if (!direction.equals(NONE) && moveSuccess(destinationX, destinationY)) {
-            moleX = destinationX;
-            moleY = destinationY;
+            mole.changePosition(destinationX, destinationY);
 
-            //DIGGING
-            if (board.getType(moleX,moleY).equals(DIRT)) {
+            if (board.getType(mole.getPosition()).equals(DIRT)) {
                 moveStyle = DIGGING;
-                tilesController.handleDigging(moleX, moleY, direction);
+                diggingController.handleDigging(direction);
             }
-            //FREE MOVE
             else {
                 moveStyle = FREE;
             }
         }
-        //NOT MOVING
         else {
             moveStyle = DIGGING;
         }
 
-        insertRandomWorm();
-        tryEatingWorm();
+        wormsController.handleWorms();
+        spadeController.handleSpade();
 
-        BoardPosition destination = new BoardPosition(moleX, moleY);
-        gamePresentable.moveMole(destination, direction, moveStyle);
+        handleEncounters();
 
+        gamePresentable.moveMole(mole.getPosition(), direction, moveStyle);
     }
 
     private boolean moveSuccess(int destinationX, int destinationY) {
@@ -124,29 +110,17 @@ public class GameController implements GameControllable {
         return true;
     }
 
-
-    private void insertRandomWorm(){
-        Random random = new Random();
-
-        int x = random.nextInt(width);
-        int y = random.nextInt(height);
-        tryInsertWorm(x, y);
-    }
-
-    private void tryInsertWorm(int x, int y){
-        if (x == moleX && y == moleY) return;
-        if (board.getType(x,y).equals(TUNNEL)){
-            if (!board.isObject(x,y,WORM)){
-                board.addObject(x,y,WORM);
-                gamePresentable.insertObject(WORM, new BoardPosition(x, y));
+    public void handleEncounters(){
+        BoardPosition position = mole.getPosition();
+        if (board.isAnyObject(position)){
+            if (board.isObject(position, WORM)){
+                board.removeObject(position, WORM);
+                gamePresentable.deleteObject(WORM, position);
+            }
+            if (board.isObject(position, SPADE)){
+                System.out.println("die from Spade");
             }
         }
     }
 
-    private void tryEatingWorm(){
-        if (board.isObject(moleX, moleY, WORM)){
-            board.removeObject(moleX, moleY, WORM);
-            gamePresentable.deleteObject(WORM, new BoardPosition(moleX, moleY));
-        }
-    }
 }

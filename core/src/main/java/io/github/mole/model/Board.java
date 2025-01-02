@@ -1,7 +1,6 @@
 package io.github.mole.model;
 
 import io.github.mole.CONST;
-import io.github.mole.model.Tile;
 import io.github.mole.utils.BoardPosition;
 import io.github.mole.utils.ObjectType;
 import io.github.mole.utils.TileType;
@@ -40,26 +39,17 @@ public class Board {
         board[position.y()][position.x()].setType(type);
     }
 
-    public boolean isObject(int x, int y, ObjectType type){
-        return board[y][x].isObject(type);
-    }
-
     public boolean isObject(BoardPosition position, ObjectType type){
         return board[position.y()][position.x()].isObject(type);
     }
 
-    public void addObject(int x, int y, ObjectType type){
-        board[y][x].addObject(type);
+    public boolean isAnyObject(BoardPosition position){
+        return board[position.y()][position.x()].isAnyObject();
     }
 
     public void addObject(BoardPosition position, ObjectType type){
         board[position.y()][position.x()].addObject(type);
     }
-
-    public void removeObject(int x, int y, ObjectType type){
-        board[y][x].removeObject(type);
-    }
-
     public void removeObject(BoardPosition position, ObjectType type){
         board[position.y()][position.x()].removeObject(type);
     }
