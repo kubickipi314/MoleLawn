@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import io.github.mole.CONST;
 import io.github.mole.presenter.MolePresenterInterface;
+import io.github.mole.presenter.helpers.CoordinatesCalculator;
 import io.github.mole.utils.BoardPosition;
 import io.github.mole.utils.MoveDirection;
 import io.github.mole.utils.MoveStyle;
@@ -14,9 +15,14 @@ import static io.github.mole.CONST.ONE;
 import static io.github.mole.utils.MoveDirection.NONE;
 
 public class MolePresenter {
+    CoordinatesCalculator calculator;
     MoleView moleView;
     int positionX;
     int positionY;
+
+    float currentX;
+    float currentY;
+
     Vector2 startPosition;
     Vector2 endPosition;
 
@@ -27,6 +33,7 @@ public class MolePresenter {
     float updatePoint;
 
     public MolePresenter() {
+        calculator = new CoordinatesCalculator();
         moleView = new MoleView();
         moleView.setNormalMotive(NONE);
         isMoving = false;
@@ -36,7 +43,10 @@ public class MolePresenter {
     public void setMolePosition(BoardPosition position) {
         positionX = position.x();
         positionY = position.y();
-        moleView.setPosition(calculatePosition(positionX, positionY));
+        Vector2 currentPosition = calculator.getCoordinates(positionX, positionY);
+        moleView.setPosition(currentPosition);
+        currentX = currentPosition.x;
+        currentY = currentPosition.y;
     }
 
     public void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style) {
@@ -46,8 +56,8 @@ public class MolePresenter {
     }
 
     public void startMoveAnimation(BoardPosition destination) {
-        startPosition = calculatePosition(positionX, positionY);
-        endPosition = calculatePosition(destination.x(), destination.y());
+        startPosition = calculator.getCoordinates(positionX, positionY);
+        endPosition = calculator.getCoordinates(destination.x(), destination.y());
 
         positionX = destination.x();
         positionY = destination.y();
@@ -69,8 +79,8 @@ public class MolePresenter {
         float animationDuration = CONST.ANIMATION_DURATION;
         float progress = Math.min(1.0f, movementTime / animationDuration);
 
-        float currentX = startPosition.x + (endPosition.x - startPosition.x) * progress;
-        float currentY = startPosition.y + (endPosition.y - startPosition.y) * progress;
+        currentX = startPosition.x + (endPosition.x - startPosition.x) * progress;
+        currentY = startPosition.y + (endPosition.y - startPosition.y) * progress;
         Vector2 currentPosition = new Vector2(currentX, currentY);
 
         moleView.setPosition(currentPosition);
@@ -94,13 +104,17 @@ public class MolePresenter {
             movementTime = 0;
         }
     }
-
-    private Vector2 calculatePosition(int posX, int posY) {
-        return new Vector2(posX * 50 + 50, posY * 50 + 50);
-    }
-
     public boolean isActive() {
         return isMoving;
+    }
+
+    public float getMoleX(){
+
+        return currentX + calculator.getTileSize().x/2; //calculator.getCoordinates(positionX,positionY).x;
+    }
+
+    public float getMoleY(){
+        return currentY + calculator.getTileSize().x/2;//calculator.getCoordinates(positionX,positionY).y;
     }
 
     public void render(SpriteBatch batch, int stageNumber) {

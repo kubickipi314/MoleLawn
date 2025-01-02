@@ -17,7 +17,7 @@ public class Main extends Game {
         gameController = new GameController();
         gamePresenter = new GamePresenter(gameController);
 
-        gameController.setGamePresentable(gamePresenter);
+        gameController.setPresentable(gamePresenter);
         gameController.initializePresentable();
 
         setScreen(new GameScreen(gamePresenter));

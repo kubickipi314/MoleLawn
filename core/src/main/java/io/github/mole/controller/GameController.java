@@ -3,8 +3,14 @@ package io.github.mole.controller;
 import io.github.mole.CONST;
 import io.github.mole.controller.interfaces.GameControllable;
 import io.github.mole.controller.interfaces.GamePresentable;
-import io.github.mole.model.Tile;
+import io.github.mole.controller.specialities.HillsController;
+import io.github.mole.controller.specialities.SpadeController;
+import io.github.mole.controller.specialities.DiggingController;
+import io.github.mole.controller.specialities.WormsController;
+import io.github.mole.model.Board;
+import io.github.mole.model.Mole;
 import io.github.mole.utils.*;
+
 
 import static io.github.mole.utils.MoveDirection.*;
 import static io.github.mole.utils.MoveStyle.*;
@@ -13,57 +19,49 @@ import static io.github.mole.utils.TileType.*;
 
 public class GameController implements GameControllable {
     GamePresentable gamePresentable;
-    Tile[][] board;
     int height = CONST.BOARD_HEIGHT;
     int width = CONST.BOARD_WIDTH;
 
-    int positionX;
-    int positionY;
+    Board board;
+    Mole mole;
 
-    boolean isSpadeAttack;
-    boolean isSpadeBacked;
-    int spadeAttackX;
-
+    DiggingController diggingController;
+    SpadeController spadeController;
+    WormsController wormsController;
+    Helper helper;
 
     public GameController() {
-        board = new Tile[CONST.BOARD_HEIGHT][CONST.BOARD_WIDTH];
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                TileType type = DIRT;
-                if (i == 0) type = AIR;
-                board[i][j] = new Tile(type);
-            }
-        }
+        board = new Board();
+        mole = new Mole();
 
-        positionX = 2;
-        positionY = height - 1;
-
-        isSpadeAttack = false;
-        isSpadeBacked = false;
+        helper = new Helper(board, mole);
+        diggingController = new DiggingController(board, mole, helper);
+        spadeController = new SpadeController(board, mole);
+        wormsController = new WormsController(board, mole);
     }
 
-    public void setGamePresentable(GamePresentable gamePresentable) {
+    public void setPresentable(GamePresentable gamePresentable) {
         this.gamePresentable = gamePresentable;
+        diggingController.setPresentable(gamePresentable);
+        spadeController.setPresentable(gamePresentable);
+        wormsController.setPresentable(gamePresentable);
     }
 
     public void initializePresentable() {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                TileType type = board[i][j].getType();
-                BoardPosition position = new BoardPosition(j, i);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                TileType type = board.getType(x,y);
+                BoardPosition position = new BoardPosition(x, y);
                 gamePresentable.setTile(position, type);
             }
         }
-        BoardPosition molePosition = new BoardPosition(positionX, positionY);
-        gamePresentable.setMolePosition(molePosition);
+        gamePresentable.setMolePosition(mole.getPosition());
     }
 
     public void makeMove(MoveDirection direction) {
 
-        int destinationX = positionX;
-        int destinationY = positionY;
-
-        MoveStyle moveStyle;
+        int destinationX = mole.getX();
+        int destinationY = mole.getY();
 
         switch (direction) {
             case LEFT:
@@ -73,196 +71,56 @@ public class GameController implements GameControllable {
                 destinationX++;
                 break;
             case UP:
-                destinationY++;
-                break;
-            case DOWN:
                 destinationY--;
                 break;
-        }
-        //PLANNED ACTIONS
-        if (isSpadeBacked){
-            isSpadeBacked = false;
-            BoardPosition spadePosition = new BoardPosition(spadeAttackX, 1);
-            gamePresentable.deleteObject(SPADE, spadePosition);
-        }
-        if (isSpadeAttack){
-            isSpadeAttack = false;
-            isSpadeBacked = true;
-            BoardPosition spadePosition = new BoardPosition(spadeAttackX, 1);
-            gamePresentable.insertObject(SPADE, spadePosition);
+            case DOWN:
+                destinationY++;
+                break;
         }
 
-        //MOVING
+        MoveStyle moveStyle;
         if (!direction.equals(NONE) && moveSuccess(destinationX, destinationY)) {
-            positionX = destinationX;
-            positionY = destinationY;
-            Tile destTile = board[height - 1 - positionY][positionX];
-            //DIGGING
-            if (destTile.getType().equals(DIRT)) {
+            mole.changePosition(destinationX, destinationY);
+
+            if (board.getType(mole.getPosition()).equals(DIRT)) {
                 moveStyle = DIGGING;
-                handleDigging(direction);
+                diggingController.handleDigging(direction);
             }
-            //FREE MOVE
             else {
                 moveStyle = FREE;
             }
         }
-        //NOT MOVING
         else {
             moveStyle = DIGGING;
         }
 
-        BoardPosition destination = new BoardPosition(positionX, positionY);
-        gamePresentable.moveMole(destination, direction, moveStyle);
+        wormsController.handleWorms();
+        spadeController.handleSpade();
 
-        if (isMoleDead()) {
-            //animate death
-        }
+        handleEncounters();
+
+        gamePresentable.moveMole(mole.getPosition(), direction, moveStyle);
     }
 
     private boolean moveSuccess(int destinationX, int destinationY) {
         if (destinationX < 0 || destinationX >= width) return false;
         if (destinationY < 0 || destinationY >= height) return false;
 
-        Tile destinationTile = board[height - 1 - destinationY][destinationX];
-        if (destinationTile.getType().equals(STONE)) return false;
+        if (board.getType(destinationX,destinationY).equals(STONE)) return false;
         return true;
     }
 
-    private boolean isMoleDead() {
-        return false;
-    }
-
-    private void handleDigging(MoveDirection direction){
-        BoardPosition position = new BoardPosition(positionX, positionY);
-        board[height - 1 - positionY][positionX].setType(TUNNEL);
-        gamePresentable.changeTile(position, direction, TUNNEL);
-
-        BoardPosition leftPosition = getLeftPosition(direction);
-        if (isPositionOnBoard(leftPosition)) {
-            if (isTunnel(leftPosition)) {
-                board[height - 1 - leftPosition.y()][leftPosition.x()].setType(DIRT);
-                gamePresentable.changeTile(leftPosition, getLeftDirection(direction), DIRT);
+    public void handleEncounters(){
+        BoardPosition position = mole.getPosition();
+        if (board.isAnyObject(position)){
+            if (board.isObject(position, WORM)){
+                board.removeObject(position, WORM);
+                gamePresentable.deleteObject(WORM, position);
             }
-            if (isAir(leftPosition)) {
-                if (!board[height - 1 - leftPosition.y()][leftPosition.x()].isObject(CANAL)
-                    && !board[height - 1 - leftPosition.y()][leftPosition.x()].isObject(HILL)) {
-                    board[height - 1 - leftPosition.y()][leftPosition.x()].addObject(CANAL);
-                    gamePresentable.insertObject(CANAL, leftPosition);
-                }
-            }
-        }
-
-        BoardPosition rightPosition = getRightPosition(direction);
-        if (isPositionOnBoard(rightPosition)) {
-            if (isTunnel(rightPosition)) {
-                board[height - 1 - rightPosition.y()][rightPosition.x()].setType(DIRT);
-                gamePresentable.changeTile(rightPosition, getRightDirection(direction), DIRT);
-            }
-            if (isAir(rightPosition)) {
-                if (!board[height - 1 - rightPosition.y()][rightPosition.x()].isObject(CANAL)
-                && !board[height - 1 - rightPosition.y()][rightPosition.x()].isObject(HILL)) {
-                    board[height - 1 - rightPosition.y()][rightPosition.x()].addObject(CANAL);
-                    gamePresentable.insertObject(CANAL, leftPosition);
-                }
-            }
-        }
-
-        BoardPosition frontPosition = getFrontPosition(direction);
-        if (isPositionOnBoard(frontPosition) && frontPosition.y()<height-1) {
-            if (isTunnel(frontPosition)) {
-                board[height - 1 - frontPosition.y()][frontPosition.x()].setType(DIRT);
-                gamePresentable.changeTile(frontPosition, direction, DIRT);
-            }
-        }
-
-        if (direction.equals(UP)){
-            BoardPosition upPosition = getUpperPosition();
-            if (isPositionOnBoard(upPosition)){
-
-                if (board[height - 1 - upPosition.y()][upPosition.x()].getType().equals(AIR)) {
-                    if (!board[height - 1 - upPosition.y()][upPosition.x()].isObject(HILL)) {
-                        board[height - 1 - upPosition.y()][upPosition.x()].addObject(HILL);
-                        gamePresentable.insertObject(HILL, upPosition);
-
-                        isSpadeAttack = true;
-                        spadeAttackX = positionX;
-
-                        if (!board[height - 1 - upPosition.y()][upPosition.x()].isObject(CANAL)) {
-                            board[height - 1 - upPosition.y()][upPosition.x()].removeObject(CANAL);
-                            gamePresentable.deleteObject(CANAL, upPosition);
-                        }
-                    }
-                }
+            if (board.isObject(position, SPADE)){
+                System.out.println("die from Spade");
             }
         }
     }
 
-    private BoardPosition getLeftPosition(MoveDirection direction) {
-        return switch (direction) {
-            case LEFT -> new BoardPosition(positionX, positionY - 1);
-            case RIGHT -> new BoardPosition(positionX, positionY + 1);
-            case UP -> new BoardPosition(positionX - 1, positionY);
-            case DOWN -> new BoardPosition(positionX + 1, positionY);
-            default -> null;
-        };
-    }
-
-    private BoardPosition getRightPosition(MoveDirection direction) {
-        return switch (direction) {
-            case LEFT -> new BoardPosition(positionX, positionY + 1);
-            case RIGHT -> new BoardPosition(positionX, positionY - 1);
-            case UP -> new BoardPosition(positionX + 1, positionY);
-            case DOWN -> new BoardPosition(positionX - 1, positionY);
-            default -> null;
-        };
-    }
-
-    private BoardPosition getFrontPosition(MoveDirection direction) {
-        return switch (direction) {
-            case LEFT -> new BoardPosition(positionX - 1, positionY);
-            case RIGHT -> new BoardPosition(positionX + 1, positionY);
-            case UP -> new BoardPosition(positionX, positionY + 1);
-            case DOWN -> new BoardPosition(positionX, positionY - 1);
-            default -> null;
-        };
-    }
-
-    private BoardPosition getUpperPosition() {
-        return new BoardPosition(positionX, positionY + 1);
-    }
-
-    private boolean isTunnel(BoardPosition position) {
-        return board[height - 1 - position.y()][position.x()].getType().equals(TUNNEL);
-    }
-
-    private boolean isAir(BoardPosition position) {
-        return board[height - 1 - position.y()][position.x()].getType().equals(AIR);
-    }
-
-    private MoveDirection getLeftDirection(MoveDirection direction) {
-        return switch (direction) {
-            case LEFT -> DOWN;
-            case DOWN -> RIGHT;
-            case RIGHT -> UP;
-            case UP -> LEFT;
-            case NONE -> NONE;
-        };
-    }
-
-    private MoveDirection getRightDirection(MoveDirection direction) {
-        return switch (direction) {
-            case LEFT -> UP;
-            case UP -> RIGHT;
-            case RIGHT -> DOWN;
-            case DOWN -> LEFT;
-            case NONE -> NONE;
-        };
-    }
-
-    private boolean isPositionOnBoard(BoardPosition position){
-        if (position.x() < 0 || position.x() >= width) return false;
-        if (position.y() < 0 || position.y() >= height) return false;
-        return true;
-    }
 }

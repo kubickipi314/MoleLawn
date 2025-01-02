@@ -64,12 +64,8 @@ public class TileView {
         int motiveSize = textures.size();
         if (actualFrame != (int) (motiveSize * progress)) {
             actualFrame++;
-            tileSprite.setTexture(textures.get(actualFrame));
+            tileSprite.setTexture(textures.get((int) (motiveSize * progress)));
         }
-    }
-
-    public TileType getMotive() {
-        return actualMotive;
     }
 
     public void draw(SpriteBatch batch) {
