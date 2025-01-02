@@ -109,11 +109,11 @@ public class MolePresenter {
 
     public float getMoleX(){
 
-        return currentX + calculator.getTileSize().x/2; //calculator.getCoordinates(positionX,positionY).x;
+        return currentX + calculator.getTileSize().x/2;
     }
 
     public float getMoleY(){
-        return currentY + calculator.getTileSize().x/2;//calculator.getCoordinates(positionX,positionY).y;
+        return currentY + calculator.getTileSize().x/2;
     }
 
     public void render(SpriteBatch batch, int stageNumber) {

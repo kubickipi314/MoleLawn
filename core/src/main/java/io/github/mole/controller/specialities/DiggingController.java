@@ -7,9 +7,8 @@ import io.github.mole.model.Mole;
 import io.github.mole.utils.BoardPosition;
 import io.github.mole.utils.MoveDirection;
 
-import static io.github.mole.utils.MoveDirection.UP;
-import static io.github.mole.utils.ObjectType.CANAL;
-import static io.github.mole.utils.ObjectType.HILL;
+import static io.github.mole.utils.MoveDirection.*;
+import static io.github.mole.utils.ObjectType.*;
 import static io.github.mole.utils.TileType.*;
 
 public class DiggingController {
@@ -35,65 +34,62 @@ public class DiggingController {
 
         BoardPosition left = helper.getLeftPosition(direction);
         if (helper.isPositionOnBoard(left)) {
-            if (board.getType(left).equals(TUNNEL)) {
-                board.setType(left, DIRT);
-                gamePresentable.changeTile(left, helper.getLeftDirection(direction), DIRT);
-            }
-            if (board.getType(left).equals(AIR)) {
-                if (!board.isObject(left, CANAL)
-                    && !board.isObject(left, HILL)) {
-                    board.addObject(left, CANAL);
-                    gamePresentable.insertObject(CANAL, left);
-                    spadeController.activateByCanal();
-                }
-            }
+            tryBuryTunnel(left, helper.getLeftDirection(direction));
+            tryMakeCanal(left);
         }
 
         BoardPosition right = helper.getRightPosition(direction);
         if (helper.isPositionOnBoard(right)) {
-            if (board.getType(right).equals(TUNNEL)) {
-                board.setType(right.x(), right.y(), DIRT);
-                gamePresentable.changeTile(right, helper.getRightDirection(direction), DIRT);
-            }
-            if (board.getType(right).equals(AIR)) {
-                if (!board.isObject(right, CANAL)
-                    && !board.isObject(right, HILL)) {
-                    board.addObject(right, CANAL);
-                    gamePresentable.insertObject(CANAL, left);
-                    spadeController.activateByCanal();
-                }
-            }
+            tryBuryTunnel(right, helper.getRightDirection(direction));
+            tryMakeCanal(right);
         }
 
         BoardPosition front = helper.getFrontPosition(direction);
-        if (helper.isPositionOnBoard(front) && front.y()>0) {
-            if (board.getType(front).equals(TUNNEL)) {
-                board.setType(front, DIRT);
-                gamePresentable.changeTile(front, direction, DIRT);
-            }
+        if (helper.isPositionOnBoard(front)) {
+            tryBuryTunnel(front, direction);
+            tryMakeHill(front);
         }
+    }
 
-        if (direction.equals(UP)){
-            BoardPosition upper = helper.getUpperPosition();
-            if (helper.isPositionOnBoard(upper)){
-
-                if (board.getType(upper).equals(AIR)) {
-                    if (!board.isObject(upper, HILL)) {
-                        board.addObject(upper, HILL);
-                        gamePresentable.insertObject(HILL, upper);
-                        spadeController.activateByHill();
-
-
-                        if (board.isObject(upper, CANAL)) {
-                            board.removeObject(upper, CANAL);
-                            gamePresentable.deleteObject(CANAL, upper);
-                        }
-                    }
+    private void tryBuryTunnel(BoardPosition position, MoveDirection direction) {
+        if (board.getType(position).equals(TUNNEL)) {
+            board.setType(position, DIRT);
+            gamePresentable.changeTile(position, direction, DIRT);
+            if (board.isAnyObject(position)) {
+                if (board.isObject(position, WORM)) {
+                    board.removeObject(position, WORM);
+                    gamePresentable.deleteObject(WORM, position);
                 }
             }
         }
-
     }
+
+    private void tryMakeCanal(BoardPosition position){
+        if (board.getType(position).equals(AIR)) {
+            if (!board.isObject(position, CANAL)
+                && !board.isObject(position, HILL)) {
+                board.addObject(position, CANAL);
+                gamePresentable.insertObject(CANAL, position);
+                spadeController.activateByCanal();
+            }
+        }
+    }
+
+    private void tryMakeHill(BoardPosition position){
+        if (board.getType(position).equals(AIR)) {
+            if (!board.isObject(position, HILL)) {
+                board.addObject(position, HILL);
+                gamePresentable.insertObject(HILL, position);
+                spadeController.activateByHill();
+
+                if (board.isObject(position, CANAL)) {
+                    board.removeObject(position, CANAL);
+                    gamePresentable.deleteObject(CANAL, position);
+                }
+            }
+        }
+    }
+
 
     public void setSpade(SpadeController spadeController) {
         this.spadeController = spadeController;

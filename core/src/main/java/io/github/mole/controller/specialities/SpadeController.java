@@ -1,5 +1,7 @@
 package io.github.mole.controller.specialities;
 
+import com.badlogic.gdx.math.MathUtils;
+import io.github.mole.CONST;
 import io.github.mole.controller.interfaces.GamePresentable;
 import io.github.mole.model.Board;
 import io.github.mole.model.Mole;
@@ -42,7 +44,8 @@ public class SpadeController {
 
         } else if (activeByCanal) {
             int moleX = mole.getX();
-            moleX += random.nextInt(3) - 1;
+            moleX += MathUtils.clamp(random.nextInt(3) - 1, 0, CONST.BOARD_WIDTH - 1);
+
             spadePosition = new BoardPosition(moleX, 1);
             board.addObject(spadePosition, SPADE);
             gamePresentable.insertObject(SPADE, spadePosition);

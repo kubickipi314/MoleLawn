@@ -50,7 +50,7 @@ public class GamePresenter implements GamePresentable {
     public void update() {
         float targetX = molePresenter.getMoleX();
         float targetY = molePresenter.getMoleY();
-        float cameraX = MathUtils.clamp(targetX, camera.viewportWidth / 2 + 40,  650 + 10 - camera.viewportWidth / 2);
+        float cameraX = MathUtils.clamp(targetX, camera.viewportWidth / 2 + 40,  660 - camera.viewportWidth / 2);
         float cameraY = MathUtils.clamp(targetY, camera.viewportWidth / 2, 440 - camera.viewportWidth / 2);
         camera.position.lerp(new Vector3(cameraX, cameraY, 0), 0.075f);
         camera.update();

@@ -54,6 +54,10 @@ public class Helper {
         return new BoardPosition(mole.getX(), mole.getY() - 1);
     }
 
+    public BoardPosition getBottomPosition() {
+        return new BoardPosition(mole.getX(), Math.min((mole.getY() + 1), height - 1));
+    }
+
     public MoveDirection getLeftDirection(MoveDirection direction) {
         return switch (direction) {
             case LEFT -> DOWN;
