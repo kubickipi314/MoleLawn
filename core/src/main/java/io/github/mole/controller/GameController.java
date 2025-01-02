@@ -38,6 +38,8 @@ public class GameController implements GameControllable {
         diggingController = new DiggingController(board, mole, helper);
         spadeController = new SpadeController(board, mole);
         wormsController = new WormsController(board, mole);
+
+        diggingController.setSpade(spadeController);
     }
 
     public void setPresentable(GamePresentable gamePresentable) {
@@ -78,6 +80,8 @@ public class GameController implements GameControllable {
                 break;
         }
 
+        spadeController.handleSpade();
+
         MoveStyle moveStyle;
         if (!direction.equals(NONE) && moveSuccess(destinationX, destinationY)) {
             mole.changePosition(destinationX, destinationY);
@@ -95,7 +99,6 @@ public class GameController implements GameControllable {
         }
 
         wormsController.handleWorms();
-        spadeController.handleSpade();
 
         handleEncounters();
 

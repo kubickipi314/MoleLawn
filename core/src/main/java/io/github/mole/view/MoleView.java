@@ -5,8 +5,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import io.github.mole.presenter.helpers.CoordinatesCalculator;
-import io.github.mole.presenter.helpers.MoleTextureLoader;
+import io.github.mole.view.helpers.MoleTextureLoader;
 import io.github.mole.utils.MoveDirection;
+import io.github.mole.utils.MoveStyle;
 
 import java.util.List;
 
@@ -37,8 +38,8 @@ public class MoleView {
         moleSprite.setTexture(textures.get(frameSwitch));
     }
 
-    public void setDiggingMotive(MoveDirection direction) {
-        textures = loader.getDiggingMotive(direction);
+    public void setDiggingMotive(MoveDirection direction, MoveStyle style) {
+        textures = loader.getMovingMotive(direction, style);
         moleSprite.setTexture(textures.get(frameSwitch));
     }
 

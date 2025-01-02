@@ -18,6 +18,7 @@ public class DiggingController {
     Mole mole;
     Helper helper;
     GamePresentable gamePresentable;
+    SpadeController spadeController;
     public DiggingController(Board board, Mole mole, Helper helper) {
         this.board = board;
         this.mole = mole;
@@ -43,6 +44,7 @@ public class DiggingController {
                     && !board.isObject(left, HILL)) {
                     board.addObject(left, CANAL);
                     gamePresentable.insertObject(CANAL, left);
+                    spadeController.activateByCanal();
                 }
             }
         }
@@ -58,6 +60,7 @@ public class DiggingController {
                     && !board.isObject(right, HILL)) {
                     board.addObject(right, CANAL);
                     gamePresentable.insertObject(CANAL, left);
+                    spadeController.activateByCanal();
                 }
             }
         }
@@ -78,6 +81,7 @@ public class DiggingController {
                     if (!board.isObject(upper, HILL)) {
                         board.addObject(upper, HILL);
                         gamePresentable.insertObject(HILL, upper);
+                        spadeController.activateByHill();
 
 
                         if (board.isObject(upper, CANAL)) {
@@ -91,4 +95,7 @@ public class DiggingController {
 
     }
 
+    public void setSpade(SpadeController spadeController) {
+        this.spadeController = spadeController;
+    }
 }

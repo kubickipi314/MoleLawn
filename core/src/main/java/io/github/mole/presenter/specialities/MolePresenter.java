@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import io.github.mole.CONST;
-import io.github.mole.presenter.MolePresenterInterface;
 import io.github.mole.presenter.helpers.CoordinatesCalculator;
 import io.github.mole.utils.BoardPosition;
 import io.github.mole.utils.MoveDirection;
@@ -51,7 +50,7 @@ public class MolePresenter {
 
     public void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style) {
         actualDirection = direction;
-        moleView.setDiggingMotive(actualDirection);
+        moleView.setDiggingMotive(actualDirection, style);
         startMoveAnimation(destination);
     }
 

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import io.github.mole.CONST;
 import io.github.mole.presenter.helpers.CoordinatesCalculator;
-import io.github.mole.presenter.helpers.TileTextureLoader;
+import io.github.mole.view.helpers.TileTextureLoader;
 import io.github.mole.utils.BoardPosition;
 import io.github.mole.utils.MoveDirection;
 import io.github.mole.utils.TileType;

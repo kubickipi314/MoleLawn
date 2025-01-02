@@ -1,4 +1,4 @@
-package io.github.mole.presenter.helpers;
+package io.github.mole.view.helpers;
 
 import com.badlogic.gdx.graphics.Texture;
 import io.github.mole.utils.ObjectType;
@@ -42,12 +42,11 @@ public class ObjectsTextureLoader {
 
         stillObjects.put(SPADE, List.of(new Texture("textures/objects/spade/still_0.png"),
             new Texture("textures/objects/spade/still_1.png")));
-        insertedObjects.put(SPADE, List.of(new Texture("textures/objects/spade/delete_5.png"),
-            new Texture("textures/objects/spade/delete_4.png"),
-            new Texture("textures/objects/spade/delete_3.png"),
-            new Texture("textures/objects/spade/delete_2.png"),
-            new Texture("textures/objects/spade/delete_1.png"),
-            new Texture("textures/objects/spade/delete_0.png")));
+        insertedObjects.put(SPADE, List.of(new Texture("textures/objects/spade/insert_0.png"),
+            new Texture("textures/objects/spade/insert_1.png"),
+            new Texture("textures/objects/spade/insert_2.png"),
+            new Texture("textures/objects/spade/insert_3.png"),
+            new Texture("textures/objects/spade/insert_4.png")));
         deletedObjects.put(SPADE, List.of(new Texture("textures/objects/spade/delete_0.png"),
             new Texture("textures/objects/spade/delete_1.png"),
             new Texture("textures/objects/spade/delete_2.png"),
