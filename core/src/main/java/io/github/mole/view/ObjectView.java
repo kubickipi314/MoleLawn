@@ -35,12 +35,13 @@ public class ObjectView {
     }
 
     public void setInsertMotive() {
-        actualFrame = -1;
+        actualFrame = 0;
         textures = loader.getInsertMotive(type);
         objectSprite.setTexture(textures.get(0));
     }
 
     public void setDeleteMotive() {
+        actualFrame = 0;
         textures = loader.getDeleteMotive(type);
         objectSprite.setTexture(textures.get(0));
     }

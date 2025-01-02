@@ -24,10 +24,10 @@ public class SingleObject {
         isDeleteAnimation = false;
         isDeleted = false;
         animationTime = 0;
-        init();
+        startInsertAnimation();
     }
 
-    private void init() {
+    private void startInsertAnimation() {
         objectView.setInsertMotive();
         isInsertAnimation = true;
     }
@@ -73,7 +73,8 @@ public class SingleObject {
     }
 
     public void render(SpriteBatch batch) {
-        objectView.draw(batch);
+        if (!isDeleted)
+            objectView.draw(batch);
     }
 
     public BoardPosition getPosition() {

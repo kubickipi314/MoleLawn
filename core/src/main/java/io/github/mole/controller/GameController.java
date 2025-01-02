@@ -3,8 +3,12 @@ package io.github.mole.controller;
 import io.github.mole.CONST;
 import io.github.mole.controller.interfaces.GameControllable;
 import io.github.mole.controller.interfaces.GamePresentable;
-import io.github.mole.model.Tile;
+import io.github.mole.controller.specialities.HillsController;
+import io.github.mole.controller.specialities.SpadeController;
+import io.github.mole.controller.specialities.WormsController;
 import io.github.mole.utils.*;
+
+import java.util.Random;
 
 import static io.github.mole.utils.MoveDirection.*;
 import static io.github.mole.utils.MoveStyle.*;
@@ -13,55 +17,54 @@ import static io.github.mole.utils.TileType.*;
 
 public class GameController implements GameControllable {
     GamePresentable gamePresentable;
-    Tile[][] board;
     int height = CONST.BOARD_HEIGHT;
     int width = CONST.BOARD_WIDTH;
 
-    int positionX;
-    int positionY;
+    Board board;
+    int moleX;
+    int moleY;
+    int energyLevel;
 
-    boolean isSpadeAttack;
-    boolean isSpadeBacked;
-    int spadeAttackX;
-
+    SpadeController spadeController;
+    HillsController hillsController;
+    WormsController wormsController;
+    Helper helper;
 
     public GameController() {
-        board = new Tile[CONST.BOARD_HEIGHT][CONST.BOARD_WIDTH];
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                TileType type = DIRT;
-                if (i == 0) type = AIR;
-                board[i][j] = new Tile(type);
-            }
-        }
+        spadeController = new SpadeController();
+        hillsController = new HillsController();
+        wormsController = new WormsController();
+        helper = new Helper();
 
-        positionX = 2;
-        positionY = height - 1;
-
-        isSpadeAttack = false;
-        isSpadeBacked = false;
+        board = new Board();
+        moleX = CONST.MOLE_POSITION_X;
+        moleY = CONST.MOLE_POSITION_Y;
+        energyLevel = CONST.ENERGY_LEVEL;
     }
 
-    public void setGamePresentable(GamePresentable gamePresentable) {
+    public void setPresentable(GamePresentable gamePresentable) {
         this.gamePresentable = gamePresentable;
+        spadeController.setPresentable(gamePresentable);
+        hillsController.setPresentable(gamePresentable);
+        wormsController.setPresentable(gamePresentable);
     }
 
     public void initializePresentable() {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                TileType type = board[i][j].getType();
-                BoardPosition position = new BoardPosition(j, i);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                TileType type = board.getType(x,y);
+                BoardPosition position = new BoardPosition(x, y);
                 gamePresentable.setTile(position, type);
             }
         }
-        BoardPosition molePosition = new BoardPosition(positionX, positionY);
+        BoardPosition molePosition = new BoardPosition(moleX, moleY);
         gamePresentable.setMolePosition(molePosition);
     }
 
     public void makeMove(MoveDirection direction) {
 
-        int destinationX = positionX;
-        int destinationY = positionY;
+        int destinationX = moleX;
+        int destinationY = moleY;
 
         MoveStyle moveStyle;
 
@@ -79,26 +82,14 @@ public class GameController implements GameControllable {
                 destinationY--;
                 break;
         }
-        //PLANNED ACTIONS
-        if (isSpadeBacked){
-            isSpadeBacked = false;
-            BoardPosition spadePosition = new BoardPosition(spadeAttackX, 1);
-            gamePresentable.deleteObject(SPADE, spadePosition);
-        }
-        if (isSpadeAttack){
-            isSpadeAttack = false;
-            isSpadeBacked = true;
-            BoardPosition spadePosition = new BoardPosition(spadeAttackX, 1);
-            gamePresentable.insertObject(SPADE, spadePosition);
-        }
 
         //MOVING
         if (!direction.equals(NONE) && moveSuccess(destinationX, destinationY)) {
-            positionX = destinationX;
-            positionY = destinationY;
-            Tile destTile = board[height - 1 - positionY][positionX];
+            moleX = destinationX;
+            moleY = destinationY;
+
             //DIGGING
-            if (destTile.getType().equals(DIRT)) {
+            if (board.getType(moleX,moleY).equals(DIRT)) {
                 moveStyle = DIGGING;
                 handleDigging(direction);
             }
@@ -112,85 +103,78 @@ public class GameController implements GameControllable {
             moveStyle = DIGGING;
         }
 
-        BoardPosition destination = new BoardPosition(positionX, positionY);
+        insertRandomWorm();
+        tryEatingWorm();
+
+        BoardPosition destination = new BoardPosition(moleX, moleY);
         gamePresentable.moveMole(destination, direction, moveStyle);
 
-        if (isMoleDead()) {
-            //animate death
-        }
     }
 
     private boolean moveSuccess(int destinationX, int destinationY) {
         if (destinationX < 0 || destinationX >= width) return false;
         if (destinationY < 0 || destinationY >= height) return false;
 
-        Tile destinationTile = board[height - 1 - destinationY][destinationX];
-        if (destinationTile.getType().equals(STONE)) return false;
+        if (board.getType(destinationX,destinationY).equals(STONE)) return false;
         return true;
     }
 
-    private boolean isMoleDead() {
-        return false;
-    }
-
     private void handleDigging(MoveDirection direction){
-        BoardPosition position = new BoardPosition(positionX, positionY);
-        board[height - 1 - positionY][positionX].setType(TUNNEL);
+        BoardPosition position = new BoardPosition(moleX, moleY);
+        board.setType(moleX, moleY, TUNNEL);
         gamePresentable.changeTile(position, direction, TUNNEL);
 
-        BoardPosition leftPosition = getLeftPosition(direction);
-        if (isPositionOnBoard(leftPosition)) {
-            if (isTunnel(leftPosition)) {
-                board[height - 1 - leftPosition.y()][leftPosition.x()].setType(DIRT);
-                gamePresentable.changeTile(leftPosition, getLeftDirection(direction), DIRT);
+        BoardPosition left = helper.getLeftPosition(moleX, moleY, direction);
+        if (helper.isPositionOnBoard(left)) {
+            if (board.getType(left).equals(TUNNEL)) {
+                board.setType(left, DIRT);
+                gamePresentable.changeTile(left, helper.getLeftDirection(direction), DIRT);
             }
-            if (isAir(leftPosition)) {
-                if (!board[height - 1 - leftPosition.y()][leftPosition.x()].isObject(CANAL)
-                    && !board[height - 1 - leftPosition.y()][leftPosition.x()].isObject(HILL)) {
-                    board[height - 1 - leftPosition.y()][leftPosition.x()].addObject(CANAL);
-                    gamePresentable.insertObject(CANAL, leftPosition);
+            if (board.getType(left).equals(AIR)) {
+                if (!board.isObject(left, CANAL)
+                    && !board.isObject(left, HILL)) {
+                    board.addObject(left, CANAL);
+                    gamePresentable.insertObject(CANAL, left);
                 }
             }
         }
 
-        BoardPosition rightPosition = getRightPosition(direction);
-        if (isPositionOnBoard(rightPosition)) {
-            if (isTunnel(rightPosition)) {
-                board[height - 1 - rightPosition.y()][rightPosition.x()].setType(DIRT);
-                gamePresentable.changeTile(rightPosition, getRightDirection(direction), DIRT);
+        BoardPosition right = helper.getRightPosition(moleX, moleY, direction);
+        if (helper.isPositionOnBoard(right)) {
+            if (board.getType(right).equals(TUNNEL)) {
+                board.setType(right.x(), right.y(), DIRT);
+                gamePresentable.changeTile(right, helper.getRightDirection(direction), DIRT);
             }
-            if (isAir(rightPosition)) {
-                if (!board[height - 1 - rightPosition.y()][rightPosition.x()].isObject(CANAL)
-                && !board[height - 1 - rightPosition.y()][rightPosition.x()].isObject(HILL)) {
-                    board[height - 1 - rightPosition.y()][rightPosition.x()].addObject(CANAL);
-                    gamePresentable.insertObject(CANAL, leftPosition);
+            if (board.getType(right).equals(AIR)) {
+                if (!board.isObject(right, CANAL)
+                && !board.isObject(right, HILL)) {
+                    board.addObject(right, CANAL);
+                    gamePresentable.insertObject(CANAL, left);
                 }
             }
         }
 
-        BoardPosition frontPosition = getFrontPosition(direction);
-        if (isPositionOnBoard(frontPosition) && frontPosition.y()<height-1) {
-            if (isTunnel(frontPosition)) {
-                board[height - 1 - frontPosition.y()][frontPosition.x()].setType(DIRT);
-                gamePresentable.changeTile(frontPosition, direction, DIRT);
+        BoardPosition front = helper.getFrontPosition(moleX, moleY, direction);
+        if (helper.isPositionOnBoard(front) && front.y()<height-1) {
+            if (board.getType(front).equals(TUNNEL)) {
+                board.setType(front, DIRT);
+                gamePresentable.changeTile(front, direction, DIRT);
             }
         }
 
         if (direction.equals(UP)){
-            BoardPosition upPosition = getUpperPosition();
-            if (isPositionOnBoard(upPosition)){
+            BoardPosition upper = helper.getUpperPosition(moleX, moleY);
+            if (helper.isPositionOnBoard(upper)){
 
-                if (board[height - 1 - upPosition.y()][upPosition.x()].getType().equals(AIR)) {
-                    if (!board[height - 1 - upPosition.y()][upPosition.x()].isObject(HILL)) {
-                        board[height - 1 - upPosition.y()][upPosition.x()].addObject(HILL);
-                        gamePresentable.insertObject(HILL, upPosition);
+                if (board.getType(upper).equals(AIR)) {
+                    if (!board.isObject(upper, HILL)) {
+                        board.addObject(upper, HILL);
+                        gamePresentable.insertObject(HILL, upper);
 
-                        isSpadeAttack = true;
-                        spadeAttackX = positionX;
 
-                        if (!board[height - 1 - upPosition.y()][upPosition.x()].isObject(CANAL)) {
-                            board[height - 1 - upPosition.y()][upPosition.x()].removeObject(CANAL);
-                            gamePresentable.deleteObject(CANAL, upPosition);
+                        if (board.isObject(upper, CANAL)) {
+                            board.removeObject(upper, CANAL);
+                            gamePresentable.deleteObject(CANAL, upper);
                         }
                     }
                 }
@@ -198,71 +182,30 @@ public class GameController implements GameControllable {
         }
     }
 
-    private BoardPosition getLeftPosition(MoveDirection direction) {
-        return switch (direction) {
-            case LEFT -> new BoardPosition(positionX, positionY - 1);
-            case RIGHT -> new BoardPosition(positionX, positionY + 1);
-            case UP -> new BoardPosition(positionX - 1, positionY);
-            case DOWN -> new BoardPosition(positionX + 1, positionY);
-            default -> null;
-        };
+
+
+    private void insertRandomWorm(){
+        Random random = new Random();
+
+        int x = random.nextInt(width);
+        int y = random.nextInt(height);
+        tryInsertWorm(x, y);
     }
 
-    private BoardPosition getRightPosition(MoveDirection direction) {
-        return switch (direction) {
-            case LEFT -> new BoardPosition(positionX, positionY + 1);
-            case RIGHT -> new BoardPosition(positionX, positionY - 1);
-            case UP -> new BoardPosition(positionX + 1, positionY);
-            case DOWN -> new BoardPosition(positionX - 1, positionY);
-            default -> null;
-        };
+    private void tryInsertWorm(int x, int y){
+        if (x == moleX && y == moleY) return;
+        if (board.getType(x,y).equals(TUNNEL)){
+            if (!board.isObject(x,y,WORM)){
+                board.addObject(x,y,WORM);
+                gamePresentable.insertObject(WORM, new BoardPosition(x, y));
+            }
+        }
     }
 
-    private BoardPosition getFrontPosition(MoveDirection direction) {
-        return switch (direction) {
-            case LEFT -> new BoardPosition(positionX - 1, positionY);
-            case RIGHT -> new BoardPosition(positionX + 1, positionY);
-            case UP -> new BoardPosition(positionX, positionY + 1);
-            case DOWN -> new BoardPosition(positionX, positionY - 1);
-            default -> null;
-        };
-    }
-
-    private BoardPosition getUpperPosition() {
-        return new BoardPosition(positionX, positionY + 1);
-    }
-
-    private boolean isTunnel(BoardPosition position) {
-        return board[height - 1 - position.y()][position.x()].getType().equals(TUNNEL);
-    }
-
-    private boolean isAir(BoardPosition position) {
-        return board[height - 1 - position.y()][position.x()].getType().equals(AIR);
-    }
-
-    private MoveDirection getLeftDirection(MoveDirection direction) {
-        return switch (direction) {
-            case LEFT -> DOWN;
-            case DOWN -> RIGHT;
-            case RIGHT -> UP;
-            case UP -> LEFT;
-            case NONE -> NONE;
-        };
-    }
-
-    private MoveDirection getRightDirection(MoveDirection direction) {
-        return switch (direction) {
-            case LEFT -> UP;
-            case UP -> RIGHT;
-            case RIGHT -> DOWN;
-            case DOWN -> LEFT;
-            case NONE -> NONE;
-        };
-    }
-
-    private boolean isPositionOnBoard(BoardPosition position){
-        if (position.x() < 0 || position.x() >= width) return false;
-        if (position.y() < 0 || position.y() >= height) return false;
-        return true;
+    private void tryEatingWorm(){
+        if (board.isObject(moleX, moleY, WORM)){
+            board.removeObject(moleX, moleY, WORM);
+            gamePresentable.deleteObject(WORM, new BoardPosition(moleX, moleY));
+        }
     }
 }

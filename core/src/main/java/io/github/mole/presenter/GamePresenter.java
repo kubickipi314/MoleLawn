@@ -59,6 +59,7 @@ public class GamePresenter implements GamePresentable {
     public void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style) {
         molePresenter.moveMole(destination, direction, style);
         boardPresenter.startAnimation();
+        //objectsPresenter.startAnimation();
     }
 
     public void changeTile(BoardPosition position, MoveDirection direction, TileType type){
