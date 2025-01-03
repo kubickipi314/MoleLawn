@@ -3,7 +3,6 @@ package io.github.mole.controller;
 import io.github.mole.CONST;
 import io.github.mole.controller.interfaces.GameControllable;
 import io.github.mole.controller.interfaces.GamePresentable;
-import io.github.mole.controller.specialities.HillsController;
 import io.github.mole.controller.specialities.SpadeController;
 import io.github.mole.controller.specialities.DiggingController;
 import io.github.mole.controller.specialities.WormsController;
@@ -38,6 +37,8 @@ public class GameController implements GameControllable {
         diggingController = new DiggingController(board, mole, helper);
         spadeController = new SpadeController(board, mole);
         wormsController = new WormsController(board, mole);
+
+        diggingController.setSpade(spadeController);
     }
 
     public void setPresentable(GamePresentable gamePresentable) {
@@ -78,9 +79,13 @@ public class GameController implements GameControllable {
                 break;
         }
 
+        spadeController.handleSpade();
+
         MoveStyle moveStyle;
         if (!direction.equals(NONE) && moveSuccess(destinationX, destinationY)) {
             mole.changePosition(destinationX, destinationY);
+
+            System.out.println("mole position: " + mole.getX() + " " + mole.getY());
 
             if (board.getType(mole.getPosition()).equals(DIRT)) {
                 moveStyle = DIGGING;
@@ -95,7 +100,6 @@ public class GameController implements GameControllable {
         }
 
         wormsController.handleWorms();
-        spadeController.handleSpade();
 
         handleEncounters();
 
@@ -117,7 +121,7 @@ public class GameController implements GameControllable {
                 board.removeObject(position, WORM);
                 gamePresentable.deleteObject(WORM, position);
             }
-            if (board.isObject(position, SPADE)){
+            if (board.isObject(position, SPADE) || board.isObject(helper.getBottomPosition(), SPADE)){
                 System.out.println("die from Spade");
             }
         }

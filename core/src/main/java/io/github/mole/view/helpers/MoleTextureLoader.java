@@ -1,7 +1,8 @@
-package io.github.mole.presenter.helpers;
+package io.github.mole.view.helpers;
 
 import com.badlogic.gdx.graphics.Texture;
 import io.github.mole.utils.MoveDirection;
+import io.github.mole.utils.MoveStyle;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -11,8 +12,8 @@ import static io.github.mole.utils.MoveDirection.*;
 
 public class MoleTextureLoader {
     private final Map<MoveDirection, List<Texture>> normal;
-
     private final EnumMap<MoveDirection, List<Texture>> digging;
+    private final EnumMap<MoveDirection, List<Texture>> free;
 
     public MoleTextureLoader() {
         normal = new EnumMap<>(MoveDirection.class);
@@ -38,10 +39,26 @@ public class MoleTextureLoader {
             new Texture("textures/mole/dig/down_1.png")));
         digging.put(NONE, List.of(new Texture("textures/mole/dig/none_0.png"),
             new Texture("textures/mole/dig/none_1.png")));
+
+        free = new EnumMap<>(MoveDirection.class);
+        free.put(LEFT, List.of(new Texture("textures/mole/dig/left_0.png"),
+            new Texture("textures/mole/dig/left_1.png")));
+        free.put(RIGHT, List.of(new Texture("textures/mole/dig/right_0.png"),
+            new Texture("textures/mole/dig/right_1.png")));
+        free.put(UP, List.of(new Texture("textures/mole/dig/up_0.png"),
+            new Texture("textures/mole/dig/up_1.png")));
+        free.put(DOWN, List.of(new Texture("textures/mole/dig/down_0.png"),
+            new Texture("textures/mole/dig/down_1.png")));
+        free.put(NONE, List.of(new Texture("textures/mole/dig/none_0.png"),
+            new Texture("textures/mole/dig/none_1.png")));
     }
 
-    public List<Texture> getDiggingMotive(MoveDirection direction) {
-        return digging.get(direction);
+    public List<Texture> getMovingMotive(MoveDirection direction, MoveStyle style) {
+        return switch(style) {
+            case DIGGING -> digging.get(direction);
+            case FREE -> free.get(direction);
+            case DYING -> null;
+        };
     }
 
     public List<Texture> getNormalMotive(MoveDirection direction) {

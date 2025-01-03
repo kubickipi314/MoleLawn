@@ -37,6 +37,7 @@ public class WormsController {
     private void tryInsertWorm(BoardPosition position) {
         if (board.getType(position).equals(TUNNEL)) {
             if (position.equals(mole.getPosition())) return;
+            if (board.isAnyObject(position)) return;
 
             if (!board.isObject(position, WORM)) {
                 board.addObject(position, WORM);

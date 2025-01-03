@@ -31,9 +31,6 @@ public class Board {
         return board[position.y()][position.x()].getType();
     }
 
-    public void setType(int x, int y, TileType type){
-        board[y][x].setType(type);
-    }
 
     public void setType(BoardPosition position, TileType type){
         board[position.y()][position.x()].setType(type);

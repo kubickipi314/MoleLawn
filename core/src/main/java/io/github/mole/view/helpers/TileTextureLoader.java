@@ -1,4 +1,4 @@
-package io.github.mole.presenter.helpers;
+package io.github.mole.view.helpers;
 
 import com.badlogic.gdx.graphics.Texture;
 import io.github.mole.utils.MoveDirection;
