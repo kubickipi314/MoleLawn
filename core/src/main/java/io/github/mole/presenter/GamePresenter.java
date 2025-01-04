@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import io.github.mole.CONST;
 import io.github.mole.controller.interfaces.GameControllable;
 import io.github.mole.controller.interfaces.GamePresentable;
 import io.github.mole.presenter.specialities.BackgroundPresenter;
@@ -43,15 +44,15 @@ public class GamePresenter implements GamePresentable {
         camera = new OrthographicCamera();
         int windowWidth = Gdx.graphics.getWidth();
         int windowHeight = Gdx.graphics.getHeight();
-        camera.setToOrtho(false, (float) windowWidth/2, (float) windowHeight/2);
-        camera.position.lerp(new Vector3(250, 300, 0), 0.1f);
+        camera.setToOrtho(false, (float) windowWidth/1.8f, (float) windowHeight/1.8f);
+        camera.position.lerp(new Vector3(150, 200, 0), 0.1f);
     }
 
     public void update() {
         float targetX = molePresenter.getMoleX();
         float targetY = molePresenter.getMoleY();
-        float cameraX = MathUtils.clamp(targetX, camera.viewportWidth / 2 + 40,  660 - camera.viewportWidth / 2);
-        float cameraY = MathUtils.clamp(targetY, camera.viewportWidth / 2, 440 - camera.viewportWidth / 2);
+        float cameraX = MathUtils.clamp(targetX, camera.viewportWidth / 2 - 10,  CONST.BOARD_WIDTH * 50 + 10 - camera.viewportWidth / 2);
+        float cameraY = MathUtils.clamp(targetY, camera.viewportHeight / 2 - 10, CONST.BOARD_HEIGHT * 50 + 50 - camera.viewportHeight / 2);
         camera.position.lerp(new Vector3(cameraX, cameraY, 0), 0.075f);
         camera.update();
 
@@ -78,7 +79,6 @@ public class GamePresenter implements GamePresentable {
     public void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style) {
         molePresenter.moveMole(destination, direction, style);
         boardPresenter.startAnimation();
-        //objectsPresenter.startAnimation();
     }
 
     public void changeTile(BoardPosition position, MoveDirection direction, TileType type){

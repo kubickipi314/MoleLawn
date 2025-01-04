@@ -9,14 +9,14 @@ public class CoordinatesCalculator {
     final static float tileSize = 50;
 
     public Vector2 getCoordinates(BoardPosition position) {
-        float x = position.x() * tileSize + tileSize;
-        float y = (CONST.BOARD_HEIGHT - position.y()) * tileSize;
+        float x = position.x() * tileSize;
+        float y = (CONST.BOARD_HEIGHT - position.y() - 1) * tileSize;
         return new Vector2(x, y);
     }
 
     public Vector2 getCoordinates(int posX, int posY) {
-        float x = posX * tileSize + tileSize;
-        float y = (CONST.BOARD_HEIGHT - posY) * tileSize;
+        float x = posX * tileSize;
+        float y = (CONST.BOARD_HEIGHT - posY - 1) * tileSize;
         return new Vector2(x, y);
     }
 
@@ -31,6 +31,7 @@ public class CoordinatesCalculator {
     public Vector2 getObjectSize(ObjectType type) {
         return switch (type) {
             case HILL, CANAL -> new Vector2(3 * tileSize, tileSize);
+            case BOOT -> new Vector2(4 * tileSize, 2 * tileSize);
             case SPADE -> new Vector2(tileSize, 3 * tileSize);
             default -> new Vector2(tileSize, tileSize);
         };
@@ -39,6 +40,7 @@ public class CoordinatesCalculator {
     public Vector2 getObjectCoordinates(ObjectType type, BoardPosition boardPosition) {
         return switch (type) {
             case HILL, CANAL -> getCoordinates(boardPosition.x() - 1, 0);
+            case BOOT -> getCoordinates(boardPosition.x() - 2, 0);
             default -> getCoordinates(boardPosition);
         };
     }

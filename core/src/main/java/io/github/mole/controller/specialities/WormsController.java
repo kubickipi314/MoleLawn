@@ -15,8 +15,6 @@ public class WormsController {
     GamePresentable gamePresentable;
     Board board;
     Mole mole;
-    int height = CONST.BOARD_HEIGHT;
-    int width = CONST.BOARD_WIDTH;
 
     public WormsController(Board board, Mole mole) {
         this.board = board;
@@ -29,8 +27,8 @@ public class WormsController {
 
     public void handleWorms() {
         Random random = new Random();
-        int x = random.nextInt(width);
-        int y = random.nextInt(height);
+        int x = random.nextInt(board.getWidth());
+        int y = random.nextInt(board.getHeight());
         tryInsertWorm(new BoardPosition(x,y));
     }
 

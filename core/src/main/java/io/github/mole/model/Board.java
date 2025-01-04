@@ -50,4 +50,12 @@ public class Board {
     public void removeObject(BoardPosition position, ObjectType type){
         board[position.y()][position.x()].removeObject(type);
     }
+
+    public int getHeight(){
+        return height;
+    }
+
+    public int getWidth(){
+        return width;
+    }
 }

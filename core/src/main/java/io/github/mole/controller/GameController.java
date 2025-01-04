@@ -3,18 +3,23 @@ package io.github.mole.controller;
 import io.github.mole.CONST;
 import io.github.mole.controller.interfaces.GameControllable;
 import io.github.mole.controller.interfaces.GamePresentable;
-import io.github.mole.controller.specialities.SpadeController;
+import io.github.mole.controller.specialities.BootController;
 import io.github.mole.controller.specialities.DiggingController;
+import io.github.mole.controller.specialities.SpadeController;
 import io.github.mole.controller.specialities.WormsController;
 import io.github.mole.model.Board;
 import io.github.mole.model.Mole;
-import io.github.mole.utils.*;
+import io.github.mole.utils.BoardPosition;
+import io.github.mole.utils.MoveDirection;
+import io.github.mole.utils.MoveStyle;
+import io.github.mole.utils.TileType;
 
-
-import static io.github.mole.utils.MoveDirection.*;
-import static io.github.mole.utils.MoveStyle.*;
+import static io.github.mole.utils.MoveDirection.NONE;
+import static io.github.mole.utils.MoveStyle.DIGGING;
+import static io.github.mole.utils.MoveStyle.FREE;
 import static io.github.mole.utils.ObjectType.*;
-import static io.github.mole.utils.TileType.*;
+import static io.github.mole.utils.TileType.DIRT;
+import static io.github.mole.utils.TileType.STONE;
 
 public class GameController implements GameControllable {
     GamePresentable gamePresentable;
@@ -27,6 +32,7 @@ public class GameController implements GameControllable {
     DiggingController diggingController;
     SpadeController spadeController;
     WormsController wormsController;
+    BootController bootController;
     Helper helper;
 
     public GameController() {
@@ -37,6 +43,7 @@ public class GameController implements GameControllable {
         diggingController = new DiggingController(board, mole, helper);
         spadeController = new SpadeController(board, mole);
         wormsController = new WormsController(board, mole);
+        bootController = new BootController(board, mole, helper);
 
         diggingController.setSpade(spadeController);
     }
@@ -46,12 +53,13 @@ public class GameController implements GameControllable {
         diggingController.setPresentable(gamePresentable);
         spadeController.setPresentable(gamePresentable);
         wormsController.setPresentable(gamePresentable);
+        bootController.setPresentable(gamePresentable);
     }
 
     public void initializePresentable() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                TileType type = board.getType(x,y);
+                TileType type = board.getType(x, y);
                 BoardPosition position = new BoardPosition(x, y);
                 gamePresentable.setTile(position, type);
             }
@@ -85,22 +93,18 @@ public class GameController implements GameControllable {
         if (!direction.equals(NONE) && moveSuccess(destinationX, destinationY)) {
             mole.changePosition(destinationX, destinationY);
 
-            System.out.println("mole position: " + mole.getX() + " " + mole.getY());
-
             if (board.getType(mole.getPosition()).equals(DIRT)) {
                 moveStyle = DIGGING;
                 diggingController.handleDigging(direction);
-            }
-            else {
+            } else {
                 moveStyle = FREE;
             }
-        }
-        else {
+        } else {
             moveStyle = DIGGING;
         }
 
+        bootController.handleBoot();
         wormsController.handleWorms();
-
         handleEncounters();
 
         gamePresentable.moveMole(mole.getPosition(), direction, moveStyle);
@@ -110,18 +114,20 @@ public class GameController implements GameControllable {
         if (destinationX < 0 || destinationX >= width) return false;
         if (destinationY < 0 || destinationY >= height) return false;
 
-        if (board.getType(destinationX,destinationY).equals(STONE)) return false;
+        BoardPosition destination = new BoardPosition(destinationX, destinationY);
+        if (board.isObject(destination,BOOT)) return false;
+        if (board.getType(destinationX, destinationY).equals(STONE)) return false;
         return true;
     }
 
-    public void handleEncounters(){
+    public void handleEncounters() {
         BoardPosition position = mole.getPosition();
-        if (board.isAnyObject(position)){
-            if (board.isObject(position, WORM)){
+        if (board.isAnyObject(position)) {
+            if (board.isObject(position, WORM)) {
                 board.removeObject(position, WORM);
                 gamePresentable.deleteObject(WORM, position);
             }
-            if (board.isObject(position, SPADE) || board.isObject(helper.getBottomPosition(), SPADE)){
+            if (board.isObject(position, SPADE) || board.isObject(helper.getBottomPosition(), SPADE)) {
                 System.out.println("die from Spade");
             }
         }
