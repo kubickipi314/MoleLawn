@@ -28,6 +28,7 @@ public class MolePresenter {
     MoveDirection actualDirection;
 
     boolean isMoving;
+    boolean moveEnded;
     float movementTime;
     float updatePoint;
 
@@ -36,6 +37,7 @@ public class MolePresenter {
         moleView = new MoleView();
         moleView.setNormalMotive(NONE);
         isMoving = false;
+        moveEnded = false;
         actualDirection = NONE;
     }
 
@@ -92,11 +94,16 @@ public class MolePresenter {
         if (progress >= 1.0f) {
             isMoving = false;
             movementTime = 0;
-            moleView.setNormalMotive(actualDirection);
+            moveEnded = true;
+            //moleView.setNormalMotive(actualDirection);
         }
     }
 
     private void updateState() {
+        if (moveEnded){
+            moleView.setNormalMotive(actualDirection);
+            moveEnded = false;
+        }
         movementTime += Gdx.graphics.getDeltaTime();
         if (movementTime >= 0.9f) {
             moleView.updateMotive();

@@ -23,13 +23,13 @@ public class SingleObject {
         isInsertAnimation = false;
         isDeleteAnimation = false;
         isDeleted = false;
-        animationTime = 0;
         startInsertAnimation();
     }
 
     private void startInsertAnimation() {
         objectView.setInsertMotive();
         isInsertAnimation = true;
+        animationTime = 0;
     }
 
     public void delete() {
@@ -39,6 +39,7 @@ public class SingleObject {
     private void startDeleteAnimation() {
         objectView.setDeleteMotive();
         isDeleteAnimation = true;
+        animationTime = 0;
     }
 
     public void update() {
@@ -55,7 +56,7 @@ public class SingleObject {
 
         } else {
             animationTime += Gdx.graphics.getDeltaTime();
-            if (animationTime >= 0.9f) {
+            if (animationTime >= 1.2f) {
                 objectView.updateMotive();
                 animationTime = 0;
             }

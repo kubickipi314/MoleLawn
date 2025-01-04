@@ -25,10 +25,10 @@ public class ObjectsTextureLoader {
             new Texture("textures/objects/hill/insert_1.png"),
             new Texture("textures/objects/hill/insert_2.png"),
             new Texture("textures/objects/hill/insert_3.png")));
-        deletedObjects.put(HILL, List.of(new Texture("textures/objects/hill/delete_0.png"),
-            new Texture("textures/objects/hill/delete_1.png"),
-            new Texture("textures/objects/hill/delete_2.png"),
-            new Texture("textures/objects/hill/delete_3.png")));
+        deletedObjects.put(HILL, List.of(new Texture("textures/objects/hill/still_0.png"),
+            new Texture("textures/objects/hill/still_1.png"),
+            //new Texture("textures/objects/hill/delete_2.png"),
+            new Texture("textures/objects/hill/delete_2.png")));
 
         stillObjects.put(CANAL, List.of(new Texture("textures/objects/canal/still_0.png"),
             new Texture("textures/objects/canal/still_1.png")));
@@ -53,6 +53,17 @@ public class ObjectsTextureLoader {
             new Texture("textures/objects/spade/delete_3.png"),
             new Texture("textures/objects/spade/delete_4.png"),
             new Texture("textures/objects/spade/delete_5.png")));
+
+        stillObjects.put(BOOT, List.of(new Texture("textures/objects/boot/still_0.png"),
+            new Texture("textures/objects/boot/still_1.png")));
+        insertedObjects.put(BOOT, List.of(new Texture("textures/objects/boot/insert_0.png"),
+            new Texture("textures/objects/boot/insert_1.png"),
+            new Texture("textures/objects/boot/insert_2.png"),
+            new Texture("textures/objects/boot/insert_3.png")));
+        deletedObjects.put(BOOT, List.of(new Texture("textures/objects/boot/insert_3.png"),
+            new Texture("textures/objects/boot/insert_2.png"),
+            new Texture("textures/objects/boot/insert_1.png"),
+            new Texture("textures/objects/boot/insert_0.png")));
 
         stillObjects.put(WORM, List.of(new Texture("textures/objects/worm/still_0.png"),
             new Texture("textures/objects/worm/still_1.png")));

@@ -4,6 +4,7 @@ public enum ObjectType {
     SPADE,
     CANAL,
     HILL,
+    BOOT,
     WORM,
     WATER,
     SMOKE

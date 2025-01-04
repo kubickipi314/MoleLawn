@@ -40,6 +40,7 @@ public class ObjectsPresenter {
         for (var object : objects.get(type)) {
             if (object.getPosition().equals(boardPosition)) {
                 object.delete();
+                return;
             }
         }
     }

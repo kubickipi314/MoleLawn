@@ -66,7 +66,8 @@ public class DiggingController {
     private void tryMakeCanal(BoardPosition position){
         if (board.getType(position).equals(AIR)) {
             if (!board.isObject(position, CANAL)
-                && !board.isObject(position, HILL)) {
+                && !board.isObject(position, HILL)
+                && !board.isObject(position, BOOT)) {
                 board.addObject(position, CANAL);
                 gamePresentable.insertObject(CANAL, position);
                 spadeController.activateByCanal();
@@ -76,7 +77,8 @@ public class DiggingController {
 
     private void tryMakeHill(BoardPosition position){
         if (board.getType(position).equals(AIR)) {
-            if (!board.isObject(position, HILL)) {
+            if (!board.isObject(position, HILL)
+                && !board.isObject(position, BOOT)) {
                 board.addObject(position, HILL);
                 gamePresentable.insertObject(HILL, position);
                 spadeController.activateByHill();

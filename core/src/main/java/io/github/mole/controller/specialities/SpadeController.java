@@ -1,6 +1,5 @@
 package io.github.mole.controller.specialities;
 
-import com.badlogic.gdx.math.MathUtils;
 import io.github.mole.CONST;
 import io.github.mole.controller.interfaces.GamePresentable;
 import io.github.mole.model.Board;
@@ -9,6 +8,7 @@ import io.github.mole.utils.BoardPosition;
 
 import java.util.Random;
 
+import static io.github.mole.utils.ObjectType.BOOT;
 import static io.github.mole.utils.ObjectType.SPADE;
 
 public class SpadeController {
@@ -36,6 +36,7 @@ public class SpadeController {
     public void handleSpade() {
         if (activeByHill) {
             spadePosition = mole.getPosition();
+            if (board.isObject(new BoardPosition(mole.getX(), 0), BOOT)) return;
             board.addObject(spadePosition, SPADE);
             gamePresentable.insertObject(SPADE, spadePosition);
 
@@ -44,7 +45,11 @@ public class SpadeController {
 
         } else if (activeByCanal) {
             int moleX = mole.getX();
-            moleX += MathUtils.clamp(random.nextInt(3) - 1, 0, CONST.BOARD_WIDTH - 1);
+            moleX += random.nextInt(3) - 1;
+            if (moleX == -1) moleX++;
+            if (moleX == CONST.BOARD_WIDTH) moleX--;
+
+            if (board.isObject(new BoardPosition(mole.getX(), 0), BOOT)) return;
 
             spadePosition = new BoardPosition(moleX, 1);
             board.addObject(spadePosition, SPADE);

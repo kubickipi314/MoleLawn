@@ -98,7 +98,7 @@ public class BoardPresenter {
 
     public void render(SpriteBatch batch, int stageNumber) {
         if (stageNumber == ONE) {
-            for (int y = 0; y < height; y++) {
+            for (int y = 1; y < height; y++) {
                 for (int x = 0; x < width; x++) {
                     board[y][x].draw(batch);
                 }
