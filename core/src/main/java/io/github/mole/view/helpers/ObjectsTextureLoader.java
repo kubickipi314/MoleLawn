@@ -59,7 +59,9 @@ public class ObjectsTextureLoader {
         insertedObjects.put(BOOT, List.of(new Texture("textures/objects/boot/insert_0.png"),
             new Texture("textures/objects/boot/insert_1.png"),
             new Texture("textures/objects/boot/insert_2.png"),
-            new Texture("textures/objects/boot/insert_3.png")));
+            new Texture("textures/objects/boot/insert_3.png"),
+            new Texture("textures/objects/boot/insert_4.png"),
+            new Texture("textures/objects/boot/insert_5.png")));
         deletedObjects.put(BOOT, List.of(new Texture("textures/objects/boot/delete_0.png"),
             new Texture("textures/objects/boot/delete_1.png"),
             new Texture("textures/objects/boot/delete_2.png"),

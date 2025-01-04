@@ -44,7 +44,7 @@ public class GamePresenter implements GamePresentable {
         camera = new OrthographicCamera();
         int windowWidth = Gdx.graphics.getWidth();
         int windowHeight = Gdx.graphics.getHeight();
-        camera.setToOrtho(false, (float) windowWidth/2, (float) windowHeight/2);
+        camera.setToOrtho(false, (float) windowWidth/1.8f, (float) windowHeight/1.8f);
         camera.position.lerp(new Vector3(150, 200, 0), 0.1f);
     }
 
