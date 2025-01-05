@@ -5,6 +5,8 @@ import io.github.mole.utils.ObjectType;
 
 import java.util.EnumMap;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static io.github.mole.utils.ObjectType.*;
 
@@ -19,79 +21,34 @@ public class ObjectsTextureLoader {
         insertedObjects = new EnumMap<>(ObjectType.class);
         deletedObjects = new EnumMap<>(ObjectType.class);
 
-        stillObjects.put(HILL, List.of(new Texture("textures/objects/hill/still_0.png"),
-            new Texture("textures/objects/hill/still_1.png")));
-        insertedObjects.put(HILL, List.of(new Texture("textures/objects/hill/insert_0.png"),
-            new Texture("textures/objects/hill/insert_1.png"),
-            new Texture("textures/objects/hill/insert_2.png"),
-            new Texture("textures/objects/hill/insert_3.png")));
-        deletedObjects.put(HILL, List.of(new Texture("textures/objects/hill/still_0.png"),
-            new Texture("textures/objects/hill/still_1.png"),
-            //new Texture("textures/objects/hill/delete_2.png"),
-            new Texture("textures/objects/hill/delete_2.png")));
 
-        stillObjects.put(CANAL, List.of(new Texture("textures/objects/canal/still_0.png"),
-            new Texture("textures/objects/canal/still_1.png")));
-        insertedObjects.put(CANAL, List.of(new Texture("textures/objects/canal/insert_0.png"),
-            new Texture("textures/objects/canal/insert_1.png"),
-            new Texture("textures/objects/canal/insert_2.png"),
-            new Texture("textures/objects/canal/insert_3.png"),
-            new Texture("textures/objects/canal/insert_4.png")));
-        deletedObjects.put(CANAL, List.of(new Texture("textures/objects/canal/delete_0.png"),
-            new Texture("textures/objects/canal/delete_1.png")));
+        stillObjects.put(HILL, getTextureList("textures/objects/hill/still",2));
+        insertedObjects.put(HILL, getTextureList("textures/objects/hill/insert",4));
+        deletedObjects.put(HILL, getTextureList("textures/objects/hill/delete",3));
 
-        stillObjects.put(SPADE, List.of(new Texture("textures/objects/spade/still_0.png"),
-            new Texture("textures/objects/spade/still_1.png")));
-        insertedObjects.put(SPADE, List.of(new Texture("textures/objects/spade/insert_0.png"),
-            new Texture("textures/objects/spade/insert_1.png"),
-            new Texture("textures/objects/spade/insert_2.png"),
-            new Texture("textures/objects/spade/insert_3.png"),
-            new Texture("textures/objects/spade/insert_4.png")));
-        deletedObjects.put(SPADE, List.of(new Texture("textures/objects/spade/delete_0.png"),
-            new Texture("textures/objects/spade/delete_1.png"),
-            new Texture("textures/objects/spade/delete_2.png"),
-            new Texture("textures/objects/spade/delete_3.png"),
-            new Texture("textures/objects/spade/delete_4.png"),
-            new Texture("textures/objects/spade/delete_5.png")));
+        stillObjects.put(CANAL, getTextureList("textures/objects/canal/still",2));
+        insertedObjects.put(CANAL, getTextureList("textures/objects/canal/insert",5));
+        deletedObjects.put(CANAL, getTextureList("textures/objects/canal/delete",2));
 
-        stillObjects.put(BOOT, List.of(new Texture("textures/objects/boot/still_0.png"),
-            new Texture("textures/objects/boot/still_1.png")));
-        insertedObjects.put(BOOT, List.of(new Texture("textures/objects/boot/insert_0.png"),
-            new Texture("textures/objects/boot/insert_1.png"),
-            new Texture("textures/objects/boot/insert_2.png"),
-            new Texture("textures/objects/boot/insert_3.png"),
-            new Texture("textures/objects/boot/insert_4.png"),
-            new Texture("textures/objects/boot/insert_5.png")));
-        deletedObjects.put(BOOT, List.of(new Texture("textures/objects/boot/delete_0.png"),
-            new Texture("textures/objects/boot/delete_1.png"),
-            new Texture("textures/objects/boot/delete_2.png"),
-            new Texture("textures/objects/boot/delete_3.png"),
-            new Texture("textures/objects/boot/delete_4.png"),
-            new Texture("textures/objects/boot/delete_5.png"),
-            new Texture("textures/objects/boot/delete_6.png"),
-            new Texture("textures/objects/boot/delete_7.png"),
-            new Texture("textures/objects/boot/delete_8.png"),
-            new Texture("textures/objects/boot/delete_9.png"),
-            new Texture("textures/objects/boot/delete_10.png")));
+        stillObjects.put(SPADE, getTextureList("textures/objects/spade/still",2));
+        insertedObjects.put(SPADE, getTextureList("textures/objects/spade/insert",5));
+        deletedObjects.put(SPADE, getTextureList("textures/objects/spade/delete",6));
 
-        stillObjects.put(WORM, List.of(new Texture("textures/objects/worm/still_0.png"),
-            new Texture("textures/objects/worm/still_1.png")));
-        insertedObjects.put(WORM, List.of(new Texture("textures/objects/worm/insert_0.png"),
-            new Texture("textures/objects/worm/insert_1.png"),
-            new Texture("textures/objects/worm/insert_2.png")));
-        deletedObjects.put(WORM, List.of(new Texture("textures/objects/worm/delete_0.png"),
-            new Texture("textures/objects/worm/delete_1.png"),
-            new Texture("textures/objects/worm/delete_2.png")));
+        stillObjects.put(BOOT, getTextureList("textures/objects/boot/still",2));
+        insertedObjects.put(BOOT, getTextureList("textures/objects/boot/insert",6));
+        deletedObjects.put(BOOT, getTextureList("textures/objects/boot/delete",11));
 
-        stillObjects.put(WATER, List.of(new Texture("textures/objects/water/still_0.png"),
-            new Texture("textures/objects/water/still_1.png"),
-            new Texture("textures/objects/water/still_2.png"),
-            new Texture("textures/objects/water/still_3.png"),
-            new Texture("textures/objects/water/still_4.png"),
-            new Texture("textures/objects/water/still_5.png"),
-            new Texture("textures/objects/water/still_6.png")));
-        insertedObjects.put(WATER, List.of(new Texture("textures/objects/water/still_0.png")));
-        deletedObjects.put(WATER, List.of(new Texture("textures/objects/water/still_0.png")));
+        stillObjects.put(WORM, getTextureList("textures/objects/worm/still",2));
+        insertedObjects.put(WORM, getTextureList("textures/objects/worm/insert",3));
+        deletedObjects.put(WORM, getTextureList("textures/objects/worm/delete",3));
+
+        stillObjects.put(WATER, getTextureList("textures/objects/water/still",7));
+        insertedObjects.put(WATER, getTextureList("textures/objects/water/still",2));
+        deletedObjects.put(WATER, getTextureList("textures/objects/water/still",2));
+    }
+
+    private List<Texture> getTextureList(String name, int count) {
+        return IntStream.range(0, count).mapToObj(idx -> new Texture(name + "_" + idx + ".png")).collect(Collectors.toList());
     }
 
     public List<Texture> getSillMotive(ObjectType type) {
