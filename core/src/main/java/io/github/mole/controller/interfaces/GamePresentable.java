@@ -10,6 +10,8 @@ public interface GamePresentable {
 
     void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style);
 
+    void moleDie();
+
     void changeTile(BoardPosition position, MoveDirection direction, TileType type);
 
     void insertObject(ObjectType type, BoardPosition position);

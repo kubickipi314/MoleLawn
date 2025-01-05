@@ -31,6 +31,7 @@ public class MolePresenter {
     boolean moveEnded;
     float movementTime;
     float updatePoint;
+    boolean moleDead;
 
     public MolePresenter() {
         calculator = new CoordinatesCalculator();
@@ -38,6 +39,7 @@ public class MolePresenter {
         moleView.setNormalMotive(NONE);
         isMoving = false;
         moveEnded = false;
+        moleDead = false;
         actualDirection = NONE;
     }
 
@@ -88,20 +90,24 @@ public class MolePresenter {
 
         if (movementTime >= updatePoint) {
             moleView.updateMotive();
-            updatePoint += 0.2f;
+            updatePoint += animationDuration/3;
         }
 
         if (progress >= 1.0f) {
             isMoving = false;
             movementTime = 0;
             moveEnded = true;
-            //moleView.setNormalMotive(actualDirection);
+
         }
     }
 
     private void updateState() {
         if (moveEnded){
-            moleView.setNormalMotive(actualDirection);
+            if (moleDead) {
+                moleView.setDeadMotive(actualDirection);
+                moleDead = false;
+            }
+            else moleView.setNormalMotive(actualDirection);
             moveEnded = false;
         }
         movementTime += Gdx.graphics.getDeltaTime();
@@ -125,5 +131,9 @@ public class MolePresenter {
 
     public void render(SpriteBatch batch, int stageNumber) {
         if (stageNumber == ONE) moleView.draw(batch);
+    }
+
+    public void moleDie() {
+        moleDead = true;
     }
 }

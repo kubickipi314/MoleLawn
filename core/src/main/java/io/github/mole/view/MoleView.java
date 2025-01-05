@@ -34,12 +34,20 @@ public class MoleView {
     }
 
     public void setNormalMotive(MoveDirection direction) {
+        frameSwitch = 0;
         textures = loader.getNormalMotive(direction);
         moleSprite.setTexture(textures.get(frameSwitch));
     }
 
     public void setDiggingMotive(MoveDirection direction, MoveStyle style) {
+        frameSwitch = 0;
         textures = loader.getMovingMotive(direction, style);
+        moleSprite.setTexture(textures.get(frameSwitch));
+    }
+
+    public void setDeadMotive(MoveDirection direction) {
+        frameSwitch = 0;
+        textures = loader.getDeadMotive(direction);
         moleSprite.setTexture(textures.get(frameSwitch));
     }
 
@@ -51,4 +59,5 @@ public class MoleView {
     public void draw(SpriteBatch batch) {
         moleSprite.draw(batch);
     }
+
 }

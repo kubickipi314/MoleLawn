@@ -7,6 +7,8 @@ import io.github.mole.utils.BoardPosition;
 import io.github.mole.utils.ObjectType;
 import io.github.mole.view.ObjectView;
 
+import static io.github.mole.utils.ObjectType.WATER;
+
 public class SingleObject {
     ObjectType type;
     BoardPosition position;
@@ -15,6 +17,7 @@ public class SingleObject {
     boolean isDeleteAnimation;
     boolean isDeleted;
     float animationTime;
+    float updateTime;
 
     public SingleObject(ObjectType type, BoardPosition position, ObjectView objectView) {
         this.type = type;
@@ -23,7 +26,13 @@ public class SingleObject {
         isInsertAnimation = false;
         isDeleteAnimation = false;
         isDeleted = false;
+        updateTime = getTime(type);
         startInsertAnimation();
+    }
+
+    private float getTime(ObjectType type) {
+        if (type.equals(WATER))return 0.2f;
+        return 1.2f;
     }
 
     private void startInsertAnimation() {
@@ -56,7 +65,7 @@ public class SingleObject {
 
         } else {
             animationTime += Gdx.graphics.getDeltaTime();
-            if (animationTime >= 1.2f) {
+            if (animationTime >= updateTime) {
                 objectView.updateMotive();
                 animationTime = 0;
             }

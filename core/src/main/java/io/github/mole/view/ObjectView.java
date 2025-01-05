@@ -15,7 +15,6 @@ public class ObjectView {
     ObjectsTextureLoader loader;
     ObjectType type;
     int actualFrame;
-    int frameSwitch;
 
     public ObjectView(ObjectType type, Vector2 position, Vector2 size, ObjectsTextureLoader loader) {
         textures = loader.getInsertMotive(type);
@@ -24,7 +23,6 @@ public class ObjectView {
         objectSprite.setSize(size.x, size.y);
         this.loader = loader;
         this.type = type;
-        frameSwitch = 0;
         actualFrame = 0;
     }
 
@@ -55,8 +53,8 @@ public class ObjectView {
     }
 
     public void updateMotive() {
-        frameSwitch = (frameSwitch + 1) % textures.size();
-        objectSprite.setTexture(textures.get(frameSwitch));
+        actualFrame = (actualFrame + 1) % textures.size();
+        objectSprite.setTexture(textures.get(actualFrame));
     }
 
     public void draw(SpriteBatch batch) {
