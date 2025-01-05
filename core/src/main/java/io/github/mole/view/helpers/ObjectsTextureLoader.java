@@ -82,6 +82,16 @@ public class ObjectsTextureLoader {
         deletedObjects.put(WORM, List.of(new Texture("textures/objects/worm/delete_0.png"),
             new Texture("textures/objects/worm/delete_1.png"),
             new Texture("textures/objects/worm/delete_2.png")));
+
+        stillObjects.put(WATER, List.of(new Texture("textures/objects/water/still_0.png"),
+            new Texture("textures/objects/water/still_1.png"),
+            new Texture("textures/objects/water/still_2.png"),
+            new Texture("textures/objects/water/still_3.png"),
+            new Texture("textures/objects/water/still_4.png"),
+            new Texture("textures/objects/water/still_5.png"),
+            new Texture("textures/objects/water/still_6.png")));
+        insertedObjects.put(WATER, List.of(new Texture("textures/objects/water/still_0.png")));
+        deletedObjects.put(WATER, List.of(new Texture("textures/objects/water/still_0.png")));
     }
 
     public List<Texture> getSillMotive(ObjectType type) {
