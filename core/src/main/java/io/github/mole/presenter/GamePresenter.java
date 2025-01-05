@@ -18,7 +18,6 @@ import io.github.mole.utils.*;
 import static io.github.mole.CONST.ONE;
 import static io.github.mole.CONST.TWO;
 import static io.github.mole.utils.MoveDirection.*;
-import static io.github.mole.utils.ObjectType.WATER;
 
 public class GamePresenter implements GamePresentable {
 

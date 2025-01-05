@@ -90,7 +90,7 @@ public class MolePresenter {
 
         if (movementTime >= updatePoint) {
             moleView.updateMotive();
-            updatePoint += 0.2f;
+            updatePoint += animationDuration/3;
         }
 
         if (progress >= 1.0f) {

@@ -34,8 +34,8 @@ public class MoleTextureLoader {
         digging.put(NONE, getTextureList("textures/mole/dig/none",2));
 
         free = new EnumMap<>(MoveDirection.class);
-        free.put(LEFT, getTextureList("textures/mole/dig/left",2));
-        free.put(RIGHT, getTextureList("textures/mole/dig/right",2));
+        free.put(LEFT, getTextureList("textures/mole/free/left",2));
+        free.put(RIGHT, getTextureList("textures/mole/free/right",2));
         free.put(UP, getTextureList("textures/mole/dig/up",2));
         free.put(DOWN, getTextureList("textures/mole/dig/down",2));
         free.put(NONE, getTextureList("textures/mole/dig/none",2));
