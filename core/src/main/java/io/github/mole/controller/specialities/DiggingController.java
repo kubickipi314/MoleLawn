@@ -31,6 +31,7 @@ public class DiggingController {
         board.setType(mole.getPosition(), TUNNEL);
         gamePresentable.changeTile(mole.getPosition(), direction, TUNNEL);
 
+        
         BoardPosition left = helper.getLeftPosition(direction);
         if (helper.isPositionOnBoard(left)) {
             tryBuryTunnel(left, helper.getLeftDirection(direction));

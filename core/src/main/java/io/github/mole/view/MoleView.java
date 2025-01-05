@@ -43,6 +43,11 @@ public class MoleView {
         moleSprite.setTexture(textures.get(frameSwitch));
     }
 
+    public void setDeadMotive(MoveDirection direction) {
+        textures = loader.getDeadMotive(direction);
+        moleSprite.setTexture(textures.get(frameSwitch));
+    }
+
     public void updateMotive() {
         frameSwitch = (frameSwitch + 1) % textures.size();
         moleSprite.setTexture(textures.get(frameSwitch));
@@ -51,4 +56,5 @@ public class MoleView {
     public void draw(SpriteBatch batch) {
         moleSprite.draw(batch);
     }
+
 }

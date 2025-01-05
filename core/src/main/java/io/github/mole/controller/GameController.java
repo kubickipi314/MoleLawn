@@ -129,6 +129,11 @@ public class GameController implements GameControllable {
             }
             if (board.isObject(position, SPADE) || board.isObject(helper.getBottomPosition(), SPADE)) {
                 System.out.println("die from Spade");
+                gamePresentable.moleDie();
+            }
+            if (board.isObject(position, BOOT)) {
+                System.out.println("die from Boot");
+                gamePresentable.moleDie();
             }
         }
     }

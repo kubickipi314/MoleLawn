@@ -72,13 +72,16 @@ public class GamePresenter implements GamePresentable {
         molePresenter.render(batch, ONE);
         objectsPresenter.render(batch, ONE);
         sightPresenter.render(batch, ONE);
-
         batch.end();
     }
 
     public void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style) {
         molePresenter.moveMole(destination, direction, style);
         boardPresenter.startAnimation();
+    }
+
+    public void moleDie(){
+        molePresenter.moleDie();
     }
 
     public void changeTile(BoardPosition position, MoveDirection direction, TileType type){
