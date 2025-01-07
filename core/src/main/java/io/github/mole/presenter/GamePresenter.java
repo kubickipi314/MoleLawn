@@ -9,10 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import io.github.mole.CONST;
 import io.github.mole.controller.interfaces.GameControllable;
 import io.github.mole.controller.interfaces.GamePresentable;
-import io.github.mole.presenter.specialities.BackgroundPresenter;
-import io.github.mole.presenter.specialities.BoardPresenter;
-import io.github.mole.presenter.specialities.MolePresenter;
-import io.github.mole.presenter.specialities.ObjectsPresenter;
+import io.github.mole.presenter.specialities.*;
 import io.github.mole.utils.*;
 
 import static io.github.mole.CONST.ONE;
@@ -28,6 +25,8 @@ public class GamePresenter implements GamePresentable {
     BoardPresenter boardPresenter;
     ObjectsPresenter objectsPresenter;
     BackgroundPresenter sightPresenter;
+    DashboardPresenter dashboardPresenter;
+
     SpriteBatch batch;
 
 
@@ -38,6 +37,7 @@ public class GamePresenter implements GamePresentable {
         boardPresenter = new BoardPresenter();
         objectsPresenter = new ObjectsPresenter();
         sightPresenter = new BackgroundPresenter();
+        dashboardPresenter = new DashboardPresenter();
 
         batch = new SpriteBatch();
 
@@ -45,10 +45,23 @@ public class GamePresenter implements GamePresentable {
         int windowWidth = Gdx.graphics.getWidth();
         int windowHeight = Gdx.graphics.getHeight();
         camera.setToOrtho(false, (float) windowWidth/1.8f, (float) windowHeight/1.8f);
-        camera.position.lerp(new Vector3(150, 200, 0), 0.1f);
+        camera.position.lerp(new Vector3(200, 0, 0), 0.1f);
+
+        dashboardPresenter.setPosition(camera.position, camera.viewportWidth, camera.viewportHeight);
     }
 
     public void update() {
+        setCamera();
+        if (!molePresenter.isActive()) {
+            handleInput();
+        }
+        molePresenter.update();
+        boardPresenter.update();
+        objectsPresenter.update();
+        dashboardPresenter.update();
+    }
+
+    private void setCamera(){
         float targetX = molePresenter.getMoleX();
         float targetY = molePresenter.getMoleY();
         float cameraX = MathUtils.clamp(targetX, camera.viewportWidth / 2 - 10,  CONST.BOARD_WIDTH * 50 + 10 - camera.viewportWidth / 2);
@@ -56,12 +69,7 @@ public class GamePresenter implements GamePresentable {
         camera.position.lerp(new Vector3(cameraX, cameraY, 0), 0.075f);
         camera.update();
 
-        if (!molePresenter.isActive()) {
-            handleInput();
-        }
-        molePresenter.update();
-        boardPresenter.update();
-        objectsPresenter.update();
+        dashboardPresenter.setPosition(camera.position, camera.viewportWidth, camera.viewportHeight);
     }
 
     public void render() {
@@ -72,6 +80,7 @@ public class GamePresenter implements GamePresentable {
         molePresenter.render(batch, ONE);
         objectsPresenter.render(batch, ONE);
         sightPresenter.render(batch, ONE);
+        dashboardPresenter.render(batch, ONE);
         batch.end();
     }
 
@@ -96,6 +105,9 @@ public class GamePresenter implements GamePresentable {
         objectsPresenter.deleteObject(type, position);
     }
 
+    public void setEnergyLevel(int energyLevel){
+        dashboardPresenter.setEnergyLevel(energyLevel);
+    }
     private void handleInput(){
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
            controllerInput.makeMove(LEFT);

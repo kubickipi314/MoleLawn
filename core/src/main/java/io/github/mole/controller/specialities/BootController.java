@@ -12,8 +12,7 @@ import java.util.Random;
 
 import static io.github.mole.utils.MoveDirection.DOWN;
 import static io.github.mole.utils.ObjectType.*;
-import static io.github.mole.utils.TileType.DIRT;
-import static io.github.mole.utils.TileType.TUNNEL;
+import static io.github.mole.utils.TileType.*;
 
 public class BootController {
     Board board;
@@ -33,7 +32,7 @@ public class BootController {
         this.mole = mole;
         this.helper = helper;
 
-        activationCounter = 10;
+        activationCounter = 8;
         isBoot = false;
         endBoot = false;
     }
@@ -56,7 +55,7 @@ public class BootController {
             }
         } else if (activationCounter == 0) {
             tryPutBoot();
-            activationCounter = 10;
+            activationCounter = 15;
         } else {
             activationCounter--;
         }
