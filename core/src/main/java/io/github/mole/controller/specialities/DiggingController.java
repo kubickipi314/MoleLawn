@@ -28,10 +28,14 @@ public class DiggingController {
     }
 
     public void handleDigging(MoveDirection direction){
+        int moleEnergy = Math.max(mole.getEnergyLevel() - 1, 0);
+        mole.setEnergyLevel(moleEnergy);
+        gamePresentable.setEnergyLevel(moleEnergy);
+
         board.setType(mole.getPosition(), TUNNEL);
         gamePresentable.changeTile(mole.getPosition(), direction, TUNNEL);
 
-        
+
         BoardPosition left = helper.getLeftPosition(direction);
         if (helper.isPositionOnBoard(left)) {
             tryBuryTunnel(left, helper.getLeftDirection(direction));

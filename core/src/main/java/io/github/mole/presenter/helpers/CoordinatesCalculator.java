@@ -1,6 +1,7 @@
 package io.github.mole.presenter.helpers;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import io.github.mole.CONST;
 import io.github.mole.utils.BoardPosition;
 import io.github.mole.utils.ObjectType;
@@ -43,5 +44,16 @@ public class CoordinatesCalculator {
             case BOOT -> getCoordinates(boardPosition.x() - 2, 0);
             default -> getCoordinates(boardPosition);
         };
+    }
+
+    public Vector2 getHealthSize() {
+        return new Vector2(tileSize * 3, tileSize);
+    }
+
+    public float getEnergyX(Vector3 cameraPosition, float viewWidth, int offset){
+        return cameraPosition.x - viewWidth/2 + tileSize/8 + offset*tileSize/8; }
+
+    public float getEnergyY(Vector3 cameraPosition, float viewHeight){
+        return cameraPosition.y - viewHeight/2 + tileSize/8;
     }
 }

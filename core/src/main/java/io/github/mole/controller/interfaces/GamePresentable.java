@@ -17,4 +17,6 @@ public interface GamePresentable {
     void insertObject(ObjectType type, BoardPosition position);
 
     void deleteObject(ObjectType type, BoardPosition position);
+
+    void setEnergyLevel(int energyLevel);
 }

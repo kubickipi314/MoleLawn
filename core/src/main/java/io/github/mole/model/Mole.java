@@ -25,6 +25,14 @@ public class Mole {
         return moleY;
     }
 
+    public int getEnergyLevel(){
+        return energyLevel;
+    }
+
+    public void setEnergyLevel(int energyLevel) {
+        this.energyLevel = energyLevel;
+    }
+
     public void changePosition(int newX, int newY){
         moleX = newX;
         moleY = newY;

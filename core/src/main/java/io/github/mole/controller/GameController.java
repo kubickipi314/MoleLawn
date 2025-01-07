@@ -65,6 +65,7 @@ public class GameController implements GameControllable {
             }
         }
         gamePresentable.setMolePosition(mole.getPosition());
+        gamePresentable.setEnergyLevel(mole.getEnergyLevel());
     }
 
     public void makeMove(MoveDirection direction) {
@@ -126,6 +127,9 @@ public class GameController implements GameControllable {
             if (board.isObject(position, WORM)) {
                 board.removeObject(position, WORM);
                 gamePresentable.deleteObject(WORM, position);
+                int moleEnergy = Math.min(mole.getEnergyLevel() + 4, CONST.ENERGY_LEVEL);
+                mole.setEnergyLevel(moleEnergy);
+                gamePresentable.setEnergyLevel(moleEnergy);
             }
             if (board.isObject(position, SPADE) || board.isObject(helper.getBottomPosition(), SPADE)) {
                 System.out.println("die from Spade");
