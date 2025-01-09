@@ -17,5 +17,5 @@ public interface GamePresentable {
 
     void setEnergyLevel(int energyLevel);
 
-    void moleDie();
+    void moleDie(DeathType spade);
 }

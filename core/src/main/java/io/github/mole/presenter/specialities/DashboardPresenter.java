@@ -32,12 +32,12 @@ public class DashboardPresenter  implements PresenterSpeciality {
             energySprites[i].setSize(50, 50);
         }
 
-        bubbleTexture = new Texture("textures/dashboard/air/still_0.png");
-        bubbleSprites = new Sprite[5];
-        for (int i = 0; i < 5; ++i) {
-            bubbleSprites[i] = new Sprite(bubbleTexture);
-            bubbleSprites[i].setSize(40, 40);
-        }
+//        bubbleTexture = new Texture("textures/dashboard/air/still_0.png");
+//        bubbleSprites = new Sprite[5];
+//        for (int i = 0; i < 5; ++i) {
+//            bubbleSprites[i] = new Sprite(bubbleTexture);
+//            bubbleSprites[i].setSize(40, 40);
+//        }
     }
 
     public void setPosition(Vector3 cameraPosition, float viewWidth, float viewHeight) {
@@ -48,10 +48,10 @@ public class DashboardPresenter  implements PresenterSpeciality {
             energySprites[i].setPosition(calculator.getEnergyX(cameraPosition, viewWidth, i), healthY);
         }
 
-        for (int i = 0; i < 5; ++i) {
-            bubbleSprites[i].setPosition(calculator.getBubbleX(cameraPosition, viewWidth, i), healthY);
-        }
-        actualAir = 5;
+//        for (int i = 0; i < 5; ++i) {
+//            bubbleSprites[i].setPosition(calculator.getBubbleX(cameraPosition, viewWidth, i), healthY);
+//        }
+//        actualAir = 5;
     }
 
     public void setEnergyLevel(int energy) {
@@ -72,9 +72,9 @@ public class DashboardPresenter  implements PresenterSpeciality {
             for (int i = 0; i < actualEnergy; ++i) {
                 energySprites[i].draw(batch);
             }
-            for (int i = 0; i < actualAir; ++i) {
-                bubbleSprites[i].draw(batch);
-            }
+//            for (int i = 0; i < actualAir; ++i) {
+//                bubbleSprites[i].draw(batch);
+//            }
         }
     }
 }

@@ -8,14 +8,14 @@ import io.github.mole.utils.MoveDirection;
 
 import static io.github.mole.utils.MoveDirection.*;
 
-public class Helper {
+public class PositionHelper {
 
     Board board;
     Mole mole;
     int height = CONST.BOARD_HEIGHT;
     int width = CONST.BOARD_WIDTH;
 
-    public Helper(Board board, Mole mole) {
+    public PositionHelper(Board board, Mole mole) {
         this.board = board;
         this.mole = mole;
     }

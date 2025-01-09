@@ -1,6 +1,6 @@
 package io.github.mole.controller.specialities;
 
-import io.github.mole.controller.Helper;
+import io.github.mole.controller.PositionHelper;
 import io.github.mole.presenter.GamePresentable;
 import io.github.mole.model.Board;
 import io.github.mole.model.Mole;
@@ -14,14 +14,14 @@ public class DiggingController {
 
     Board board;
     Mole mole;
-    Helper helper;
+    PositionHelper positionHelper;
     GamePresentable gamePresentable;
     SpadeController spadeController;
     WormsController wormsController;
-    public DiggingController(Board board, Mole mole, Helper helper) {
+    public DiggingController(Board board, Mole mole, PositionHelper positionHelper) {
         this.board = board;
         this.mole = mole;
-        this.helper = helper;
+        this.positionHelper = positionHelper;
     }
 
     public void setPresentable(GamePresentable gamePresentable){
@@ -37,22 +37,22 @@ public class DiggingController {
         gamePresentable.changeTile(mole.getPosition(), direction, TUNNEL);
 
 
-        BoardPosition left = helper.getLeftPosition(direction);
-        if (helper.isPositionOnBoard(left)) {
+        BoardPosition left = positionHelper.getLeftPosition(direction);
+        if (positionHelper.isPositionOnBoard(left)) {
             if (board.getType(left).equals(TUNNEL)) clearDigging = false;
-            tryBuryTunnel(left, helper.getLeftDirection(direction));
+            tryBuryTunnel(left, positionHelper.getLeftDirection(direction));
             tryMakeCanal(left);
         }
 
-        BoardPosition right = helper.getRightPosition(direction);
-        if (helper.isPositionOnBoard(right)) {
+        BoardPosition right = positionHelper.getRightPosition(direction);
+        if (positionHelper.isPositionOnBoard(right)) {
             if (board.getType(right).equals(TUNNEL)) clearDigging = false;
-            tryBuryTunnel(right, helper.getRightDirection(direction));
+            tryBuryTunnel(right, positionHelper.getRightDirection(direction));
             tryMakeCanal(right);
         }
 
-        BoardPosition front = helper.getFrontPosition(direction);
-        if (helper.isPositionOnBoard(front)) {
+        BoardPosition front = positionHelper.getFrontPosition(direction);
+        if (positionHelper.isPositionOnBoard(front)) {
             if (board.getType(front).equals(TUNNEL)) clearDigging = false;
             tryBuryTunnel(front, direction);
             tryMakeHill(front);

@@ -8,10 +8,7 @@ import io.github.mole.controller.specialities.SpadeController;
 import io.github.mole.controller.specialities.WormsController;
 import io.github.mole.model.Board;
 import io.github.mole.model.Mole;
-import io.github.mole.utils.BoardPosition;
-import io.github.mole.utils.MoveDirection;
-import io.github.mole.utils.MoveStyle;
-import io.github.mole.utils.TileType;
+import io.github.mole.utils.*;
 
 import static io.github.mole.utils.MoveDirection.NONE;
 import static io.github.mole.utils.MoveStyle.DIGGING;
@@ -32,17 +29,17 @@ public class GameController implements GameControllable {
     SpadeController spadeController;
     WormsController wormsController;
     BootController bootController;
-    Helper helper;
+    PositionHelper positionHelper;
 
     public GameController() {
         board = new Board();
         mole = new Mole();
 
-        helper = new Helper(board, mole);
-        diggingController = new DiggingController(board, mole, helper);
+        positionHelper = new PositionHelper(board, mole);
+        diggingController = new DiggingController(board, mole, positionHelper);
         spadeController = new SpadeController(board, mole);
         wormsController = new WormsController(board, mole);
-        bootController = new BootController(board, mole, helper);
+        bootController = new BootController(board, mole, positionHelper);
 
         diggingController.setSpade(spadeController);
         diggingController.setWorms(wormsController);
@@ -134,13 +131,13 @@ public class GameController implements GameControllable {
             if (board.isObject(position, WORM)) {
                wormsController.eatWorm();
             }
-            if (board.isObject(position, SPADE) || board.isObject(helper.getBottomPosition(), SPADE)) {
+            if (board.isObject(position, SPADE) || board.isObject(positionHelper.getBottomPosition(), SPADE)) {
                 System.out.println("die from Spade");
-                gamePresentable.moleDie();
+                gamePresentable.moleDie(DeathType.SPADE);
             }
             if (board.isObject(position, BOOT)) {
                 System.out.println("die from Boot");
-                gamePresentable.moleDie();
+                gamePresentable.moleDie(DeathType.BOOT);
             }
         }
     }

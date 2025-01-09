@@ -15,9 +15,6 @@ import static io.github.mole.CONST.TWO;
 import static io.github.mole.utils.MoveDirection.*;
 
 public class GamePresenter implements GamePresentable, GameInputable {
-
-    CameraCoordinator cameraCoordinator;
-
     GameControllable controllable;
     MolePresenter molePresenter;
     BoardPresenter boardPresenter;
@@ -25,11 +22,10 @@ public class GamePresenter implements GamePresentable, GameInputable {
     BackgroundPresenter sightPresenter;
     DashboardPresenter dashboardPresenter;
     FinalPresenter finalPresenter;
-
     List<PresenterSpeciality> specialities;
 
+    CameraCoordinator cameraCoordinator;
     SpriteBatch batch;
-
     boolean gameOn;
 
     public GamePresenter(GameControllable controllable) {
@@ -40,7 +36,6 @@ public class GamePresenter implements GamePresentable, GameInputable {
         objectsPresenter = new ObjectsPresenter();
         sightPresenter = new BackgroundPresenter();
         dashboardPresenter = new DashboardPresenter();
-
         specialities = List.of(boardPresenter, molePresenter, objectsPresenter, sightPresenter, dashboardPresenter);
 
         batch = new SpriteBatch();
@@ -119,10 +114,11 @@ public class GamePresenter implements GamePresentable, GameInputable {
         dashboardPresenter.setEnergyLevel(energyLevel);
     }
 
-    public void moleDie() {
+    public void moleDie(DeathType deathType) {
         molePresenter.moleDie();
         gameOn = false;
         finalPresenter = new FinalPresenter(this);
+        finalPresenter.showEnding(deathType);
     }
 
     @Override

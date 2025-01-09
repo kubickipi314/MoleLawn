@@ -1,6 +1,6 @@
 package io.github.mole.controller.specialities;
 
-import io.github.mole.controller.Helper;
+import io.github.mole.controller.PositionHelper;
 import io.github.mole.presenter.GamePresentable;
 import io.github.mole.model.Board;
 import io.github.mole.model.Mole;
@@ -12,7 +12,7 @@ import static io.github.mole.utils.ObjectType.*;
 public class WaterController {
     Board board;
     Mole mole;
-    Helper helper;
+    PositionHelper positionHelper;
     GamePresentable gamePresentable;
 
     int activationCounter;
@@ -22,10 +22,10 @@ public class WaterController {
     BoardPosition bootPosition1;
     BoardPosition bootPosition2;
 
-    public WaterController(Board board, Mole mole, Helper helper) {
+    public WaterController(Board board, Mole mole, PositionHelper positionHelper) {
         this.board = board;
         this.mole = mole;
-        this.helper = helper;
+        this.positionHelper = positionHelper;
 
         activationCounter = 10;
         isHose = false;
