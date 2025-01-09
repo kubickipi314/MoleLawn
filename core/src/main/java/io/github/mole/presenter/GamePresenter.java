@@ -2,13 +2,8 @@ package io.github.mole.presenter;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector3;
-import io.github.mole.CONST;
-import io.github.mole.controller.interfaces.GameControllable;
-import io.github.mole.controller.interfaces.GamePresentable;
+import io.github.mole.controller.GameControllable;
 import io.github.mole.presenter.helpers.CameraCoordinator;
 import io.github.mole.presenter.specialities.*;
 import io.github.mole.utils.*;
@@ -49,23 +44,20 @@ public class GamePresenter implements GamePresentable, GameInputable {
         specialities = List.of(boardPresenter, molePresenter, objectsPresenter, sightPresenter, dashboardPresenter);
 
         batch = new SpriteBatch();
-
         cameraCoordinator = new CameraCoordinator(molePresenter, dashboardPresenter);
-
         gameOn = true;
     }
 
     public void update() {
         cameraCoordinator.setCamera();
+
         if (gameOn && !molePresenter.isActive()) {
             handleInput();
         }
         for (var speciality : specialities) {
             speciality.update();
         }
-
         if (!gameOn) finalPresenter.update();
-
     }
 
     public void render() {
@@ -84,33 +76,6 @@ public class GamePresenter implements GamePresentable, GameInputable {
         batch.end();
     }
 
-    public void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style) {
-        molePresenter.moveMole(destination, direction, style);
-        boardPresenter.startAnimation();
-    }
-
-    public void moleDie() {
-        molePresenter.moleDie();
-        gameOn = false;
-        finalPresenter = new FinalPresenter(this);
-    }
-
-    public void changeTile(BoardPosition position, MoveDirection direction, TileType type) {
-        boardPresenter.changeTile(position, direction, type);
-    }
-
-    public void insertObject(ObjectType type, BoardPosition position) {
-        objectsPresenter.insertObject(type, position);
-    }
-
-    public void deleteObject(ObjectType type, BoardPosition position) {
-        objectsPresenter.deleteObject(type, position);
-    }
-
-    public void setEnergyLevel(int energyLevel) {
-        dashboardPresenter.setEnergyLevel(energyLevel);
-    }
-
     private void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             controllable.makeMove(LEFT);
@@ -125,12 +90,39 @@ public class GamePresenter implements GamePresentable, GameInputable {
         }
     }
 
+    public void setMolePosition(BoardPosition position) {
+        molePresenter.setMolePosition(position);
+    }
+
+    public void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style) {
+        molePresenter.moveMole(destination, direction, style);
+        boardPresenter.startAnimation();
+    }
+
+    public void changeTile(BoardPosition position, MoveDirection direction, TileType type) {
+        boardPresenter.changeTile(position, direction, type);
+    }
+
+    public void insertObject(ObjectType type, BoardPosition position) {
+        objectsPresenter.insertObject(type, position);
+    }
+
+    public void deleteObject(ObjectType type, BoardPosition position) {
+        objectsPresenter.deleteObject(type, position);
+    }
+
     public void setTile(BoardPosition position, TileType type) {
         boardPresenter.setTile(position, type);
     }
 
-    public void setMolePosition(BoardPosition position) {
-        molePresenter.setMolePosition(position);
+    public void setEnergyLevel(int energyLevel) {
+        dashboardPresenter.setEnergyLevel(energyLevel);
+    }
+
+    public void moleDie() {
+        molePresenter.moleDie();
+        gameOn = false;
+        finalPresenter = new FinalPresenter(this);
     }
 
     @Override

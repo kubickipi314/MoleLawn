@@ -1,4 +1,4 @@
-package io.github.mole.controller.interfaces;
+package io.github.mole.controller;
 
 import io.github.mole.utils.MoveDirection;
 

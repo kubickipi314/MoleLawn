@@ -1,8 +1,7 @@
 package io.github.mole.controller;
 
 import io.github.mole.CONST;
-import io.github.mole.controller.interfaces.GameControllable;
-import io.github.mole.controller.interfaces.GamePresentable;
+import io.github.mole.presenter.GamePresentable;
 import io.github.mole.controller.specialities.BootController;
 import io.github.mole.controller.specialities.DiggingController;
 import io.github.mole.controller.specialities.SpadeController;
