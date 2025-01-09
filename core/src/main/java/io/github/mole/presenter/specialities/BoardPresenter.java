@@ -16,7 +16,7 @@ import java.util.List;
 
 import static io.github.mole.CONST.ONE;
 
-public class BoardPresenter {
+public class BoardPresenter implements PresenterSpeciality {
     CoordinatesCalculator calculator;
     TileTextureLoader loader;
     TileView[][] board;

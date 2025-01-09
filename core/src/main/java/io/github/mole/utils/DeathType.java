@@ -1,13 +1,11 @@
 package io.github.mole.utils;
 
-public enum ObjectType {
+public enum DeathType {
     SPADE,
-    HOSE,
-    CANAL,
-    HILL,
     BOOT,
-    WORM,
+    SUFFOCATION,
+    EXHAUSTION,
     WATER,
     SMOKE,
-    MOSS
+    EXPLOSION
 }

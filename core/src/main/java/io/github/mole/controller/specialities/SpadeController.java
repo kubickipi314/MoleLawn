@@ -33,7 +33,7 @@ public class SpadeController {
         this.gamePresentable = gamePresentable;
     }
 
-    public void handleSpade() {
+    public void preMoveHandle() {
         if (activeByHill) {
             spadePosition = mole.getPosition();
             if (board.isObject(new BoardPosition(mole.getX(), 0), BOOT)) return;
@@ -72,5 +72,11 @@ public class SpadeController {
     public void activateByCanal() {
         if (!spadeIn)
             activeByCanal = true;
+    }
+
+    public void postHhandle() {
+    }
+
+    public void postMoveHandle() {
     }
 }

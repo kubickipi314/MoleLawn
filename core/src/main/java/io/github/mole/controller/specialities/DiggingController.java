@@ -17,6 +17,7 @@ public class DiggingController {
     Helper helper;
     GamePresentable gamePresentable;
     SpadeController spadeController;
+    WormsController wormsController;
     public DiggingController(Board board, Mole mole, Helper helper) {
         this.board = board;
         this.mole = mole;
@@ -28,9 +29,9 @@ public class DiggingController {
     }
 
     public void handleDigging(MoveDirection direction){
-        int moleEnergy = Math.max(mole.getEnergyLevel() - 1, 0);
-        mole.setEnergyLevel(moleEnergy);
-        gamePresentable.setEnergyLevel(moleEnergy);
+
+        boolean clearDigging = true;
+
 
         board.setType(mole.getPosition(), TUNNEL);
         gamePresentable.changeTile(mole.getPosition(), direction, TUNNEL);
@@ -38,20 +39,29 @@ public class DiggingController {
 
         BoardPosition left = helper.getLeftPosition(direction);
         if (helper.isPositionOnBoard(left)) {
+            if (board.getType(left).equals(TUNNEL)) clearDigging = false;
             tryBuryTunnel(left, helper.getLeftDirection(direction));
             tryMakeCanal(left);
         }
 
         BoardPosition right = helper.getRightPosition(direction);
         if (helper.isPositionOnBoard(right)) {
+            if (board.getType(right).equals(TUNNEL)) clearDigging = false;
             tryBuryTunnel(right, helper.getRightDirection(direction));
             tryMakeCanal(right);
         }
 
         BoardPosition front = helper.getFrontPosition(direction);
         if (helper.isPositionOnBoard(front)) {
+            if (board.getType(front).equals(TUNNEL)) clearDigging = false;
             tryBuryTunnel(front, direction);
             tryMakeHill(front);
+        }
+
+        if (clearDigging){
+            int moleEnergy = Math.max(mole.getEnergyLevel() - 1, 0);
+            mole.setEnergyLevel(moleEnergy);
+            gamePresentable.setEnergyLevel(moleEnergy);
         }
     }
 
@@ -61,8 +71,7 @@ public class DiggingController {
             gamePresentable.changeTile(position, direction, DIRT);
             if (board.isAnyObject(position)) {
                 if (board.isObject(position, WORM)) {
-                    board.removeObject(position, WORM);
-                    gamePresentable.deleteObject(WORM, position);
+                    wormsController.destroyWorm(position);
                 }
             }
         }
@@ -98,5 +107,8 @@ public class DiggingController {
 
     public void setSpade(SpadeController spadeController) {
         this.spadeController = spadeController;
+    }
+    public void setWorms(WormsController wormsController) {
+        this.wormsController = wormsController;
     }
 }

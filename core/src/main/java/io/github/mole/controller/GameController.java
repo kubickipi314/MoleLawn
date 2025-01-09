@@ -46,6 +46,7 @@ public class GameController implements GameControllable {
         bootController = new BootController(board, mole, helper);
 
         diggingController.setSpade(spadeController);
+        diggingController.setWorms(wormsController);
     }
 
     public void setPresentable(GamePresentable gamePresentable) {
@@ -88,7 +89,8 @@ public class GameController implements GameControllable {
                 break;
         }
 
-        spadeController.handleSpade();
+        spadeController.preMoveHandle();
+        bootController.preMoveHandle();
 
         MoveStyle moveStyle;
         if (!direction.equals(NONE) && moveSuccess(destinationX, destinationY)) {
@@ -104,8 +106,9 @@ public class GameController implements GameControllable {
             moveStyle = DIGGING;
         }
 
-        bootController.handleBoot();
-        wormsController.handleWorms();
+        spadeController.postMoveHandle();
+        bootController.postMoveHandle();
+        wormsController.postMoveHandle();
         handleEncounters();
 
         gamePresentable.moveMole(mole.getPosition(), direction, moveStyle);
@@ -125,11 +128,7 @@ public class GameController implements GameControllable {
         BoardPosition position = mole.getPosition();
         if (board.isAnyObject(position)) {
             if (board.isObject(position, WORM)) {
-                board.removeObject(position, WORM);
-                gamePresentable.deleteObject(WORM, position);
-                int moleEnergy = Math.min(mole.getEnergyLevel() + 4, CONST.ENERGY_LEVEL);
-                mole.setEnergyLevel(moleEnergy);
-                gamePresentable.setEnergyLevel(moleEnergy);
+               wormsController.eatWorm();
             }
             if (board.isObject(position, SPADE) || board.isObject(helper.getBottomPosition(), SPADE)) {
                 System.out.println("die from Spade");

@@ -25,7 +25,7 @@ public class WormsController {
         this.gamePresentable = gamePresentable;
     }
 
-    public void handleWorms() {
+    public void postMoveHandle() {
         Random random = new Random();
         int x = random.nextInt(board.getWidth());
         int y = random.nextInt(board.getHeight());
@@ -43,4 +43,18 @@ public class WormsController {
             }
         }
     }
+
+    public void eatWorm(){
+        board.removeObject(mole.getPosition(), WORM);
+        gamePresentable.deleteObject(WORM, mole.getPosition());
+        int moleEnergy = Math.min(mole.getEnergyLevel() + 4, CONST.ENERGY_LEVEL);
+        mole.setEnergyLevel(moleEnergy);
+        gamePresentable.setEnergyLevel(moleEnergy);
+    }
+
+    public void destroyWorm(BoardPosition position){
+        board.removeObject(position, WORM);
+        gamePresentable.deleteObject(WORM, position);
+    }
+
 }

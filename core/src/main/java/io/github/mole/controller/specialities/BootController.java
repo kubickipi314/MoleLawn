@@ -41,7 +41,10 @@ public class BootController {
         this.gamePresentable = gamePresentable;
     }
 
-    public void handleBoot() {
+    public void preMoveHandle(){
+
+    }
+    public void postMoveHandle() {
         if (isBoot) {
             if (endBoot){
                 takeBoot();

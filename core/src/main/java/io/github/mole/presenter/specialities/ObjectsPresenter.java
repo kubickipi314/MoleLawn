@@ -14,7 +14,7 @@ import java.util.List;
 
 import static io.github.mole.CONST.ONE;
 
-public class ObjectsPresenter {
+public class ObjectsPresenter  implements PresenterSpeciality {
     ObjectsTextureLoader loader;
     CoordinatesCalculator calculator;
     EnumMap<ObjectType, List<SingleObject>> objects;
