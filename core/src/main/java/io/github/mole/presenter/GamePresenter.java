@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import io.github.mole.CONST;
 import io.github.mole.controller.interfaces.GameControllable;
 import io.github.mole.controller.interfaces.GamePresentable;
+import io.github.mole.presenter.helpers.CameraCoordinator;
 import io.github.mole.presenter.specialities.*;
 import io.github.mole.utils.*;
 
@@ -20,7 +21,7 @@ import static io.github.mole.utils.MoveDirection.*;
 
 public class GamePresenter implements GamePresentable, GameInputable {
 
-    OrthographicCamera camera;
+    CameraCoordinator cameraCoordinator;
 
     GameControllable controllable;
     MolePresenter molePresenter;
@@ -34,7 +35,7 @@ public class GamePresenter implements GamePresentable, GameInputable {
 
     SpriteBatch batch;
 
-    boolean gameFinised;
+    boolean gameOn;
 
     public GamePresenter(GameControllable controllable) {
         this.controllable = controllable;
@@ -48,49 +49,37 @@ public class GamePresenter implements GamePresentable, GameInputable {
         specialities = List.of(boardPresenter, molePresenter, objectsPresenter, sightPresenter, dashboardPresenter);
 
         batch = new SpriteBatch();
-        gameFinised = false;
 
-        camera = new OrthographicCamera();
-        int windowWidth = Gdx.graphics.getWidth();
-        int windowHeight = Gdx.graphics.getHeight();
-        camera.setToOrtho(false, (float) windowWidth / 2, (float) windowHeight / 2);
-        camera.position.lerp(new Vector3(200, 0, 0), 0.1f);
+        cameraCoordinator = new CameraCoordinator(molePresenter, dashboardPresenter);
 
-        dashboardPresenter.setPosition(camera.position, camera.viewportWidth, camera.viewportHeight);
+        gameOn = true;
     }
 
     public void update() {
-        setCamera();
-        if (!molePresenter.isActive()) {
+        cameraCoordinator.setCamera();
+        if (gameOn && !molePresenter.isActive()) {
             handleInput();
         }
-
         for (var speciality : specialities) {
             speciality.update();
         }
 
-    }
+        if (!gameOn) finalPresenter.update();
 
-    private void setCamera() {
-        float targetX = molePresenter.getMoleX();
-        float targetY = molePresenter.getMoleY();
-        float cameraX = MathUtils.clamp(targetX, camera.viewportWidth / 2 - 10, CONST.BOARD_WIDTH * 50 + 10 - camera.viewportWidth / 2);
-        float cameraY = MathUtils.clamp(targetY, camera.viewportHeight / 2 - 10, CONST.BOARD_HEIGHT * 50 + 50 - camera.viewportHeight / 2);
-        camera.position.lerp(new Vector3(cameraX, cameraY, 0), 0.075f);
-        camera.update();
-
-        dashboardPresenter.setPosition(camera.position, camera.viewportWidth, camera.viewportHeight);
     }
 
     public void render() {
         batch.begin();
-        batch.setProjectionMatrix(camera.combined);
+        cameraCoordinator.setBatch(batch);
 
         for (var speciality : specialities) {
             speciality.render(batch, TWO);
         }
         for (var speciality : specialities) {
             speciality.render(batch, ONE);
+        }
+        if (!gameOn){
+            finalPresenter.render(batch, ONE);
         }
         batch.end();
     }
@@ -102,6 +91,8 @@ public class GamePresenter implements GamePresentable, GameInputable {
 
     public void moleDie() {
         molePresenter.moleDie();
+        gameOn = false;
+        finalPresenter = new FinalPresenter(this);
     }
 
     public void changeTile(BoardPosition position, MoveDirection direction, TileType type) {

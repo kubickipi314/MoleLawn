@@ -114,6 +114,11 @@ public class GameController implements GameControllable {
         gamePresentable.moveMole(mole.getPosition(), direction, moveStyle);
     }
 
+    @Override
+    public void retry() {
+        System.out.println("Retry!");
+    }
+
     private boolean moveSuccess(int destinationX, int destinationY) {
         if (destinationX < 0 || destinationX >= width) return false;
         if (destinationY < 0 || destinationY >= height) return false;
