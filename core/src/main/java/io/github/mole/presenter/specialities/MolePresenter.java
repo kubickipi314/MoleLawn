@@ -13,7 +13,7 @@ import io.github.mole.view.MoleView;
 import static io.github.mole.CONST.ONE;
 import static io.github.mole.utils.MoveDirection.NONE;
 
-public class MolePresenter {
+public class MolePresenter  implements PresenterSpeciality {
     CoordinatesCalculator calculator;
     MoleView moleView;
     int positionX;

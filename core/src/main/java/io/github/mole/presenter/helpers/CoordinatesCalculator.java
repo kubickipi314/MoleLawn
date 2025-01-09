@@ -51,9 +51,13 @@ public class CoordinatesCalculator {
     }
 
     public float getEnergyX(Vector3 cameraPosition, float viewWidth, int offset){
-        return cameraPosition.x - viewWidth/2 + tileSize/8 + offset*tileSize/8; }
+        return cameraPosition.x - viewWidth/2 + offset*tileSize/8; }
 
     public float getEnergyY(Vector3 cameraPosition, float viewHeight){
-        return cameraPosition.y - viewHeight/2 + tileSize/8;
+        return cameraPosition.y - viewHeight/2;
+    }
+
+    public float getBubbleX(Vector3 cameraPosition, float viewWidth, int offset) {
+        return cameraPosition.x + viewWidth/2 - tileSize*3/4 - offset*tileSize/2;
     }
 }
