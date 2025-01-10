@@ -15,22 +15,19 @@ import static io.github.mole.CONST.TWO;
 import static io.github.mole.utils.MoveDirection.*;
 
 public class GamePresenter implements GamePresentable, GameInputable {
-
-    CameraCoordinator cameraCoordinator;
-
     GameControllable controllable;
     MolePresenter molePresenter;
     BoardPresenter boardPresenter;
     ObjectsPresenter objectsPresenter;
     BackgroundPresenter sightPresenter;
     DashboardPresenter dashboardPresenter;
-    FinalPresenter finalPresenter;
-
+    EndingPresenter endingPresenter;
     List<PresenterSpeciality> specialities;
 
+    CameraCoordinator cameraCoordinator;
     SpriteBatch batch;
-
     boolean gameOn;
+    boolean endingOn;
 
     public GamePresenter(GameControllable controllable) {
         this.controllable = controllable;
@@ -40,7 +37,6 @@ public class GamePresenter implements GamePresentable, GameInputable {
         objectsPresenter = new ObjectsPresenter();
         sightPresenter = new BackgroundPresenter();
         dashboardPresenter = new DashboardPresenter();
-
         specialities = List.of(boardPresenter, molePresenter, objectsPresenter, sightPresenter, dashboardPresenter);
 
         batch = new SpriteBatch();
@@ -57,7 +53,10 @@ public class GamePresenter implements GamePresentable, GameInputable {
         for (var speciality : specialities) {
             speciality.update();
         }
-        if (!gameOn) finalPresenter.update();
+
+        if (!gameOn && !molePresenter.isActive()) {
+            handleEnding();
+        }
     }
 
     public void render() {
@@ -71,7 +70,7 @@ public class GamePresenter implements GamePresentable, GameInputable {
             speciality.render(batch, ONE);
         }
         if (!gameOn){
-            finalPresenter.render(batch, ONE);
+            endingPresenter.render(batch, ONE);
         }
         batch.end();
     }
@@ -87,6 +86,18 @@ public class GamePresenter implements GamePresentable, GameInputable {
             controllable.makeMove(DOWN);
         } else if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             controllable.makeMove(NONE);
+        }
+    }
+
+    private void handleEnding(){
+        if (endingOn){
+            endingPresenter.update();
+        }
+        else {
+            endingOn = true;
+            cameraCoordinator.setFinalPresenter(endingPresenter);
+            dashboardPresenter.hideDashboard();
+            endingPresenter.showEnding();
         }
     }
 
@@ -119,10 +130,10 @@ public class GamePresenter implements GamePresentable, GameInputable {
         dashboardPresenter.setEnergyLevel(energyLevel);
     }
 
-    public void moleDie() {
+    public void moleDie(DeathType deathType) {
         molePresenter.moleDie();
+        endingPresenter = new EndingPresenter(this, deathType);
         gameOn = false;
-        finalPresenter = new FinalPresenter(this);
     }
 
     @Override

@@ -1,80 +1,108 @@
 package io.github.mole.presenter.specialities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
-import io.github.mole.presenter.helpers.CoordinatesCalculator;
 
 import static io.github.mole.CONST.ONE;
 
-public class DashboardPresenter  implements PresenterSpeciality {
-    Sprite backgroudSprite;
-    CoordinatesCalculator calculator;
-    Sprite[] energySprites;
+public class DashboardPresenter implements PresenterSpeciality {
+    Sprite energyFrame;
+    Sprite energyStrip;
+    Sprite airFrame;
+    Sprite airStrip;
     int actualEnergy;
     int actualAir;
 
-    Sprite[] bubbleSprites;
+    float energyFrameX;
+    float energyStripX;
+    float airFrameX;
+    float airStripX;
+    float dashboardY;
 
-    Texture energyTexture;
-    Texture bubbleTexture;
+    float currentY;
+
+    float movementTime;
+
+    boolean isHiding;
 
     public DashboardPresenter() {
-        calculator = new CoordinatesCalculator();
-        backgroudSprite = new Sprite(new Texture("textures/dashboard/energy/background.png"));
-        backgroudSprite.setSize(calculator.getHealthSize().x, calculator.getHealthSize().y);
+        energyFrame = new Sprite(new Texture("textures/dashboard/energy/frame.png"));
+        energyFrame.setSize(160, 40);
 
-        energyTexture = new Texture("textures/dashboard/energy/still_0.png");
-        energySprites = new Sprite[20];
-        for (int i = 0; i < 20; ++i) {
-            energySprites[i] = new Sprite(energyTexture);
-            energySprites[i].setSize(50, 50);
-        }
+        energyStrip = new Sprite(new Texture("textures/dashboard/energy/strip.png"));
+        energyStrip.setSize(132, 40);
 
-        bubbleTexture = new Texture("textures/dashboard/air/still_0.png");
-        bubbleSprites = new Sprite[5];
-        for (int i = 0; i < 5; ++i) {
-            bubbleSprites[i] = new Sprite(bubbleTexture);
-            bubbleSprites[i].setSize(40, 40);
-        }
+        airFrame = new Sprite(new Texture("textures/dashboard/energy/frame.png"));
+        airFrame.setSize(160, 40);
+
+        airStrip = new Sprite(new Texture("textures/dashboard/air/strip.png"));
+        airStrip.setSize(40, 40);
+
+        isHiding = false;
+        actualAir = 3;
     }
 
     public void setPosition(Vector3 cameraPosition, float viewWidth, float viewHeight) {
-        float healthY = calculator.getEnergyY(cameraPosition, viewHeight);
-        float healthX = calculator.getEnergyX(cameraPosition, viewWidth, 0);
-        backgroudSprite.setPosition(healthX, healthY);
-        for (int i = 0; i < 20; ++i) {
-            energySprites[i].setPosition(calculator.getEnergyX(cameraPosition, viewWidth, i), healthY);
-        }
+        dashboardY = cameraPosition.y - viewHeight / 2;
+        energyFrameX = cameraPosition.x - viewWidth / 2;
+        energyStripX = energyFrameX + 12;
 
-        for (int i = 0; i < 5; ++i) {
-            bubbleSprites[i].setPosition(calculator.getBubbleX(cameraPosition, viewWidth, i), healthY);
-        }
-        actualAir = 5;
+        energyFrame.setPosition(energyFrameX, dashboardY);
+        energyStrip.setPosition(energyStripX, dashboardY);
+
+        airFrameX = cameraPosition.x + viewWidth / 2 - 165;
+
+
+        float airStripLength = (float) (132 * actualAir) / 5;
+        airStripX = airFrameX + 12 + 132 - airStripLength;
+        airStrip.setSize(airStripLength, 40);
+
+        airFrame.setPosition(airFrameX, dashboardY);
+        airStrip.setPosition(airStripX, dashboardY);
+
     }
 
     public void setEnergyLevel(int energy) {
-        actualEnergy = energy;
+        energyStrip.setSize((float) (132 * energy) / 20, 40);
     }
 
     public void setAirLevel(int air) {
-        actualAir = air;
+        float airStripLength = (float) (132 * air) / 5;
+        airStrip.setPosition(airFrameX + 12 + 132 - airStripLength, dashboardY);
+        airStrip.setSize(airStripLength, 40);
+    }
+
+    public void hideDashboard() {
+        movementTime = 0;
+        isHiding = true;
     }
 
     public void update() {
+        if (isHiding) {
+            movementTime += Gdx.graphics.getDeltaTime();
+            float animationDuration = 2.0f;
+            float progress = Math.min(1.0f, movementTime / animationDuration);
+
+            currentY = dashboardY - 40 * progress;
+
+            energyFrame.setPosition(energyFrameX, currentY);
+            energyStrip.setPosition(energyStripX, currentY);
+            airFrame.setPosition(airFrameX, currentY);
+            airStrip.setPosition(airStripX, currentY);
+
+        }
     }
 
     public void render(SpriteBatch batch, int stageNumber) {
         if (stageNumber == ONE) {
-            backgroudSprite.draw(batch);
+            energyStrip.draw(batch);
+            energyFrame.draw(batch);
 
-            for (int i = 0; i < actualEnergy; ++i) {
-                energySprites[i].draw(batch);
-            }
-            for (int i = 0; i < actualAir; ++i) {
-                bubbleSprites[i].draw(batch);
-            }
+            airFrame.draw(batch);
+            airStrip.draw(batch);
         }
     }
 }
