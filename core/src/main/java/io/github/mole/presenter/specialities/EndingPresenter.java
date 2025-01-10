@@ -1,55 +1,144 @@
 package io.github.mole.presenter.specialities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import io.github.mole.presenter.GameInputable;
-import io.github.mole.presenter.helpers.CoordinatesCalculator;
 import io.github.mole.utils.DeathType;
+import io.github.mole.view.helpers.EndingTextureLoader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EndingPresenter implements PresenterSpeciality {
 
+    EndingTextureLoader loader;
     DeathType deathType;
 
     Sprite diedFromSprite;
     Sprite deathTypeSprite;
     Sprite retrySprite;
 
-
     boolean isEnding;
+    int endingPhase;
+    float animationTime;
+
+    float deathTypeX;
+    float deathTypeY;
+
+    List<Texture> diedFromTextures;
+    List<Texture> retryTextures;
+
+    List<Sprite> printedSprites;
+    int actualFrame;
 
 
-    public EndingPresenter(GameInputable gamePresenter, DeathType deathType){
+    public EndingPresenter(GameInputable gamePresenter, DeathType deathType) {
         this.deathType = deathType;
 
-        diedFromSprite = new Sprite(new Texture("textures/ending/died_from.png"));
-        diedFromSprite.setSize(180,90);
+        loader = new EndingTextureLoader();
 
-        retrySprite = new Sprite(new Texture("textures/ending/retry.png"));
-        retrySprite.setSize(80,80);
+        diedFromTextures = List.of(new Texture("textures/ending/died_from_7.png"),
+            new Texture("textures/ending/died_from_6.png"),
+            new Texture("textures/ending/died_from_5.png"),
+            new Texture("textures/ending/died_from_4.png"),
+            new Texture("textures/ending/died_from_3.png"),
+            new Texture("textures/ending/died_from_2.png"),
+            new Texture("textures/ending/died_from_1.png"),
+            new Texture("textures/ending/died_from.png"));
+        retryTextures = loader.getRetry();
 
-        if (deathType.equals(DeathType.SPADE)){
+        diedFromSprite = new Sprite(new Texture("textures/ending/died_from_7.png"));
+        diedFromSprite.setSize(180, 90);
+
+        retrySprite = new Sprite(new Texture("textures/ending/retry_0.png"));
+        retrySprite.setSize(80, 80);
+
+        if (deathType.equals(DeathType.SPADE)) {
             deathTypeSprite = new Sprite(new Texture("textures/ending/spade.png"));
-            deathTypeSprite.setSize(180,90);
+            deathTypeSprite.setSize(180, 90);
         }
+
+        printedSprites = new ArrayList<>();
 
         isEnding = false;
     }
 
     public void showEnding() {
         isEnding = true;
-
+        endingPhase = 0;
+        animationTime = 0;
     }
 
     public void update() {
+        if (isEnding) {
+            if (endingPhase == 0) {
+                animationTime += Gdx.graphics.getDeltaTime();
+                if (animationTime >= 1.0f) {
+                    animationTime = 0;
+                    endingPhase = 1;
+                    actualFrame = 0;
+                    printedSprites.add(diedFromSprite);
+                }
+            } else if (endingPhase == 1) {
+                animationTime += Gdx.graphics.getDeltaTime();
+                float animationDuration = 1.0f;
+                float progress = animationTime / animationDuration;
+
+                if (actualFrame != (int) (diedFromTextures.size() * progress)) {
+                    actualFrame++;
+                    if (actualFrame == diedFromTextures.size()) {
+                        animationTime = 0;
+                        endingPhase = 2;
+                        printedSprites.add(deathTypeSprite);
+                    } else {
+                        diedFromSprite.setTexture(diedFromTextures.get((int) (diedFromTextures.size() * progress)));
+                    }
+                }
+
+                if (progress >= 1) {
+                    animationTime = 0;
+                    endingPhase = 2;
+                    printedSprites.add(deathTypeSprite);
+                    deathTypeSprite.setPosition(deathTypeX, deathTypeY - 200);
+                }
+            } else if (endingPhase == 2) {
+                animationTime += Gdx.graphics.getDeltaTime();
+                float animationDuration = 1.0f;
+                float progress = Math.min(1.0f, animationTime / animationDuration);
+
+                if (progress >= 1) {
+                    animationTime = 0;
+                    endingPhase = 3;
+                    printedSprites.add(retrySprite);
+                    actualFrame = -1;
+                }
+
+                deathTypeSprite.setPosition(deathTypeX, deathTypeY - 200 + 200 * progress);
+
+            } else if (endingPhase == 3) {
+                animationTime += Gdx.graphics.getDeltaTime();
+                float animationDuration = 1.0f;
+                float progress = animationTime / animationDuration;
+
+                if (actualFrame != (int) (retryTextures.size() * progress)) {
+                    actualFrame++;
+                    if (actualFrame == retryTextures.size()) {
+                        isEnding = false;
+                    } else {
+                        retrySprite.setTexture(retryTextures.get((int) (retryTextures.size() * progress)));
+                    }
+                }
+            }
+        }
     }
 
+
     public void render(SpriteBatch batch, int one) {
-        if (isEnding) {
-            diedFromSprite.draw(batch);
-            deathTypeSprite.draw(batch);
-            retrySprite.draw(batch);
+        for (var sprite : printedSprites) {
+            sprite.draw(batch);
         }
     }
 
@@ -59,5 +148,8 @@ public class EndingPresenter implements PresenterSpeciality {
         diedFromSprite.setPosition(endingX, endingY);
         deathTypeSprite.setPosition(endingX + 185, endingY);
         retrySprite.setPosition(endingX + 365, endingY);
+
+        deathTypeX = endingX + 185;
+        deathTypeY = endingY;
     }
 }

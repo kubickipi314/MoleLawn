@@ -95,8 +95,9 @@ public class GamePresenter implements GamePresentable, GameInputable {
         }
         else {
             endingOn = true;
+            cameraCoordinator.setFinalPresenter(endingPresenter);
             dashboardPresenter.hideDashboard();
-            //endingPresenter.showEnding();
+            endingPresenter.showEnding();
         }
     }
 
@@ -132,7 +133,6 @@ public class GamePresenter implements GamePresentable, GameInputable {
     public void moleDie(DeathType deathType) {
         molePresenter.moleDie();
         endingPresenter = new EndingPresenter(this, deathType);
-        cameraCoordinator.setFinalPresenter(endingPresenter);
         gameOn = false;
     }
 
