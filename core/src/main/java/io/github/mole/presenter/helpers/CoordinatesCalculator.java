@@ -60,4 +60,5 @@ public class CoordinatesCalculator {
     public float getBubbleX(Vector3 cameraPosition, float viewWidth, int offset) {
         return cameraPosition.x + viewWidth/2 - tileSize*3/4 - offset*tileSize/2;
     }
+
 }

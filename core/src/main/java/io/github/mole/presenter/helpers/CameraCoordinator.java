@@ -7,12 +7,15 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import io.github.mole.CONST;
 import io.github.mole.presenter.specialities.DashboardPresenter;
+import io.github.mole.presenter.specialities.FinalPresenter;
 import io.github.mole.presenter.specialities.MolePresenter;
 
 public class CameraCoordinator {
     OrthographicCamera camera;
     MolePresenter molePresenter;
     DashboardPresenter dashboardPresenter;
+
+    FinalPresenter finalPresenter;
 
 
     public CameraCoordinator(MolePresenter molePresenter, DashboardPresenter dashboardPresenter) {
@@ -23,13 +26,22 @@ public class CameraCoordinator {
         initialize();
     }
 
+    public void setFinalPresenter(FinalPresenter finalPresenter) {
+        this.finalPresenter = finalPresenter;
+        float viewWidth = camera.viewportWidth;
+        float viewHeight = camera.viewportHeight;
+        finalPresenter.setPosition(camera.position,  viewWidth, viewHeight);
+    }
+
     private void initialize() {
         int windowWidth = Gdx.graphics.getWidth();
         int windowHeight = Gdx.graphics.getHeight();
         camera.setToOrtho(false, (float) windowWidth / 2, (float) windowHeight / 2);
         camera.position.lerp(new Vector3(200, 0, 0), 0.1f);
 
-        dashboardPresenter.setPosition(camera.position, camera.viewportWidth, camera.viewportHeight);
+        float viewWidth = camera.viewportWidth;
+        float viewHeight = camera.viewportHeight;
+        dashboardPresenter.setPosition(camera.position, viewWidth, viewHeight);
     }
 
     public void setCamera() {

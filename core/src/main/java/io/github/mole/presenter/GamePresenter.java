@@ -2,6 +2,7 @@ package io.github.mole.presenter;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.github.mole.controller.GameControllable;
 import io.github.mole.presenter.helpers.CameraCoordinator;
@@ -52,7 +53,7 @@ public class GamePresenter implements GamePresentable, GameInputable {
         for (var speciality : specialities) {
             speciality.update();
         }
-        if (!gameOn) finalPresenter.update();
+        if (finalPresenter != null) finalPresenter.update();
     }
 
     public void render() {
@@ -119,6 +120,7 @@ public class GamePresenter implements GamePresentable, GameInputable {
         gameOn = false;
         finalPresenter = new FinalPresenter(this);
         finalPresenter.showEnding(deathType);
+        cameraCoordinator.setFinalPresenter(finalPresenter);
     }
 
     @Override
