@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import io.github.mole.CONST;
 import io.github.mole.presenter.specialities.DashboardPresenter;
-import io.github.mole.presenter.specialities.FinalPresenter;
+import io.github.mole.presenter.specialities.EndingPresenter;
 import io.github.mole.presenter.specialities.MolePresenter;
 
 public class CameraCoordinator {
@@ -15,7 +15,7 @@ public class CameraCoordinator {
     MolePresenter molePresenter;
     DashboardPresenter dashboardPresenter;
 
-    FinalPresenter finalPresenter;
+    EndingPresenter endingPresenter;
 
 
     public CameraCoordinator(MolePresenter molePresenter, DashboardPresenter dashboardPresenter) {
@@ -26,11 +26,11 @@ public class CameraCoordinator {
         initialize();
     }
 
-    public void setFinalPresenter(FinalPresenter finalPresenter) {
-        this.finalPresenter = finalPresenter;
+    public void setFinalPresenter(EndingPresenter endingPresenter) {
+        this.endingPresenter = endingPresenter;
         float viewWidth = camera.viewportWidth;
         float viewHeight = camera.viewportHeight;
-        finalPresenter.setPosition(camera.position,  viewWidth, viewHeight);
+        endingPresenter.setPosition(camera.position,  viewWidth, viewHeight);
     }
 
     private void initialize() {
@@ -47,8 +47,8 @@ public class CameraCoordinator {
     public void setCamera() {
         float targetX = molePresenter.getMoleX();
         float targetY = molePresenter.getMoleY();
-        float cameraX = MathUtils.clamp(targetX, camera.viewportWidth / 2 - 10, CONST.BOARD_WIDTH * 50 + 10 - camera.viewportWidth / 2);
-        float cameraY = MathUtils.clamp(targetY, camera.viewportHeight / 2 - 10, CONST.BOARD_HEIGHT * 50 + 50 - camera.viewportHeight / 2);
+        float cameraX = MathUtils.clamp(targetX, camera.viewportWidth / 2, CONST.BOARD_WIDTH * 50 - camera.viewportWidth / 2);
+        float cameraY = MathUtils.clamp(targetY, camera.viewportHeight / 2, CONST.BOARD_HEIGHT * 50 + 50 - camera.viewportHeight / 2);
         camera.position.lerp(new Vector3(cameraX, cameraY, 0), 0.075f);
         camera.update();
 

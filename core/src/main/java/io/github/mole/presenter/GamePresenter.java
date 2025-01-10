@@ -2,7 +2,6 @@ package io.github.mole.presenter;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.github.mole.controller.GameControllable;
 import io.github.mole.presenter.helpers.CameraCoordinator;
@@ -22,12 +21,13 @@ public class GamePresenter implements GamePresentable, GameInputable {
     ObjectsPresenter objectsPresenter;
     BackgroundPresenter sightPresenter;
     DashboardPresenter dashboardPresenter;
-    FinalPresenter finalPresenter;
+    EndingPresenter endingPresenter;
     List<PresenterSpeciality> specialities;
 
     CameraCoordinator cameraCoordinator;
     SpriteBatch batch;
     boolean gameOn;
+    boolean endingOn;
 
     public GamePresenter(GameControllable controllable) {
         this.controllable = controllable;
@@ -53,7 +53,10 @@ public class GamePresenter implements GamePresentable, GameInputable {
         for (var speciality : specialities) {
             speciality.update();
         }
-        if (finalPresenter != null) finalPresenter.update();
+
+        if (!gameOn && !molePresenter.isActive()) {
+            handleEnding();
+        }
     }
 
     public void render() {
@@ -67,7 +70,7 @@ public class GamePresenter implements GamePresentable, GameInputable {
             speciality.render(batch, ONE);
         }
         if (!gameOn){
-            finalPresenter.render(batch, ONE);
+            endingPresenter.render(batch, ONE);
         }
         batch.end();
     }
@@ -83,6 +86,17 @@ public class GamePresenter implements GamePresentable, GameInputable {
             controllable.makeMove(DOWN);
         } else if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             controllable.makeMove(NONE);
+        }
+    }
+
+    private void handleEnding(){
+        if (endingOn){
+            endingPresenter.update();
+        }
+        else {
+            endingOn = true;
+            dashboardPresenter.hideDashboard();
+            //endingPresenter.showEnding();
         }
     }
 
@@ -117,10 +131,9 @@ public class GamePresenter implements GamePresentable, GameInputable {
 
     public void moleDie(DeathType deathType) {
         molePresenter.moleDie();
+        endingPresenter = new EndingPresenter(this, deathType);
+        cameraCoordinator.setFinalPresenter(endingPresenter);
         gameOn = false;
-        finalPresenter = new FinalPresenter(this);
-        finalPresenter.showEnding(deathType);
-        cameraCoordinator.setFinalPresenter(finalPresenter);
     }
 
     @Override

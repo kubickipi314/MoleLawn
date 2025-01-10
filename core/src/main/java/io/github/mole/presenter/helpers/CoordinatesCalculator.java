@@ -45,20 +45,4 @@ public class CoordinatesCalculator {
             default -> getCoordinates(boardPosition);
         };
     }
-
-    public Vector2 getHealthSize() {
-        return new Vector2(tileSize * 3, tileSize);
-    }
-
-    public float getEnergyX(Vector3 cameraPosition, float viewWidth, int offset){
-        return cameraPosition.x - viewWidth/2 + offset*tileSize/8; }
-
-    public float getEnergyY(Vector3 cameraPosition, float viewHeight){
-        return cameraPosition.y - viewHeight/2;
-    }
-
-    public float getBubbleX(Vector3 cameraPosition, float viewWidth, int offset) {
-        return cameraPosition.x + viewWidth/2 - tileSize*3/4 - offset*tileSize/2;
-    }
-
 }
