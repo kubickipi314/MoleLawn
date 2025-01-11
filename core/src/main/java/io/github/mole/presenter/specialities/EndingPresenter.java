@@ -60,6 +60,11 @@ public class EndingPresenter implements PresenterSpeciality {
             deathTypeSprite = new Sprite(new Texture("textures/ending/spade.png"));
             deathTypeSprite.setSize(180, 90);
         }
+        if (deathType.equals(DeathType.BOOT)) {
+            deathTypeSprite = new Sprite(new Texture("textures/ending/boot.png"));
+            deathTypeSprite.setSize(180, 90);
+        }
+
 
         printedSprites = new ArrayList<>();
 
@@ -76,7 +81,7 @@ public class EndingPresenter implements PresenterSpeciality {
         if (isEnding) {
             if (endingPhase == 0) {
                 animationTime += Gdx.graphics.getDeltaTime();
-                if (animationTime >= 1.0f) {
+                if (animationTime >= 0.5f) {
                     animationTime = 0;
                     endingPhase = 1;
                     actualFrame = 0;
