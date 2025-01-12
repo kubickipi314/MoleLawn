@@ -83,7 +83,7 @@ public class DashboardPresenter implements PresenterSpeciality {
     public void update() {
         if (isHiding) {
             movementTime += Gdx.graphics.getDeltaTime();
-            float animationDuration = 2.0f;
+            float animationDuration = 0.5f;
             float progress = Math.min(1.0f, movementTime / animationDuration);
 
             currentY = dashboardY - 40 * progress;
