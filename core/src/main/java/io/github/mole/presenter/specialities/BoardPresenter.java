@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import io.github.mole.CONST;
 import io.github.mole.presenter.helpers.CoordinatesCalculator;
+import io.github.mole.view.MaskView;
 import io.github.mole.view.helpers.TileTextureLoader;
 import io.github.mole.utils.BoardPosition;
 import io.github.mole.utils.MoveDirection;
@@ -15,11 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static io.github.mole.CONST.ONE;
+import static io.github.mole.CONST.ZERO;
 
 public class BoardPresenter implements PresenterSpeciality {
     CoordinatesCalculator calculator;
     TileTextureLoader loader;
     TileView[][] board;
+    MaskView[][] mask;
     private final int height = CONST.BOARD_HEIGHT;
     private final int width = CONST.BOARD_WIDTH;
     boolean isMoving;
@@ -39,6 +42,8 @@ public class BoardPresenter implements PresenterSpeciality {
                 board[y][x] = new TileView(loader, position);
             }
         }
+
+        mask = new MaskView[height][width];
 
         isMoving = false;
         movementTime = 0;
@@ -98,6 +103,13 @@ public class BoardPresenter implements PresenterSpeciality {
 
     public void render(SpriteBatch batch, int stageNumber) {
         if (stageNumber == ONE) {
+            for (int y = 1; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    board[y][x].draw(batch);
+                }
+            }
+        }
+        if (stageNumber == ZERO) {
             for (int y = 1; y < height; y++) {
                 for (int x = 0; x < width; x++) {
                     board[y][x].draw(batch);

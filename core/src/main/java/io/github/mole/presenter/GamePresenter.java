@@ -136,12 +136,13 @@ public class GamePresenter implements GamePresentable, GameInputable {
         gameOn = false;
     }
 
-    @Override
+    public void setAirMask() {
+
+    }
     public void retry() {
         controllable.retry();
     }
 
-    @Override
     public void exit() {
 
     }
