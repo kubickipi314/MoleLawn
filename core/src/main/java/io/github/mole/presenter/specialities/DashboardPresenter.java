@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
 import static io.github.mole.CONST.ONE;
+import static io.github.mole.CONST.ZERO;
 
 public class DashboardPresenter implements PresenterSpeciality {
     Sprite energyFrame;
@@ -97,7 +98,7 @@ public class DashboardPresenter implements PresenterSpeciality {
     }
 
     public void render(SpriteBatch batch, int stageNumber) {
-        if (stageNumber == ONE) {
+        if (stageNumber == ZERO) {
             energyStrip.draw(batch);
             energyFrame.draw(batch);
 

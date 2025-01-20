@@ -20,7 +20,7 @@ public class MaskView {
     }
 
     public void setMask(float airLevel) {
-        maskSprite.setColor(0.5f, 0.5f, 0.5f, 1 - airLevel);
+        maskSprite.setColor(0, 0, 0, (1 - airLevel)*0.5f);
     }
 
     public void draw(SpriteBatch batch) {

@@ -19,5 +19,5 @@ public interface GamePresentable {
 
     void moleDie(DeathType spade);
 
-    void setAirMask();
+    void setAirMask(float[][] airMask);
 }

@@ -36,14 +36,14 @@ public class BoardPresenter implements PresenterSpeciality {
         animatedTiles = new ArrayList<>();
 
         board = new TileView[height][width];
+        mask = new MaskView[height][width];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Vector2 position = calculator.getCoordinates(x, y);
                 board[y][x] = new TileView(loader, position);
+                mask[y][x] = new MaskView(position);
             }
         }
-
-        mask = new MaskView[height][width];
 
         isMoving = false;
         movementTime = 0;
@@ -101,6 +101,14 @@ public class BoardPresenter implements PresenterSpeciality {
         board[y][x].setStillMotive(type);
     }
 
+    public void updateMask(float[][] airMask){
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                mask[y][x].setMask(airMask[y][x]);
+            }
+        }
+    }
+
     public void render(SpriteBatch batch, int stageNumber) {
         if (stageNumber == ONE) {
             for (int y = 1; y < height; y++) {
@@ -112,7 +120,7 @@ public class BoardPresenter implements PresenterSpeciality {
         if (stageNumber == ZERO) {
             for (int y = 1; y < height; y++) {
                 for (int x = 0; x < width; x++) {
-                    board[y][x].draw(batch);
+                    mask[y][x].draw(batch);
                 }
             }
         }

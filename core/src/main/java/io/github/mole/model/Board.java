@@ -22,6 +22,13 @@ public class Board {
             }
         }
     }
+    public float getAirLevel(int x, int y) {
+        return board[y][x].getAirLevel();
+    }
+
+    public void setAirLevel(int x, int y, float airLevel) {
+        board[y][x].setAirLevel(airLevel);
+    }
 
     public TileType getType(int x, int y){
         return board[y][x].getType();
