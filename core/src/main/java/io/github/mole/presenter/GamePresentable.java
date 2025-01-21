@@ -17,6 +17,8 @@ public interface GamePresentable {
 
     void setEnergyLevel(int energyLevel);
 
+    void setAirLevel(float airLevel);
+
     void moleDie(DeathType spade);
 
     void setAirMask(float[][] airMask);

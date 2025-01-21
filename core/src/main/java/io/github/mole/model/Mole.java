@@ -7,11 +7,13 @@ public class Mole {
     int moleX;
     int moleY;
     int energyLevel;
+    float airLevel;
 
     public Mole(){
         moleX = CONST.MOLE_POSITION_X;
         moleY = CONST.MOLE_POSITION_Y;
         energyLevel = CONST.ENERGY_LEVEL;
+        airLevel = 1.0f;
     }
 
     public BoardPosition getPosition(){
@@ -31,6 +33,14 @@ public class Mole {
 
     public void setEnergyLevel(int energyLevel) {
         this.energyLevel = energyLevel;
+    }
+
+    public void setAirLevel(float airLevel) {
+        this.airLevel = airLevel;
+    }
+
+    public float getAirLevel(){
+        return airLevel;
     }
 
     public void changePosition(int newX, int newY){

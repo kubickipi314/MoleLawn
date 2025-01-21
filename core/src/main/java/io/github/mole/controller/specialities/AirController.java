@@ -42,7 +42,7 @@ public class AirController {
     public void update(){
         getActualMap();
         getActualAir();
-        for (int i=0; i<5; ++i) stepAirSimulation();
+        for (int i=0; i<10; ++i) stepAirSimulation();
         saveAirToBoard();
     }
 

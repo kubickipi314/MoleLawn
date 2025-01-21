@@ -65,6 +65,7 @@ public class GameController implements GameControllable {
         gamePresentable.setEnergyLevel(mole.getEnergyLevel());
 
         gamePresentable.setAirMask(airController.getAirMask());
+        gamePresentable.setAirLevel(mole.getAirLevel());
     }
 
     public void makeMove(MoveDirection direction) {
@@ -113,6 +114,9 @@ public class GameController implements GameControllable {
 
         airController.update();
         gamePresentable.setAirMask(airController.getAirMask());
+
+        mole.setAirLevel((mole.getAirLevel() + board.getAirLevel(mole.getX(), mole.getY()))/2);
+        gamePresentable.setAirLevel(mole.getAirLevel());
     }
 
     @Override

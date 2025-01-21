@@ -132,6 +132,10 @@ public class GamePresenter implements GamePresentable, GameInputable {
         dashboardPresenter.setEnergyLevel(energyLevel);
     }
 
+    public void setAirLevel(float airLevel) {
+        dashboardPresenter.setAirLevel(airLevel);
+    }
+
     public void moleDie(DeathType deathType) {
         molePresenter.moleDie();
         endingPresenter = new EndingPresenter(this, deathType);
