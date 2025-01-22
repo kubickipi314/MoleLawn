@@ -29,7 +29,20 @@ public class WormsController {
         Random random = new Random();
         int x = random.nextInt(board.getWidth());
         int y = random.nextInt(board.getHeight());
+        tryDestroyWorm(new BoardPosition(x,y));
+
+        x = random.nextInt(board.getWidth());
+        y = random.nextInt(board.getHeight());
         tryInsertWorm(new BoardPosition(x,y));
+    }
+
+    private void tryDestroyWorm(BoardPosition position) {
+        if (board.isAnyObject(position)){;
+            if (board.isObject(position, WORM)) {
+                board.removeObject(position, WORM);
+                gamePresentable.deleteObject(WORM, position);
+            }
+        }
     }
 
     private void tryInsertWorm(BoardPosition position) {

@@ -1,11 +1,15 @@
 package io.github.mole.presenter.specialities;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import io.github.mole.presenter.GameInputable;
+import io.github.mole.presenter.GamePresenter;
 import io.github.mole.utils.DeathType;
 import io.github.mole.view.helpers.EndingTextureLoader;
 
@@ -14,6 +18,7 @@ import java.util.List;
 
 public class EndingPresenter implements PresenterSpeciality {
 
+    GameInputable gamePresenter;
     EndingTextureLoader loader;
     DeathType deathType;
 
@@ -34,8 +39,8 @@ public class EndingPresenter implements PresenterSpeciality {
     List<Sprite> printedSprites;
     int actualFrame;
 
-
     public EndingPresenter(GameInputable gamePresenter, DeathType deathType) {
+        this.gamePresenter = gamePresenter;
         this.deathType = deathType;
 
         loader = new EndingTextureLoader();
@@ -137,7 +142,36 @@ public class EndingPresenter implements PresenterSpeciality {
                     }
                 }
             }
+        } else {
+            handleInput();
         }
+    }
+
+    void handleInput(){
+        Vector2 mousePosition = getMousePosition();
+        if (buttonContains(mousePosition)) {
+            retrySprite.setTexture(retryTextures.get(15));
+            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                gamePresenter.retry();
+            }
+        }
+        else {
+            retrySprite.setTexture(retryTextures.get(16));
+        }
+    }
+
+    public boolean buttonContains(Vector2 mousePosition) {
+        float mouseX = mousePosition.x;
+        float mouseY = mousePosition.y;
+        return retrySprite.getBoundingRectangle().contains(mouseX, mouseY);
+    }
+
+    private Vector2 getMousePosition() {
+        int windowHeight = Gdx.graphics.getHeight();
+        Vector2 mouseWorldCoords = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+        float mouseX = mouseWorldCoords.x;
+        float mouseY = (windowHeight - mouseWorldCoords.y);
+        return new Vector2(mouseX, mouseY);
     }
 
 

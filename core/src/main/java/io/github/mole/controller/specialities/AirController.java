@@ -1,19 +1,24 @@
 package io.github.mole.controller.specialities;
 
 import io.github.mole.model.Board;
+import io.github.mole.model.Mole;
 import io.github.mole.utils.TileType;
 
 import static io.github.mole.utils.TileType.*;
+import static java.lang.Math.max;
 
 public class AirController {
     Board board;
+    Mole mole;
     int height;
     int width;
     float[][] actualAir;
     float[][] computedAir;
     TileType[][] actualMap;
-    public AirController(Board board) {
+
+    public AirController(Board board, Mole mole) {
         this.board = board;
+        this.mole = mole;
         height = board.getHeight();
         width = board.getWidth();
 
@@ -24,7 +29,7 @@ public class AirController {
         initializeAir();
     }
 
-    public void initializeAir(){
+    public void initializeAir() {
         for (int x = 0; x < width; x++) {
             actualAir[0][x] = 1;
         }
@@ -35,18 +40,21 @@ public class AirController {
         }
 
         getActualMap();
-        for (int i=0; i<50; ++i) stepAirSimulation();
+        for (int i = 0; i < 50; ++i) stepAirSimulation();
         saveAirToBoard();
     }
 
-    public void update(){
+    public void update() {
         getActualMap();
         getActualAir();
-        for (int i=0; i<10; ++i) stepAirSimulation();
+        if (board.getType(mole.getPosition()).equals(TUNNEL)) {
+            actualAir[mole.getY()][mole.getX()] = max(0, actualAir[mole.getY()][mole.getX()] - 0.2f);
+        }
+        for (int i = 0; i < 20; ++i) stepAirSimulation();
         saveAirToBoard();
     }
 
-    private void stepAirSimulation(){
+    private void stepAirSimulation() {
         for (int x = 0; x < width; x++) {
             computedAir[0][x] = 1;
         }
@@ -60,73 +68,66 @@ public class AirController {
         computedAir = temp;
     }
 
-    private void processTile(int x, int y){
-        float sum = actualAir[y][x]*5;
+    private void processTile(int x, int y) {
+        float sum = actualAir[y][x] * 5;
         float dividor = 5;
 
         float tunnelFlow = 10;
 
-        if (actualMap[y-1][x].equals(AIR) || actualMap[y-1][x].equals(TUNNEL)){
-            sum+=actualAir[y-1][x]*tunnelFlow;
-            dividor+=tunnelFlow;
-        }
-        else if (actualMap[y-1][x].equals(DIRT)){
-            sum+=actualAir[y-1][x];
-            dividor+=1;
+        if (actualMap[y - 1][x].equals(AIR) || actualMap[y - 1][x].equals(TUNNEL)) {
+            sum += actualAir[y - 1][x] * tunnelFlow;
+            dividor += tunnelFlow;
+        } else if (actualMap[y - 1][x].equals(DIRT) && !actualMap[y][x].equals(TUNNEL)) {
+            sum += actualAir[y - 1][x];
+            dividor += 1;
         }
 
-        if (y+1 == height){
-            dividor+=1;
-        }
-        else {
-            if (actualMap[y+1][x].equals(TUNNEL)){
-                sum+=actualAir[y+1][x]*tunnelFlow;
-                dividor+=tunnelFlow;
-            }
-            else if (actualMap[y+1][x].equals(DIRT)){
-                sum+=actualAir[y+1][x];
-                dividor+=1;
+        if (y + 1 == height) {
+            dividor += 1;
+        } else {
+            if (actualMap[y + 1][x].equals(TUNNEL)) {
+                sum += actualAir[y + 1][x] * tunnelFlow;
+                dividor += tunnelFlow;
+            } else if (actualMap[y + 1][x].equals(DIRT) && !actualMap[y][x].equals(TUNNEL)) {
+                sum += actualAir[y + 1][x];
+                dividor += 1;
             }
         }
 
-        if (x+1 == width){
-            dividor+=1;
-        }
-        else {
-            if (actualMap[y][x+1].equals(TUNNEL)){
-                sum+=actualAir[y][x+1]*tunnelFlow;
-                dividor+=tunnelFlow;
-            }
-            else if (actualMap[y][x+1].equals(DIRT)){
-                sum+=actualAir[y][x+1];
-                dividor+=1;
+        if (x + 1 == width) {
+            dividor += 1;
+        } else {
+            if (actualMap[y][x + 1].equals(TUNNEL)) {
+                sum += actualAir[y][x + 1] * tunnelFlow;
+                dividor += tunnelFlow;
+            } else if (actualMap[y][x + 1].equals(DIRT) && !actualMap[y][x].equals(TUNNEL)) {
+                sum += actualAir[y][x + 1];
+                dividor += 1;
             }
         }
 
-        if (x == 0){
-            dividor+=1;
-        }
-        else {
-            if (actualMap[y][x-1].equals(TUNNEL)){
-                sum+=actualAir[y][x-1]*tunnelFlow;
-                dividor+=tunnelFlow;
-            }
-            else if (actualMap[y][x-1].equals(DIRT)){
-                sum+=actualAir[y][x-1];
-                dividor+=1;
+        if (x == 0) {
+            dividor += 1;
+        } else {
+            if (actualMap[y][x - 1].equals(TUNNEL)) {
+                sum += actualAir[y][x - 1] * tunnelFlow;
+                dividor += tunnelFlow;
+            } else if (actualMap[y][x - 1].equals(DIRT) && !actualMap[y][x].equals(TUNNEL)) {
+                sum += actualAir[y][x - 1];
+                dividor += 1;
             }
         }
 
-        if (actualMap[y][x].equals(DIRT)) dividor = dividor*1.05f;
+        if (actualMap[y][x].equals(DIRT)) dividor = dividor * 1.05f;
 
-        computedAir[y][x] = sum/dividor;
+        computedAir[y][x] = sum / dividor;
     }
 
-    public float[][] getAirMask(){
+    public float[][] getAirMask() {
         return actualAir;
     }
 
-    private void getActualAir(){
+    private void getActualAir() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 actualAir[y][x] = board.getAirLevel(x, y);
@@ -134,7 +135,7 @@ public class AirController {
         }
     }
 
-    private void getActualMap(){
+    private void getActualMap() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 actualMap[y][x] = board.getType(x, y);
@@ -142,7 +143,7 @@ public class AirController {
         }
     }
 
-    private void saveAirToBoard(){
+    private void saveAirToBoard() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 board.setAirLevel(x, y, actualAir[y][x]);

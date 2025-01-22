@@ -1,6 +1,7 @@
 package io.github.mole.presenter.specialities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,7 +27,6 @@ public class DashboardPresenter implements PresenterSpeciality {
     float movementTime;
 
     boolean isHiding;
-
     public DashboardPresenter() {
         energyFrame = new Sprite(new Texture("textures/dashboard/energy/frame.png"));
         energyFrame.setSize(160, 40);
@@ -89,6 +89,7 @@ public class DashboardPresenter implements PresenterSpeciality {
             airStrip.setPosition(airStripX - airStripLength, currentY);
         }
     }
+
 
     public void render(SpriteBatch batch, int stageNumber) {
         if (stageNumber == ZERO) {

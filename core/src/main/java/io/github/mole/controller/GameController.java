@@ -1,6 +1,7 @@
 package io.github.mole.controller;
 
 import io.github.mole.CONST;
+import io.github.mole.Main;
 import io.github.mole.controller.specialities.*;
 import io.github.mole.presenter.GamePresentable;
 import io.github.mole.model.Board;
@@ -22,6 +23,8 @@ public class GameController implements GameControllable {
     Board board;
     Mole mole;
 
+    Main main;
+
     DiggingController diggingController;
     SpadeController spadeController;
     WormsController wormsController;
@@ -29,12 +32,14 @@ public class GameController implements GameControllable {
     PositionHelper positionHelper;
     AirController airController;
 
-    public GameController() {
+    public GameController(Main main) {
+        this.main = main;
+
         board = new Board();
         mole = new Mole();
 
         positionHelper = new PositionHelper(board, mole);
-        airController = new AirController(board);
+        airController = new AirController(board, mole);
 
         diggingController = new DiggingController(board, mole, positionHelper);
         spadeController = new SpadeController(board, mole);
@@ -121,6 +126,7 @@ public class GameController implements GameControllable {
 
     @Override
     public void retry() {
+        main.retry();
         System.out.println("Retry!");
     }
 
