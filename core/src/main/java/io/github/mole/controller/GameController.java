@@ -35,7 +35,8 @@ public class GameController implements GameControllable {
     public GameController(Main main) {
         this.main = main;
 
-        board = new Board();
+        MapLoader mapLoader = new MapLoader();
+        board = new Board(mapLoader.loadMap("maps/map1.png"));
         mole = new Mole();
 
         positionHelper = new PositionHelper(board, mole);

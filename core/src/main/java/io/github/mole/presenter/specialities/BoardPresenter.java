@@ -66,9 +66,9 @@ public class BoardPresenter implements PresenterSpeciality {
 
     private void updateRandomTile() {
         updateTime += Gdx.graphics.getDeltaTime();
-        if (updateTime >= 0.5f) {
-            int i = (int) (Math.random() * 5);
-            int j = (int) (Math.random() * 12);
+        if (updateTime >= 0.1f) {
+            int i = (int) (Math.random() * CONST.BOARD_HEIGHT);
+            int j = (int) (Math.random() * CONST.BOARD_WIDTH);
             board[i][j].updateStillMotive();
             updateTime = 0;
         }

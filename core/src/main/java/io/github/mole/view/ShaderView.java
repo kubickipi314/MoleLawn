@@ -26,7 +26,7 @@ public class ShaderView {
     public void setMask(float airLevel) {
         startingLevel = targetLevel;
         targetLevel = airLevel;
-        shaderSprite.setColor(0, 0, 0, (1 - airLevel)*0.5f);
+        shaderSprite.setColor(0, 0, 0, (1 - airLevel)*0.7f);
     }
 
     public void draw(SpriteBatch batch) {
@@ -35,6 +35,6 @@ public class ShaderView {
 
     public void updateShader(float progress) {
         float actualLevel = startingLevel + (targetLevel - startingLevel)*progress;
-        shaderSprite.setColor(0, 0, 0, (1 - actualLevel)*0.5f);
+        shaderSprite.setColor(0, 0, 0, (1 - actualLevel)*0.7f);
     }
 }
