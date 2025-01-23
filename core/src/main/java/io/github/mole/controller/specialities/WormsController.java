@@ -16,9 +16,12 @@ public class WormsController {
     Board board;
     Mole mole;
 
+    int wormsNumber;
+
     public WormsController(Board board, Mole mole) {
         this.board = board;
         this.mole = mole;
+        wormsNumber = 0;
     }
 
     public void setPresentable(GamePresentable gamePresentable) {
@@ -29,7 +32,21 @@ public class WormsController {
         Random random = new Random();
         int x = random.nextInt(board.getWidth());
         int y = random.nextInt(board.getHeight());
+        tryDestroyWorm(new BoardPosition(x,y));
+        if (wormsNumber >= 20) return;
+        x = random.nextInt(board.getWidth());
+        y = random.nextInt(board.getHeight());
         tryInsertWorm(new BoardPosition(x,y));
+    }
+
+    private void tryDestroyWorm(BoardPosition position) {
+        if (board.isAnyObject(position)){;
+            if (board.isObject(position, WORM)) {
+                board.removeObject(position, WORM);
+                gamePresentable.deleteObject(WORM, position);
+                wormsNumber--;
+            }
+        }
     }
 
     private void tryInsertWorm(BoardPosition position) {
@@ -40,6 +57,7 @@ public class WormsController {
             if (!board.isObject(position, WORM)) {
                 board.addObject(position, WORM);
                 gamePresentable.insertObject(WORM, position);
+                wormsNumber++;
             }
         }
     }
@@ -47,6 +65,7 @@ public class WormsController {
     public void eatWorm(){
         board.removeObject(mole.getPosition(), WORM);
         gamePresentable.deleteObject(WORM, mole.getPosition());
+        wormsNumber--;
         int moleEnergy = Math.min(mole.getEnergyLevel() + 4, CONST.ENERGY_LEVEL);
         mole.setEnergyLevel(moleEnergy);
         gamePresentable.setEnergyLevel(moleEnergy);
@@ -55,6 +74,7 @@ public class WormsController {
     public void destroyWorm(BoardPosition position){
         board.removeObject(position, WORM);
         gamePresentable.deleteObject(WORM, position);
+        wormsNumber--;
     }
 
 }

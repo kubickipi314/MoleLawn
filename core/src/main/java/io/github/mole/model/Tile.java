@@ -8,6 +8,7 @@ import java.util.EnumMap;
 public class Tile {
     TileType type;
     int objectsNumber;
+    float airLevel;
     EnumMap<ObjectType,Boolean> objects;
 
     public Tile(TileType type) {
@@ -41,5 +42,13 @@ public class Tile {
     }
     public TileType getType(){
         return type;
+    }
+
+    public float getAirLevel(){
+        return airLevel;
+    }
+
+    public void setAirLevel(float airLevel) {
+        this.airLevel = airLevel;
     }
 }

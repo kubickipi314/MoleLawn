@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import io.github.mole.CONST;
 import io.github.mole.presenter.helpers.CoordinatesCalculator;
+import io.github.mole.view.ShaderView;
 import io.github.mole.view.helpers.TileTextureLoader;
 import io.github.mole.utils.BoardPosition;
 import io.github.mole.utils.MoveDirection;
@@ -15,16 +16,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static io.github.mole.CONST.ONE;
+import static io.github.mole.CONST.ZERO;
 
 public class BoardPresenter implements PresenterSpeciality {
     CoordinatesCalculator calculator;
     TileTextureLoader loader;
     TileView[][] board;
+    ShaderView[][] shaders;
     private final int height = CONST.BOARD_HEIGHT;
     private final int width = CONST.BOARD_WIDTH;
     boolean isMoving;
     float movementTime;
     float updateTime;
+    float progress;
     List<TileView> animatedTiles;
 
     public BoardPresenter() {
@@ -33,10 +37,12 @@ public class BoardPresenter implements PresenterSpeciality {
         animatedTiles = new ArrayList<>();
 
         board = new TileView[height][width];
+        shaders = new ShaderView[height][width];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 Vector2 position = calculator.getCoordinates(x, y);
                 board[y][x] = new TileView(loader, position);
+                shaders[y][x] = new ShaderView(position);
             }
         }
 
@@ -53,15 +59,16 @@ public class BoardPresenter implements PresenterSpeciality {
     public void update() {
         if (isMoving) {
             updateAnimatedTiles();
+            updateShaders();
         }
         updateRandomTile();
     }
 
     private void updateRandomTile() {
         updateTime += Gdx.graphics.getDeltaTime();
-        if (updateTime >= 0.5f) {
-            int i = (int) (Math.random() * 5);
-            int j = (int) (Math.random() * 12);
+        if (updateTime >= 0.1f) {
+            int i = (int) (Math.random() * CONST.BOARD_HEIGHT);
+            int j = (int) (Math.random() * CONST.BOARD_WIDTH);
             board[i][j].updateStillMotive();
             updateTime = 0;
         }
@@ -70,12 +77,20 @@ public class BoardPresenter implements PresenterSpeciality {
     private void updateAnimatedTiles() {
         movementTime += Gdx.graphics.getDeltaTime();
         float animationDuration = CONST.ANIMATION_DURATION;
-        float progress = Math.min(1.0f, movementTime / animationDuration);
+        progress = Math.min(1.0f, movementTime / animationDuration);
 
         if (progress >= 1.0f)
             endAnimation();
 
         for (var tile : animatedTiles) tile.updateArisingMotive(progress);
+    }
+
+    private void updateShaders() {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                shaders[y][x].updateShader(progress);
+            }
+        }
     }
 
     private void endAnimation() {
@@ -96,11 +111,26 @@ public class BoardPresenter implements PresenterSpeciality {
         board[y][x].setStillMotive(type);
     }
 
+    public void updateMask(float[][] airMask){
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                shaders[y][x].setMask(airMask[y][x]);
+            }
+        }
+    }
+
     public void render(SpriteBatch batch, int stageNumber) {
         if (stageNumber == ONE) {
             for (int y = 1; y < height; y++) {
                 for (int x = 0; x < width; x++) {
                     board[y][x].draw(batch);
+                }
+            }
+        }
+        if (stageNumber == ZERO) {
+            for (int y = 1; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    shaders[y][x].draw(batch);
                 }
             }
         }

@@ -14,7 +14,15 @@ public class Main extends Game {
 
     @Override
     public void create() {
-        gameController = new GameController();
+        initializeGame();
+    }
+
+    public void retry(){
+        initializeGame();
+    }
+
+    private void initializeGame(){
+        gameController = new GameController(this);
         gamePresenter = new GamePresenter(gameController);
 
         gameController.setPresentable(gamePresenter);

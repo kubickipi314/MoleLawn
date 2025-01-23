@@ -10,8 +10,7 @@ import io.github.mole.utils.*;
 
 import java.util.List;
 
-import static io.github.mole.CONST.ONE;
-import static io.github.mole.CONST.TWO;
+import static io.github.mole.CONST.*;
 import static io.github.mole.utils.MoveDirection.*;
 
 public class GamePresenter implements GamePresentable, GameInputable {
@@ -69,6 +68,9 @@ public class GamePresenter implements GamePresentable, GameInputable {
         for (var speciality : specialities) {
             speciality.render(batch, ONE);
         }
+        boardPresenter.render(batch, ZERO);
+        dashboardPresenter.render(batch, ZERO);
+
         if (!gameOn){
             endingPresenter.render(batch, ONE);
         }
@@ -130,18 +132,23 @@ public class GamePresenter implements GamePresentable, GameInputable {
         dashboardPresenter.setEnergyLevel(energyLevel);
     }
 
+    public void setAirLevel(float airLevel) {
+        dashboardPresenter.setAirLevel(airLevel);
+    }
+
     public void moleDie(DeathType deathType) {
         molePresenter.moleDie();
         endingPresenter = new EndingPresenter(this, deathType);
         gameOn = false;
     }
 
-    @Override
+    public void setAirMask(float[][] airMask) {
+        boardPresenter.updateMask(airMask);
+    }
     public void retry() {
         controllable.retry();
     }
 
-    @Override
     public void exit() {
 
     }

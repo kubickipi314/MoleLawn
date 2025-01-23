@@ -24,6 +24,7 @@ public class TileTextureLoader {
         stillTiles.put(DIRT, getTextureList("textures/tiles/dirt/dirt",3));
         stillTiles.put(TUNNEL, getTextureList("textures/tiles/tunnel/tunnel",3));
         stillTiles.put(AIR, List.of(new Texture("textures/tiles/grass.png")));
+        stillTiles.put(STONE, getTextureList("textures/tiles/stone/stone",3));
 
         leftArisingTiles = new EnumMap<>(TileType.class);
         leftArisingTiles.put(DIRT, getTextureList("textures/tiles/dirt/dirt_left",4));

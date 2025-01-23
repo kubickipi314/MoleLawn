@@ -1,25 +1,25 @@
 package io.github.mole.presenter.specialities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 
-import static io.github.mole.CONST.ONE;
+import static io.github.mole.CONST.ZERO;
 
 public class DashboardPresenter implements PresenterSpeciality {
     Sprite energyFrame;
     Sprite energyStrip;
     Sprite airFrame;
     Sprite airStrip;
-    int actualEnergy;
-    int actualAir;
-
     float energyFrameX;
     float energyStripX;
     float airFrameX;
     float airStripX;
+
+    float airStripLength;
     float dashboardY;
 
     float currentY;
@@ -27,7 +27,6 @@ public class DashboardPresenter implements PresenterSpeciality {
     float movementTime;
 
     boolean isHiding;
-
     public DashboardPresenter() {
         energyFrame = new Sprite(new Texture("textures/dashboard/energy/frame.png"));
         energyFrame.setSize(160, 40);
@@ -42,7 +41,6 @@ public class DashboardPresenter implements PresenterSpeciality {
         airStrip.setSize(40, 40);
 
         isHiding = false;
-        actualAir = 3;
     }
 
     public void setPosition(Vector3 cameraPosition, float viewWidth, float viewHeight) {
@@ -55,23 +53,20 @@ public class DashboardPresenter implements PresenterSpeciality {
 
         airFrameX = cameraPosition.x + viewWidth / 2 - 165;
 
-
-        float airStripLength = (float) (132 * actualAir) / 5;
-        airStripX = airFrameX + 12 + 132 - airStripLength;
+        airStripX = airFrameX + 12 + 132;
         airStrip.setSize(airStripLength, 40);
 
         airFrame.setPosition(airFrameX, dashboardY);
-        airStrip.setPosition(airStripX, dashboardY);
-
+        airStrip.setPosition(airStripX - airStripLength, dashboardY);
     }
 
     public void setEnergyLevel(int energy) {
         energyStrip.setSize((float) (132 * energy) / 20, 40);
     }
 
-    public void setAirLevel(int air) {
-        float airStripLength = (float) (132 * air) / 5;
-        airStrip.setPosition(airFrameX + 12 + 132 - airStripLength, dashboardY);
+    public void setAirLevel(float air) {
+        airStripLength = 132 * air;
+        airStrip.setPosition(airStripX - airStripLength, dashboardY);
         airStrip.setSize(airStripLength, 40);
     }
 
@@ -91,13 +86,13 @@ public class DashboardPresenter implements PresenterSpeciality {
             energyFrame.setPosition(energyFrameX, currentY);
             energyStrip.setPosition(energyStripX, currentY);
             airFrame.setPosition(airFrameX, currentY);
-            airStrip.setPosition(airStripX, currentY);
-
+            airStrip.setPosition(airStripX - airStripLength, currentY);
         }
     }
 
+
     public void render(SpriteBatch batch, int stageNumber) {
-        if (stageNumber == ONE) {
+        if (stageNumber == ZERO) {
             energyStrip.draw(batch);
             energyFrame.draw(batch);
 

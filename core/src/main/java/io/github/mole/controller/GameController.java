@@ -1,11 +1,9 @@
 package io.github.mole.controller;
 
 import io.github.mole.CONST;
+import io.github.mole.Main;
+import io.github.mole.controller.specialities.*;
 import io.github.mole.presenter.GamePresentable;
-import io.github.mole.controller.specialities.BootController;
-import io.github.mole.controller.specialities.DiggingController;
-import io.github.mole.controller.specialities.SpadeController;
-import io.github.mole.controller.specialities.WormsController;
 import io.github.mole.model.Board;
 import io.github.mole.model.Mole;
 import io.github.mole.utils.*;
@@ -25,17 +23,25 @@ public class GameController implements GameControllable {
     Board board;
     Mole mole;
 
+    Main main;
+
     DiggingController diggingController;
     SpadeController spadeController;
     WormsController wormsController;
     BootController bootController;
     PositionHelper positionHelper;
+    AirController airController;
 
-    public GameController() {
-        board = new Board();
+    public GameController(Main main) {
+        this.main = main;
+
+        MapLoader mapLoader = new MapLoader();
+        board = new Board(mapLoader.loadMap("maps/map1.png"));
         mole = new Mole();
 
         positionHelper = new PositionHelper(board, mole);
+        airController = new AirController(board, mole);
+
         diggingController = new DiggingController(board, mole, positionHelper);
         spadeController = new SpadeController(board, mole);
         wormsController = new WormsController(board, mole);
@@ -63,6 +69,9 @@ public class GameController implements GameControllable {
         }
         gamePresentable.setMolePosition(mole.getPosition());
         gamePresentable.setEnergyLevel(mole.getEnergyLevel());
+
+        gamePresentable.setAirMask(airController.getAirMask());
+        gamePresentable.setAirLevel(mole.getAirLevel());
     }
 
     public void makeMove(MoveDirection direction) {
@@ -108,10 +117,17 @@ public class GameController implements GameControllable {
         handleEncounters();
 
         gamePresentable.moveMole(mole.getPosition(), direction, moveStyle);
+
+        airController.update();
+        gamePresentable.setAirMask(airController.getAirMask());
+
+        mole.setAirLevel((mole.getAirLevel() + board.getAirLevel(mole.getX(), mole.getY()))/2);
+        gamePresentable.setAirLevel(mole.getAirLevel());
     }
 
     @Override
     public void retry() {
+        main.retry();
         System.out.println("Retry!");
     }
 
