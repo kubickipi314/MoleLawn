@@ -28,9 +28,7 @@ public class CameraCoordinator {
 
     public void setFinalPresenter(EndingPresenter endingPresenter) {
         this.endingPresenter = endingPresenter;
-        float viewWidth = camera.viewportWidth;
-        float viewHeight = camera.viewportHeight;
-        endingPresenter.setPosition(camera.position,  viewWidth, viewHeight);
+        endingPresenter.setPosition(camera.position);
     }
 
     private void initialize() {

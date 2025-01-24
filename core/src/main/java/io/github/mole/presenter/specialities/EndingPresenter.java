@@ -45,20 +45,13 @@ public class EndingPresenter implements PresenterSpeciality {
 
         loader = new EndingTextureLoader();
 
-        diedFromTextures = List.of(new Texture("textures/ending/died_from_7.png"),
-            new Texture("textures/ending/died_from_6.png"),
-            new Texture("textures/ending/died_from_5.png"),
-            new Texture("textures/ending/died_from_4.png"),
-            new Texture("textures/ending/died_from_3.png"),
-            new Texture("textures/ending/died_from_2.png"),
-            new Texture("textures/ending/died_from_1.png"),
-            new Texture("textures/ending/died_from.png"));
+        diedFromTextures = loader.getDiedFrom();
         retryTextures = loader.getRetry();
 
-        diedFromSprite = new Sprite(new Texture("textures/ending/died_from_7.png"));
+        diedFromSprite = new Sprite(diedFromTextures.get(0));
         diedFromSprite.setSize(180, 90);
 
-        retrySprite = new Sprite(new Texture("textures/ending/retry_0.png"));
+        retrySprite = new Sprite(retryTextures.get(0));
         retrySprite.setSize(80, 80);
 
         if (deathType.equals(DeathType.SPADE)) {
@@ -166,6 +159,10 @@ public class EndingPresenter implements PresenterSpeciality {
         else {
             retrySprite.setTexture(retryTextures.get(16));
         }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            gamePresenter.retry();
+        }
     }
 
     public boolean buttonContains(Vector2 mousePosition) {
@@ -189,7 +186,7 @@ public class EndingPresenter implements PresenterSpeciality {
         }
     }
 
-    public void setPosition(Vector3 cameraPosition, float viewWidth, float viewHeight) {
+    public void setPosition(Vector3 cameraPosition) {
         float endingY = cameraPosition.y - 100;
         float endingX = cameraPosition.x - 220;
         diedFromSprite.setPosition(endingX, endingY);
