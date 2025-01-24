@@ -31,11 +31,11 @@ public class WormsController {
     public void postMoveHandle() {
         Random random = new Random();
         int x = random.nextInt(board.getWidth());
-        int y = random.nextInt(board.getHeight());
+        int y = random.nextInt(board.getHeight()/2);
         tryDestroyWorm(new BoardPosition(x,y));
         if (wormsNumber >= 20) return;
         x = random.nextInt(board.getWidth());
-        y = random.nextInt(board.getHeight());
+        y = random.nextInt(board.getHeight()/2);
         tryInsertWorm(new BoardPosition(x,y));
     }
 
@@ -66,9 +66,7 @@ public class WormsController {
         board.removeObject(mole.getPosition(), WORM);
         gamePresentable.deleteObject(WORM, mole.getPosition());
         wormsNumber--;
-        int moleEnergy = Math.min(mole.getEnergyLevel() + 4, CONST.ENERGY_LEVEL);
-        mole.setEnergyLevel(moleEnergy);
-        gamePresentable.setEnergyLevel(moleEnergy);
+        mole.changeEnergyLevel(8.0f);
     }
 
     public void destroyWorm(BoardPosition position){

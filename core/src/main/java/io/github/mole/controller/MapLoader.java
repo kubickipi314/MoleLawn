@@ -10,7 +10,7 @@ public class MapLoader {
     public MapLoader() {
     }
 
-    public static TileType[][] loadMap(String filePath) {
+    public TileType[][] loadMap(String filePath) {
         Pixmap pixmap = new Pixmap(Gdx.files.internal(filePath));
         int width = pixmap.getWidth();
         int height = pixmap.getHeight();

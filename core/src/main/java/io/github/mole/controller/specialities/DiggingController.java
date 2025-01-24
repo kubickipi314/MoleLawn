@@ -59,9 +59,10 @@ public class DiggingController {
         }
 
         if (clearDigging){
-            int moleEnergy = Math.max(mole.getEnergyLevel() - 1, 0);
-            mole.setEnergyLevel(moleEnergy);
-            gamePresentable.setEnergyLevel(moleEnergy);
+            mole.changeEnergyLevel(-0.7f);
+        }
+        else {
+            mole.changeEnergyLevel(-0.3f);
         }
     }
 

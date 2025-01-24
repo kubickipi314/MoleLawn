@@ -10,7 +10,7 @@ public class EndingTextureLoader {
     List<Texture> retryTextures;
 
     public EndingTextureLoader() {
-        //diedFromTextures = getTextureList("textures/ending/died_from", 6);
+        diedFromTextures = getTextureList("textures/ending/died_from", 8);
         retryTextures = getTextureList("textures/ending/retry", 17);
 
     }

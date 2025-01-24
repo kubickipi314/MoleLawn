@@ -1,6 +1,5 @@
 package io.github.mole.presenter.specialities;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -11,7 +10,6 @@ import static io.github.mole.CONST.ONE;
 import static io.github.mole.CONST.TWO;
 
 public class BackgroundPresenter  implements PresenterSpeciality {
-
     int positionY = (CONST.BOARD_HEIGHT - 1) * 50;
     SightView background1;
     SightView background2;
