@@ -7,7 +7,7 @@ import io.github.mole.utils.BoardPosition;
 import io.github.mole.utils.ObjectType;
 import io.github.mole.view.ObjectView;
 
-import static io.github.mole.utils.ObjectType.WATER;
+import static io.github.mole.utils.ObjectType.*;
 
 public class SingleObject {
     ObjectType type;
@@ -32,6 +32,8 @@ public class SingleObject {
 
     private float getTime(ObjectType type) {
         if (type.equals(WATER))return 0.2f;
+        if (type.equals(PETARD))return 0.15f;
+        if (type.equals(EXPLOSION))return 0.2f;
         return 1.2f;
     }
 

@@ -1,7 +1,6 @@
 package io.github.mole.presenter.helpers;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import io.github.mole.CONST;
 import io.github.mole.utils.BoardPosition;
 import io.github.mole.utils.ObjectType;
@@ -34,6 +33,7 @@ public class CoordinatesCalculator {
             case HILL, CANAL -> new Vector2(3 * tileSize, tileSize);
             case BOOT -> new Vector2(4 * tileSize, 2 * tileSize);
             case SPADE -> new Vector2(tileSize, 3 * tileSize);
+            case PETARD -> new Vector2(tileSize, 4 * tileSize);
             default -> new Vector2(tileSize, tileSize);
         };
     }
