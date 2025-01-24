@@ -4,7 +4,7 @@ public enum DeathType {
     SPADE,
     BOOT,
     SUFFOCATION,
-    EXHAUSTION,
+    HUNGER,
     WATER,
     SMOKE,
     EXPLOSION

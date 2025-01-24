@@ -18,13 +18,13 @@ public class DashboardPresenter implements PresenterSpeciality {
     float energyStripX;
     float airFrameX;
     float airStripX;
-
     float airStripLength;
     float dashboardY;
-
     float currentY;
 
     float movementTime;
+
+    boolean isAnimation;
 
     boolean isHiding;
     public DashboardPresenter() {
@@ -60,8 +60,8 @@ public class DashboardPresenter implements PresenterSpeciality {
         airStrip.setPosition(airStripX - airStripLength, dashboardY);
     }
 
-    public void setEnergyLevel(int energy) {
-        energyStrip.setSize((float) (132 * energy) / 20, 40);
+    public void setEnergyLevel(float energy) {
+        energyStrip.setSize((132 * energy) / 20, 40);
     }
 
     public void setAirLevel(float air) {
@@ -88,6 +88,15 @@ public class DashboardPresenter implements PresenterSpeciality {
             airFrame.setPosition(airFrameX, currentY);
             airStrip.setPosition(airStripX - airStripLength, currentY);
         }
+        if (isAnimation) {
+            movementTime += Gdx.graphics.getDeltaTime();
+            float animationDuration = 0.5f;
+            float progress = Math.min(1.0f, movementTime / animationDuration);
+
+
+
+        }
+
     }
 
 
@@ -99,5 +108,8 @@ public class DashboardPresenter implements PresenterSpeciality {
             airFrame.draw(batch);
             airStrip.draw(batch);
         }
+    }
+
+    public void startAnimation() {
     }
 }

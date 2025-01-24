@@ -110,6 +110,7 @@ public class GamePresenter implements GamePresentable, GameInputable {
     public void moveMole(BoardPosition destination, MoveDirection direction, MoveStyle style) {
         molePresenter.moveMole(destination, direction, style);
         boardPresenter.startAnimation();
+        dashboardPresenter.startAnimation();
     }
 
     public void changeTile(BoardPosition position, MoveDirection direction, TileType type) {
@@ -128,7 +129,7 @@ public class GamePresenter implements GamePresentable, GameInputable {
         boardPresenter.setTile(position, type);
     }
 
-    public void setEnergyLevel(int energyLevel) {
+    public void setEnergyLevel(float energyLevel) {
         dashboardPresenter.setEnergyLevel(energyLevel);
     }
 

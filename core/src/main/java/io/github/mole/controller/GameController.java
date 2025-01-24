@@ -75,7 +75,7 @@ public class GameController implements GameControllable {
     }
 
     public void makeMove(MoveDirection direction) {
-
+        mole.changeEnergyLevel(-0.1f);
         int destinationX = mole.getX();
         int destinationY = mole.getY();
 
@@ -92,6 +92,10 @@ public class GameController implements GameControllable {
             case DOWN:
                 destinationY++;
                 break;
+        }
+
+        if (!direction.equals(NONE)){
+            mole.changeEnergyLevel(-0.1f);
         }
 
         spadeController.preMoveHandle();
@@ -115,6 +119,7 @@ public class GameController implements GameControllable {
         bootController.postMoveHandle();
         wormsController.postMoveHandle();
         handleEncounters();
+        handleEnergy();
 
         gamePresentable.moveMole(mole.getPosition(), direction, moveStyle);
 
@@ -123,6 +128,7 @@ public class GameController implements GameControllable {
 
         mole.setAirLevel((mole.getAirLevel() + board.getAirLevel(mole.getX(), mole.getY()))/2);
         gamePresentable.setAirLevel(mole.getAirLevel());
+        handleAir();
     }
 
     @Override
@@ -137,11 +143,10 @@ public class GameController implements GameControllable {
 
         BoardPosition destination = new BoardPosition(destinationX, destinationY);
         if (board.isObject(destination,BOOT)) return false;
-        if (board.getType(destinationX, destinationY).equals(STONE)) return false;
-        return true;
+        return !board.getType(destination).equals(STONE);
     }
 
-    public void handleEncounters() {
+    private void handleEncounters() {
         BoardPosition position = mole.getPosition();
         if (board.isAnyObject(position)) {
             if (board.isObject(position, WORM)) {
@@ -155,6 +160,22 @@ public class GameController implements GameControllable {
                 System.out.println("die from Boot");
                 gamePresentable.moleDie(DeathType.BOOT);
             }
+        }
+    }
+
+    private void handleEnergy(){
+        gamePresentable.setEnergyLevel(mole.getEnergyLevel());
+
+        if (mole.getEnergyLevel() <= 0) {
+            System.out.println("die from Hunger");
+            gamePresentable.moleDie(DeathType.HUNGER);
+        }
+    }
+
+    private void handleAir(){
+        if (mole.getAirLevel() <= 0.1f){
+            System.out.println("die from Suffocation");
+            gamePresentable.moleDie(DeathType.SUFFOCATION);
         }
     }
 
