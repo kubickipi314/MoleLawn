@@ -70,6 +70,10 @@ public class EndingPresenter implements PresenterSpeciality {
             deathTypeSprite = new Sprite(new Texture("textures/ending/suffocation.png"));
             deathTypeSprite.setSize(180, 90);
         }
+        if (deathType.equals(DeathType.EXPLOSION)) {
+            deathTypeSprite = new Sprite(new Texture("textures/ending/explosion.png"));
+            deathTypeSprite.setSize(180, 90);
+        }
 
 
         printedSprites = new ArrayList<>();

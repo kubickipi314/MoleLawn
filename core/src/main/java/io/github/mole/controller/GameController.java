@@ -8,12 +8,10 @@ import io.github.mole.model.Board;
 import io.github.mole.model.Mole;
 import io.github.mole.utils.*;
 
-import static io.github.mole.utils.MoveDirection.NONE;
-import static io.github.mole.utils.MoveStyle.DIGGING;
-import static io.github.mole.utils.MoveStyle.FREE;
+import static io.github.mole.utils.MoveDirection.*;
+import static io.github.mole.utils.MoveStyle.*;
 import static io.github.mole.utils.ObjectType.*;
-import static io.github.mole.utils.TileType.DIRT;
-import static io.github.mole.utils.TileType.STONE;
+import static io.github.mole.utils.TileType.*;
 
 public class GameController implements GameControllable {
     GamePresentable gamePresentable;
@@ -29,6 +27,7 @@ public class GameController implements GameControllable {
     SpadeController spadeController;
     WormsController wormsController;
     BootController bootController;
+    PetardController petardController;
     PositionHelper positionHelper;
     AirController airController;
 
@@ -46,6 +45,7 @@ public class GameController implements GameControllable {
         spadeController = new SpadeController(board, mole);
         wormsController = new WormsController(board, mole);
         bootController = new BootController(board, mole, positionHelper);
+        petardController = new PetardController(board, mole, positionHelper);
 
         diggingController.setSpade(spadeController);
         diggingController.setWorms(wormsController);
@@ -57,6 +57,7 @@ public class GameController implements GameControllable {
         spadeController.setPresentable(gamePresentable);
         wormsController.setPresentable(gamePresentable);
         bootController.setPresentable(gamePresentable);
+        petardController.setPresentable(gamePresentable);
     }
 
     public void initializePresentable() {
@@ -118,6 +119,7 @@ public class GameController implements GameControllable {
         spadeController.postMoveHandle();
         bootController.postMoveHandle();
         wormsController.postMoveHandle();
+        petardController.postMoveHandle();
         handleEncounters();
         handleEnergy();
 
@@ -153,11 +155,9 @@ public class GameController implements GameControllable {
                wormsController.eatWorm();
             }
             if (board.isObject(position, SPADE) || board.isObject(positionHelper.getBottomPosition(), SPADE)) {
-                System.out.println("die from Spade");
                 gamePresentable.moleDie(DeathType.SPADE);
             }
             if (board.isObject(position, BOOT)) {
-                System.out.println("die from Boot");
                 gamePresentable.moleDie(DeathType.BOOT);
             }
         }
@@ -165,16 +165,13 @@ public class GameController implements GameControllable {
 
     private void handleEnergy(){
         gamePresentable.setEnergyLevel(mole.getEnergyLevel());
-
         if (mole.getEnergyLevel() <= 0) {
-            System.out.println("die from Hunger");
             gamePresentable.moleDie(DeathType.HUNGER);
         }
     }
 
     private void handleAir(){
         if (mole.getAirLevel() <= 0.1f){
-            System.out.println("die from Suffocation");
             gamePresentable.moleDie(DeathType.SUFFOCATION);
         }
     }

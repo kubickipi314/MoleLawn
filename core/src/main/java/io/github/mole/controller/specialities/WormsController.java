@@ -66,7 +66,7 @@ public class WormsController {
         board.removeObject(mole.getPosition(), WORM);
         gamePresentable.deleteObject(WORM, mole.getPosition());
         wormsNumber--;
-        mole.changeEnergyLevel(8.0f);
+        mole.changeEnergyLevel(5.0f);
     }
 
     public void destroyWorm(BoardPosition position){

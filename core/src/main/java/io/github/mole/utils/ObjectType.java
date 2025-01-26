@@ -7,6 +7,8 @@ public enum ObjectType {
     HILL,
     BOOT,
     WORM,
+    PETARD,
+    EXPLOSION,
     WATER,
     SMOKE,
     MOSS

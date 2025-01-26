@@ -38,6 +38,14 @@ public class ObjectsTextureLoader {
         insertedObjects.put(BOOT, getTextureList("textures/objects/boot/insert",6));
         deletedObjects.put(BOOT, getTextureList("textures/objects/boot/delete",11));
 
+        stillObjects.put(PETARD, getTextureList("textures/objects/petard/still",2));
+        insertedObjects.put(PETARD, getTextureList("textures/objects/petard/insert",15));
+        deletedObjects.put(PETARD, getTextureList("textures/objects/petard/delete",2));
+
+        stillObjects.put(EXPLOSION, getTextureList("textures/objects/explosion/still",2));
+        insertedObjects.put(EXPLOSION, getTextureList("textures/objects/explosion/insert",3));
+        deletedObjects.put(EXPLOSION, getTextureList("textures/objects/explosion/delete",3));
+
         stillObjects.put(WORM, getTextureList("textures/objects/worm/still",2));
         insertedObjects.put(WORM, getTextureList("textures/objects/worm/insert",3));
         deletedObjects.put(WORM, getTextureList("textures/objects/worm/delete",3));
