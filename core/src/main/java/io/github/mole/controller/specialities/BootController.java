@@ -32,7 +32,7 @@ public class BootController {
         this.mole = mole;
         this.positionHelper = positionHelper;
 
-        activationCounter = 8;
+        activationCounter = 30;
         isBoot = false;
         endBoot = false;
     }
@@ -58,7 +58,7 @@ public class BootController {
             }
         } else if (activationCounter == 0) {
             tryPutBoot();
-            activationCounter = 15;
+            activationCounter = 20;
         } else {
             activationCounter--;
         }

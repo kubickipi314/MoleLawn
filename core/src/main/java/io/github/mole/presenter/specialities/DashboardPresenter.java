@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import io.github.mole.CONST;
 
 import static io.github.mole.CONST.ZERO;
 
@@ -61,7 +62,7 @@ public class DashboardPresenter implements PresenterSpeciality {
     }
 
     public void setEnergyLevel(float energy) {
-        energyStrip.setSize((132 * energy) / 20, 40);
+        energyStrip.setSize((132 * energy) / CONST.ENERGY_LEVEL, 40);
     }
 
     public void setAirLevel(float air) {

@@ -8,7 +8,10 @@ import io.github.mole.utils.BoardPosition;
 import io.github.mole.utils.DeathType;
 import io.github.mole.utils.TileType;
 
+import static io.github.mole.utils.MoveDirection.DOWN;
 import static io.github.mole.utils.ObjectType.*;
+import static io.github.mole.utils.TileType.DIRT;
+import static io.github.mole.utils.TileType.TUNNEL;
 import static java.lang.Math.abs;
 
 public class PetardController {
@@ -28,7 +31,7 @@ public class PetardController {
         this.mole = mole;
         this.positionHelper = positionHelper;
 
-        activationCounter = 8;
+        activationCounter = 15;
         isPetard = false;
     }
 
@@ -43,7 +46,7 @@ public class PetardController {
             endExplostion();
         } else if (activationCounter == 0) {
             tryThrowPetard();
-            activationCounter = 15;
+            activationCounter = 25;
         } else {
             activationCounter--;
         }
@@ -57,6 +60,7 @@ public class PetardController {
         int petardY = petardPosition.y();
         for (int x = -1; x <= 1; ++x) {
             for (int y = -1; y <= 1; ++y) {
+                if (petardX + x < 0 || x + petardX >= board.getWidth()) return;
                 BoardPosition position = new BoardPosition(petardX + x, petardY + y);
                 tryExplode(position);
             }
@@ -68,13 +72,32 @@ public class PetardController {
     private void endExplostion() {
         int petardX = petardPosition.x();
         int petardY = petardPosition.y();
-        for (int x = -1; x <= 1; ++x) {
-            for (int y = -1; y <= 1; ++y) {
+        for (int x = 1; x >= -1; --x) {
+            for (int y = 1; y >= -1; --y) {
+                if (petardX + x < 0 || x + petardX >= board.getWidth()) return;
                 BoardPosition position = new BoardPosition(petardX + x, petardY + y);
                 gamePresentable.deleteObject(EXPLOSION, position);
+                tryExplodeBury(position);
             }
         }
         isExplosion = false;
+    }
+
+    void tryExplodeBury(BoardPosition position) {
+        if (board.getType(position).equals(TUNNEL) && !mole.getPosition().equals(position)) {
+            BoardPosition upper = new BoardPosition(position.x(), position.y() - 1);
+            if (board.getType(upper).equals(DIRT)) {
+                board.setType(position, DIRT);
+                gamePresentable.changeTile(position, DOWN, DIRT);
+
+                if (board.isAnyObject(position)) {
+                    if (board.isObject(position, WORM)) {
+                        board.removeObject(position, WORM);
+                        gamePresentable.deleteObject(WORM, position);
+                    }
+                }
+            }
+        }
     }
 
     private void tryExplode(BoardPosition position) {
@@ -134,7 +157,7 @@ public class PetardController {
 
     int getPetardY() {
         int petardY = 1;
-        for (int y = 2; y <= mole.getY(); ++y) {
+        for (int y = 2; y <= 4; ++y) {
             if (!board.getType(holeX, y).equals(TileType.TUNNEL)) break;
             petardY = y;
         }
