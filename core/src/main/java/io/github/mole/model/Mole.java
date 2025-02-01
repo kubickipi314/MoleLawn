@@ -2,6 +2,7 @@ package io.github.mole.model;
 
 import io.github.mole.CONST;
 import io.github.mole.utils.BoardPosition;
+import io.github.mole.utils.ObjectType;
 
 public class Mole {
     int moleX;
@@ -9,11 +10,15 @@ public class Mole {
     float energyLevel;
     float airLevel;
 
+    boolean emptyStorage;
+    ObjectType storage;
+
     public Mole() {
         moleX = CONST.MOLE_POSITION_X;
         moleY = CONST.MOLE_POSITION_Y;
         energyLevel = CONST.ENERGY_LEVEL;
         airLevel = 1.0f;
+        emptyStorage = true;
     }
 
     public BoardPosition getPosition() {
@@ -53,5 +58,22 @@ public class Mole {
         energyLevel += energyChange;
         energyLevel = Math.max(energyLevel, 0);
         energyLevel = Math.min(energyLevel, CONST.ENERGY_LEVEL);
+    }
+
+    public boolean isEmptyStorage(){
+        return emptyStorage;
+    }
+
+    public void putStorage(ObjectType objectType){
+        storage = objectType;
+        emptyStorage = false;
+    }
+
+    public void emptyStorage(){
+        emptyStorage = true;
+    }
+
+    public ObjectType getStorage(){
+        return storage;
     }
 }

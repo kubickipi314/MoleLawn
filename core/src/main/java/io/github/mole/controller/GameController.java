@@ -26,6 +26,7 @@ public class GameController implements GameControllable {
     DiggingController diggingController;
     SpadeController spadeController;
     WormsController wormsController;
+    MossController mossController;
     BootController bootController;
     PetardController petardController;
     PositionHelper positionHelper;
@@ -44,11 +45,15 @@ public class GameController implements GameControllable {
         diggingController = new DiggingController(board, mole, positionHelper);
         spadeController = new SpadeController(board, mole);
         wormsController = new WormsController(board, mole);
+        mossController = new MossController(board, mole);
         bootController = new BootController(board, mole, positionHelper);
         petardController = new PetardController(board, mole, positionHelper);
 
         diggingController.setSpade(spadeController);
         diggingController.setWorms(wormsController);
+        diggingController.setMossController(mossController);
+        bootController.setMossController(mossController);
+        petardController.setMossController(mossController);
     }
 
     public void setPresentable(GamePresentable gamePresentable) {
@@ -56,6 +61,7 @@ public class GameController implements GameControllable {
         diggingController.setPresentable(gamePresentable);
         spadeController.setPresentable(gamePresentable);
         wormsController.setPresentable(gamePresentable);
+        mossController.setPresentable(gamePresentable);
         bootController.setPresentable(gamePresentable);
         petardController.setPresentable(gamePresentable);
     }
@@ -116,10 +122,15 @@ public class GameController implements GameControllable {
             moveStyle = DIGGING;
         }
 
+        if (direction.equals(NONE)){
+            handleKeepingStorage();
+        }
+
         spadeController.postMoveHandle();
         bootController.postMoveHandle();
         wormsController.postMoveHandle();
         petardController.postMoveHandle();
+        mossController.postMoveHandle();
         handleEncounters();
         handleEnergy();
 
@@ -173,6 +184,24 @@ public class GameController implements GameControllable {
     private void handleAir(){
         if (mole.getAirLevel() <= 0.1f){
             gamePresentable.moleDie(DeathType.SUFFOCATION);
+        }
+    }
+
+    private void handleKeepingStorage(){
+        BoardPosition position = mole.getPosition();
+        if (mole.isEmptyStorage()){
+            if (board.isObject(position, MOSS)){
+                board.removeObject(position, MOSS);
+                gamePresentable.deleteObject(MOSS, position);
+                if (position.y() == 0) mole.putStorage(MOSS);
+            }
+        }
+        else if (mole.getStorage().equals(MOSS)){
+            if (!board.isObject(position, MOSS)){
+                board.addObject(position, MOSS);
+                gamePresentable.insertObject(MOSS, position);
+                mole.emptyStorage();
+            }
         }
     }
 

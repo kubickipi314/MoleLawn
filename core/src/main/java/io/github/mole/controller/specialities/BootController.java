@@ -20,6 +20,8 @@ public class BootController {
     PositionHelper positionHelper;
     GamePresentable gamePresentable;
 
+    MossController mossController;
+
     int activationCounter;
     boolean isBoot;
     boolean endBoot;
@@ -39,6 +41,10 @@ public class BootController {
 
     public void setPresentable(GamePresentable gamePresentable) {
         this.gamePresentable = gamePresentable;
+    }
+
+    public void setMossController(MossController mossController) {
+        this.mossController = mossController;
     }
 
     public void preMoveHandle(){
@@ -138,6 +144,7 @@ public class BootController {
                     gamePresentable.deleteObject(WORM, position);
                 }
             }
+            mossController.tryDeleteMoss(position);
         }
     }
 }

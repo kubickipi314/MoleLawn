@@ -13,6 +13,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static io.github.mole.CONST.ONE;
+import static io.github.mole.utils.ObjectType.MOSS;
+import static io.github.mole.utils.ObjectType.NEST;
 
 public class ObjectsPresenter  implements PresenterSpeciality {
     ObjectsTextureLoader loader;
@@ -29,6 +31,7 @@ public class ObjectsPresenter  implements PresenterSpeciality {
     }
 
     public void insertObject(ObjectType type, BoardPosition boardPosition) {
+        if (type.equals(MOSS) && boardPosition.y() > 0) type = NEST;
         Vector2 position = calculator.getObjectCoordinates(type, boardPosition);
         Vector2 size = calculator.getObjectSize(type);
         ObjectView newObjectView = new ObjectView(type, position, size, loader);
@@ -37,6 +40,7 @@ public class ObjectsPresenter  implements PresenterSpeciality {
     }
 
     public void deleteObject(ObjectType type, BoardPosition boardPosition) {
+        if (type.equals(MOSS) && boardPosition.y() > 0) type = NEST;
         for (var object : objects.get(type)) {
             if (object.getPosition().equals(boardPosition)) {
                 object.delete();

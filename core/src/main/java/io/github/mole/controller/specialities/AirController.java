@@ -50,7 +50,7 @@ public class AirController {
         if (board.getType(mole.getPosition()).equals(TUNNEL)) {
             actualAir[mole.getY()][mole.getX()] = max(0, actualAir[mole.getY()][mole.getX()] - 0.4f);
         }
-        for (int i = 0; i < 10; ++i) stepAirSimulation();
+        for (int i = 0; i < 15; ++i) stepAirSimulation();
         saveAirToBoard();
     }
 

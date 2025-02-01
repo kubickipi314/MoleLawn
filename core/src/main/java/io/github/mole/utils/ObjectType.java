@@ -11,5 +11,6 @@ public enum ObjectType {
     EXPLOSION,
     WATER,
     SMOKE,
-    MOSS
+    MOSS,
+    NEST
 }

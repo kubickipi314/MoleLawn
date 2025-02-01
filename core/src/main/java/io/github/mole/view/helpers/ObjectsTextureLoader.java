@@ -53,6 +53,14 @@ public class ObjectsTextureLoader {
         stillObjects.put(WATER, getTextureList("textures/objects/water/still",7));
         insertedObjects.put(WATER, getTextureList("textures/objects/water/still",2));
         deletedObjects.put(WATER, getTextureList("textures/objects/water/still",2));
+
+        stillObjects.put(MOSS, getTextureList("textures/objects/moss/still",2));
+        insertedObjects.put(MOSS, getTextureList("textures/objects/moss/insert",3));
+        deletedObjects.put(MOSS, getTextureList("textures/objects/moss/delete",3));
+
+        stillObjects.put(NEST, getTextureList("textures/objects/nest/still",2));
+        insertedObjects.put(NEST, getTextureList("textures/objects/nest/insert",4));
+        deletedObjects.put(NEST, getTextureList("textures/objects/nest/delete",3));
     }
 
     private List<Texture> getTextureList(String name, int count) {

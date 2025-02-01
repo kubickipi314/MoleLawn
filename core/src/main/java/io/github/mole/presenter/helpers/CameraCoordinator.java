@@ -34,7 +34,7 @@ public class CameraCoordinator {
     private void initialize() {
         int windowWidth = Gdx.graphics.getWidth();
         int windowHeight = Gdx.graphics.getHeight();
-        camera.setToOrtho(false, (float) windowWidth / 2, (float) windowHeight / 2);
+        camera.setToOrtho(false, (float) windowWidth / CONST.LOCAL_VIEW, (float) windowHeight / CONST.LOCAL_VIEW);
         camera.position.lerp(new Vector3(200, 0, 0), 0.1f);
 
         float viewWidth = camera.viewportWidth;
