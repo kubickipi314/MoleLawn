@@ -20,6 +20,8 @@ public class PetardController {
     PositionHelper positionHelper;
     GamePresentable gamePresentable;
 
+    MossController mossController;
+
     int activationCounter;
     boolean isPetard;
     boolean isExplosion;
@@ -31,12 +33,15 @@ public class PetardController {
         this.mole = mole;
         this.positionHelper = positionHelper;
 
-        activationCounter = 15;
+        activationCounter = 50;
         isPetard = false;
     }
 
     public void setPresentable(GamePresentable gamePresentable) {
         this.gamePresentable = gamePresentable;
+    }
+    public void setMossController(MossController mossController) {
+        this.mossController = mossController;
     }
 
     public void postMoveHandle() {
@@ -108,6 +113,7 @@ public class PetardController {
                     gamePresentable.deleteObject(WORM, position);
                 }
             }
+            mossController.tryDeleteMoss(position);
             gamePresentable.insertObject(EXPLOSION, position);
 
             if (mole.getPosition().equals(position)) {

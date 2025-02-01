@@ -18,6 +18,7 @@ public class DiggingController {
     GamePresentable gamePresentable;
     SpadeController spadeController;
     WormsController wormsController;
+    MossController mossController;
     public DiggingController(Board board, Mole mole, PositionHelper positionHelper) {
         this.board = board;
         this.mole = mole;
@@ -68,6 +69,7 @@ public class DiggingController {
 
     private void tryBuryTunnel(BoardPosition position, MoveDirection direction) {
         if (board.getType(position).equals(TUNNEL)) {
+            if (board.isObject(position, MOSS)) return;
             board.setType(position, DIRT);
             gamePresentable.changeTile(position, direction, DIRT);
             if (board.isAnyObject(position)) {
@@ -86,6 +88,7 @@ public class DiggingController {
                 board.addObject(position, CANAL);
                 gamePresentable.insertObject(CANAL, position);
                 spadeController.activateByCanal();
+                mossController.tryDeleteMoss(position);
             }
         }
     }
@@ -102,6 +105,8 @@ public class DiggingController {
                     board.removeObject(position, CANAL);
                     gamePresentable.deleteObject(CANAL, position);
                 }
+
+                mossController.tryDeleteMoss(position);
             }
         }
     }
@@ -111,5 +116,8 @@ public class DiggingController {
     }
     public void setWorms(WormsController wormsController) {
         this.wormsController = wormsController;
+    }
+    public void setMossController(MossController mossController) {
+        this.mossController = mossController;
     }
 }
