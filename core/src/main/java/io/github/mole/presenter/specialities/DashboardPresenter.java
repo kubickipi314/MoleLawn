@@ -7,68 +7,40 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import io.github.mole.CONST;
+import io.github.mole.view.AirBarView;
+import io.github.mole.view.EnergyBarView;
+import io.github.mole.view.StorageView;
 
 import static io.github.mole.CONST.ZERO;
 
 public class DashboardPresenter implements PresenterSpeciality {
-    Sprite energyFrame;
-    Sprite energyStrip;
-    Sprite airFrame;
-    Sprite airStrip;
-    float energyFrameX;
-    float energyStripX;
-    float airFrameX;
-    float airStripX;
-    float airStripLength;
+    EnergyBarView energyBarView;
+    AirBarView airBarView;
+    StorageView storageView;
     float dashboardY;
     float currentY;
-
     float movementTime;
-
     boolean isAnimation;
-
     boolean isHiding;
     public DashboardPresenter() {
-        energyFrame = new Sprite(new Texture("textures/dashboard/energy/frame.png"));
-        energyFrame.setSize(160, 40);
-
-        energyStrip = new Sprite(new Texture("textures/dashboard/energy/strip.png"));
-        energyStrip.setSize(132, 40);
-
-        airFrame = new Sprite(new Texture("textures/dashboard/energy/frame.png"));
-        airFrame.setSize(160, 40);
-
-        airStrip = new Sprite(new Texture("textures/dashboard/air/strip.png"));
-        airStrip.setSize(40, 40);
-
+        energyBarView = new EnergyBarView();
+        airBarView = new AirBarView();
+        storageView = new StorageView();
         isHiding = false;
     }
 
     public void setPosition(Vector3 cameraPosition, float viewWidth, float viewHeight) {
-        dashboardY = cameraPosition.y - viewHeight / 2;
-        energyFrameX = cameraPosition.x - viewWidth / 2;
-        energyStripX = energyFrameX + 12;
-
-        energyFrame.setPosition(energyFrameX, dashboardY);
-        energyStrip.setPosition(energyStripX, dashboardY);
-
-        airFrameX = cameraPosition.x + viewWidth / 2 - 165;
-
-        airStripX = airFrameX + 12 + 132;
-        airStrip.setSize(airStripLength, 40);
-
-        airFrame.setPosition(airFrameX, dashboardY);
-        airStrip.setPosition(airStripX - airStripLength, dashboardY);
+        energyBarView.setPosition(cameraPosition, viewWidth, viewHeight);
+        airBarView.setPosition(cameraPosition, viewWidth, viewHeight);
+        storageView.setPosition(cameraPosition, viewWidth, viewHeight);
     }
 
     public void setEnergyLevel(float energy) {
-        energyStrip.setSize((132 * energy) / CONST.ENERGY_LEVEL, 40);
+        energyBarView.setEnergyLevel(energy);
     }
 
     public void setAirLevel(float air) {
-        airStripLength = 132 * air;
-        airStrip.setPosition(airStripX - airStripLength, dashboardY);
-        airStrip.setSize(airStripLength, 40);
+        airBarView.setAirLevel(air);
     }
 
     public void hideDashboard() {
@@ -84,33 +56,34 @@ public class DashboardPresenter implements PresenterSpeciality {
 
             currentY = dashboardY - 40 * progress;
 
-            energyFrame.setPosition(energyFrameX, currentY);
-            energyStrip.setPosition(energyStripX, currentY);
-            airFrame.setPosition(airFrameX, currentY);
-            airStrip.setPosition(airStripX - airStripLength, currentY);
+            energyBarView.setPosition(currentY);
+            airBarView.setPosition(currentY);
+            storageView.setPosition(currentY);
         }
         if (isAnimation) {
             movementTime += Gdx.graphics.getDeltaTime();
             float animationDuration = 0.5f;
             float progress = Math.min(1.0f, movementTime / animationDuration);
 
+            energyBarView.update(progress);
+            airBarView.update(progress);
 
-
+            if (progress >= 1) {
+                movementTime = 0;
+                isAnimation = false;
+            }
         }
-
     }
-
 
     public void render(SpriteBatch batch, int stageNumber) {
         if (stageNumber == ZERO) {
-            energyStrip.draw(batch);
-            energyFrame.draw(batch);
-
-            airFrame.draw(batch);
-            airStrip.draw(batch);
+            energyBarView.draw(batch);
+            airBarView.draw(batch);
+            storageView.draw(batch);
         }
     }
 
     public void startAnimation() {
+        isAnimation = true;
     }
 }
