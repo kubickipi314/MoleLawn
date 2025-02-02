@@ -71,7 +71,7 @@ public class GamePresenter implements GamePresentable, GameInputable {
         boardPresenter.render(batch, ZERO);
         dashboardPresenter.render(batch, ZERO);
 
-        if (!gameOn){
+        if (!gameOn) {
             endingPresenter.render(batch, ONE);
         }
         batch.end();
@@ -91,11 +91,10 @@ public class GamePresenter implements GamePresentable, GameInputable {
         }
     }
 
-    private void handleEnding(){
-        if (endingOn){
+    private void handleEnding() {
+        if (endingOn) {
             endingPresenter.update();
-        }
-        else {
+        } else {
             endingOn = true;
             cameraCoordinator.setFinalPresenter(endingPresenter);
             dashboardPresenter.hideDashboard();
@@ -143,9 +142,18 @@ public class GamePresenter implements GamePresentable, GameInputable {
         gameOn = false;
     }
 
+    public void putStorage(ObjectType type) {
+        dashboardPresenter.putStorage(type);
+    }
+
+    public void removeStorage() {
+        dashboardPresenter.removeStorage();
+    }
+
     public void setAirMask(float[][] airMask) {
         boardPresenter.updateMask(airMask);
     }
+
     public void retry() {
         controllable.retry();
     }

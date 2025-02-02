@@ -22,4 +22,8 @@ public interface GamePresentable {
     void moleDie(DeathType spade);
 
     void setAirMask(float[][] airMask);
+
+    void putStorage(ObjectType objectType);
+
+    void removeStorage();
 }

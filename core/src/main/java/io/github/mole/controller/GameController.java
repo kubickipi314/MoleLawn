@@ -193,7 +193,10 @@ public class GameController implements GameControllable {
             if (board.isObject(position, MOSS)){
                 board.removeObject(position, MOSS);
                 gamePresentable.deleteObject(MOSS, position);
-                if (position.y() == 0) mole.putStorage(MOSS);
+                if (position.y() == 0) {
+                    mole.putStorage(MOSS);
+                    gamePresentable.putStorage(MOSS);
+                }
             }
         }
         else if (mole.getStorage().equals(MOSS)){
@@ -201,6 +204,7 @@ public class GameController implements GameControllable {
                 board.addObject(position, MOSS);
                 gamePresentable.insertObject(MOSS, position);
                 mole.emptyStorage();
+                gamePresentable.removeStorage();
             }
         }
     }
