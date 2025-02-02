@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import io.github.mole.CONST;
+import io.github.mole.utils.ObjectType;
 import io.github.mole.view.AirBarView;
 import io.github.mole.view.EnergyBarView;
 import io.github.mole.view.StorageView;
@@ -43,6 +44,12 @@ public class DashboardPresenter implements PresenterSpeciality {
         airBarView.setAirLevel(air);
     }
 
+    public void putStorage(ObjectType type) {
+        storageView.setObject(type);
+    }
+    public void removeStorage() {
+        storageView.removeObject();
+    }
     public void hideDashboard() {
         movementTime = 0;
         isHiding = true;
