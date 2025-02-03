@@ -46,14 +46,14 @@ public class AirBarView {
 
     public void update(float progress){
         float air = (airLevel - oldAirLevel) * progress + oldAirLevel;
-        airStripLength = 132 * air;
+        airStripLength = Math.max(132 * (air - 0.1f) / 0.9f, 0);
         airStrip.setPosition(airStripX - airStripLength, dashboardY);
         airStrip.setSize(airStripLength, 40);
     }
 
-    public void setPosition(float currentY){
-        airFrame.setPosition(airFrameX, currentY);
-        airStrip.setPosition(airStripX - airStripLength, currentY);
+    public void setPosition(float offset){
+        airFrame.setPosition(airFrameX, dashboardY - offset);
+        airStrip.setPosition(airStripX - airStripLength, dashboardY - offset);
     }
 
     public void draw(SpriteBatch batch){
