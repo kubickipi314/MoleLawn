@@ -13,9 +13,9 @@ We controll the mole by `arrows` and `space`.
 
 Mole is digging tunnels buring the the ground around. It must eat worms not to die from `Hunger` as well as keeping access to the air so as not to `Suffocate`.
 
-The `Lawn Owner` tries to kill our mole in many ways. For a now the main target is to survive satisfactorily long.
+The `Lawn Owner` tries to kill the mole in many ways. For a now the main target is to survive satisfactorily long.
 
-We can also collest `Moss` to make nest in the tunnel which will not be buried with dirt.
+We can also collesc `Moss` to make nest in the tunnel which will not be buried with dirt.
 
 ### Running
-Cloned repository requires gradlew. We simply build with `./gradlew build` and run with `./gradlew run`. Those commands are also in `build.sh` and `run.sh`
+Cloned repository requires gradlew. We simply build with `./gradlew build` and run with `./gradlew run`.
