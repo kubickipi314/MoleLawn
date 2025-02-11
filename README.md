@@ -15,7 +15,7 @@ Mole is digging tunnels buring the the ground around. It must eat worms not to d
 
 The `Lawn Owner` tries to kill the mole in many ways. For a now the main target is to survive satisfactorily long.
 
-We can also collesc `Moss` to make nest in the tunnel which will not be buried with dirt.
+We can also collect `Moss` to make nest in the tunnel which will not be buried with dirt.
 
 ### Running
 Cloned repository requires gradlew. We simply build with `./gradlew build` and run with `./gradlew run`.
