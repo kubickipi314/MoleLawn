@@ -13,5 +13,6 @@ public final class CONST {
     public static final int ZERO = 0;
     public static final int ONE = 1;
     public static final int TWO = 2;
-    public static final float LOCAL_VIEW = 2.2f;
+    public static final float LOCAL_VIEW = 2f;
+    public static final float TILE_SIZE = 50;
 }
