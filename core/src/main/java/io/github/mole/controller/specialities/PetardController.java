@@ -25,6 +25,7 @@ public class PetardController {
     int activationCounter;
     boolean isPetard;
     boolean isExplosion;
+    boolean isWaiting;
     int holeX;
     BoardPosition petardPosition;
 
@@ -33,7 +34,7 @@ public class PetardController {
         this.mole = mole;
         this.positionHelper = positionHelper;
 
-        activationCounter = 50;
+        activationCounter = 10;
         isPetard = false;
     }
 
@@ -46,14 +47,29 @@ public class PetardController {
 
     public void postMoveHandle() {
         if (isPetard) {
-            explodePetard();
+            if (isWaiting){
+                handleFailure();
+                isWaiting = false;
+            }
+            else {
+                explodePetard();
+            }
         } else if (isExplosion) {
             endExplostion();
         } else if (activationCounter == 0) {
             tryThrowPetard();
+            isWaiting = true;
             activationCounter = 25;
         } else {
             activationCounter--;
+        }
+    }
+
+    private void handleFailure() {
+        if (!board.getType(petardPosition).equals(TUNNEL)){
+            board.removeObject(petardPosition, PETARD);
+            gamePresentable.deleteObject(PETARD, petardPosition);
+            isPetard = false;
         }
     }
 

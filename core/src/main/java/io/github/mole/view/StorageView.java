@@ -56,8 +56,9 @@ public class StorageView {
         emptyStorage = true;
     }
 
-    public void setPosition(float currentY){
-        storageFrame.setPosition(storageFrameX, currentY);
+    public void setPosition(float offset){
+        storageFrame.setPosition(storageFrameX, dashboardY - offset);
+        storedObject.setPosition(storageFrameX, dashboardY - offset);
     }
 
     public void draw(SpriteBatch batch){

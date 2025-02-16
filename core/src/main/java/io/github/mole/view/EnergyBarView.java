@@ -35,9 +35,9 @@ public class EnergyBarView {
         energyStrip.setPosition(energyStripX, dashboardY);
     }
 
-    public void setPosition(float currentY) {
-        energyFrame.setPosition(energyFrameX, currentY);
-        energyStrip.setPosition(energyFrameX, currentY);
+    public void setPosition(float offset) {
+        energyFrame.setPosition(energyFrameX, dashboardY - offset);
+        energyStrip.setPosition(energyFrameX, dashboardY - offset);
     }
 
     public void setEnergyLevel(float energy) {

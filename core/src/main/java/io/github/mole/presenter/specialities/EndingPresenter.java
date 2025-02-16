@@ -91,7 +91,7 @@ public class EndingPresenter implements PresenterSpeciality {
         if (isEnding) {
             if (endingPhase == 0) {
                 animationTime += Gdx.graphics.getDeltaTime();
-                if (animationTime >= 0.5f) {
+                if (animationTime >= 0.9f) {
                     animationTime = 0;
                     endingPhase = 1;
                     actualFrame = 0;

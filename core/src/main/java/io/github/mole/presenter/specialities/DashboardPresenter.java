@@ -18,8 +18,6 @@ public class DashboardPresenter implements PresenterSpeciality {
     EnergyBarView energyBarView;
     AirBarView airBarView;
     StorageView storageView;
-    float dashboardY;
-    float currentY;
     float movementTime;
     boolean isAnimation;
     boolean isHiding;
@@ -58,14 +56,14 @@ public class DashboardPresenter implements PresenterSpeciality {
     public void update() {
         if (isHiding) {
             movementTime += Gdx.graphics.getDeltaTime();
-            float animationDuration = 0.5f;
+            float animationDuration = 1.2f;
             float progress = Math.min(1.0f, movementTime / animationDuration);
 
-            currentY = dashboardY - 40 * progress;
+            float offset = 100 * progress;
 
-            energyBarView.setPosition(currentY);
-            airBarView.setPosition(currentY);
-            storageView.setPosition(currentY);
+            energyBarView.setPosition(offset);
+            airBarView.setPosition(offset);
+            storageView.setPosition(offset);
         }
         if (isAnimation) {
             movementTime += Gdx.graphics.getDeltaTime();
