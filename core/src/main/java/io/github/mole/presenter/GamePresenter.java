@@ -3,7 +3,7 @@ package io.github.mole.presenter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import io.github.mole.controller.GameControllable;
+import io.github.mole.controllerr.GameControllable;
 import io.github.mole.presenter.helpers.CameraCoordinator;
 import io.github.mole.presenter.specialities.*;
 import io.github.mole.utils.*;
