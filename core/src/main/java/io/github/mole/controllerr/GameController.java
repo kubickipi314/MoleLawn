@@ -37,9 +37,13 @@ public class GameController implements GameControllable{
 
     @Override
     public void makeMove(MoveDirection direction) {
+        time.incrementTime();
+
         moleController.makeMove(direction);
         humanController.makeAction();
         environmentController.update();
+
+        moleController.setDashboard();
     }
 
     @Override

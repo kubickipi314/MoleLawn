@@ -12,7 +12,7 @@ public class Registry {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T get(Class<T> clazz) {
+    public <T> T get(Class<T> clazz) {
         return (T) registry.get(clazz);
     }
 }

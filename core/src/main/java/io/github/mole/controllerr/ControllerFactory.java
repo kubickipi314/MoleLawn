@@ -26,6 +26,7 @@ public class ControllerFactory {
 
 
         Registry registry= new Registry();
+        registry.register(AirController.class, new AirController(board, mole));
         registry.register(DirtController.class, new DirtController(board, registry));
         registry.register(HillsController.class, new HillsController(board, model.getHills(), registry));
         registry.register(MossController.class, new MossController(board, model.getMoss()));
@@ -33,7 +34,7 @@ public class ControllerFactory {
         registry.register(WaterController.class, new WaterController(board, model.getWater()));
         registry.register(WormsController.class, new WormsController(board, model.getWorms()));
 
-        EnvironmentController envController = new EnvironmentController(registry);
+        EnvironmentController envController = new EnvironmentController(board,registry);
 
 
         HumanController humanController = new HumanController(time, human);
@@ -44,12 +45,11 @@ public class ControllerFactory {
         humanController.setWaterAttack(new WaterAttackController(board, model.getWaterAttack(), registry));
 
 
-        MoleController moleController = new MoleController(mole);
+        MoleController moleController = new MoleController(board, mole, registry);
 
         GameController gameController = new GameController(moleController, humanController, envController);
         gameController.setTime(time);
-
-
+        gameController.setMain(main);
 
         return gameController;
     }
