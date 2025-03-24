@@ -1,4 +1,5 @@
 # MoleLawn
+![logo](https://github.com/user-attachments/assets/4ddce92a-3c25-4588-9579-6bfe18b84585)
 
 A survival/adventrue game telling a story of a Mole living inside the Lawn.\
 The aim was to create an enjoyable 2D digging-based game with pixel art.
