@@ -6,7 +6,7 @@ The aim was to create an enjoyable 2D digging-based game with pixel art.
 It is being written in Java using libGDX UI and it's still under construction.
 
 ### Web release
-There is also a JavaScript release deployed from Java with GTW compiler. You can play it [here](https://kubickipi314.github.io/MoleLawnWeb/).
+There is also a JavaScript release deployed from Java with GTW compiler. You can play it [HERE🕹](https://kubickipi314.github.io/MoleLawnWeb/).
 
 ### Appearance
 The lawn underground map consists of 8x8 pixel tiles that are being shaded depending on the air level.
@@ -26,3 +26,4 @@ We can also collect `Moss` to make nest in the tunnel which will not be buried w
 
 ### Running
 Cloned repository requires gradlew. We simply build with `./gradlew build` and run with `./gradlew run`.
+Or you can play web [release](https://kubickipi314.github.io/MoleLawnWeb/).
