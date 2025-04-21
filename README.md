@@ -6,7 +6,8 @@ The aim is to create an enjoyable game with pixel art.
 It is being written in Java using libGDX UI.
 Game is under construction in a middle stage
 ### Appearance
-![image](https://github.com/user-attachments/assets/1fd95633-e0ec-4a26-a1f5-041a31e34413)
+![image](https://github.com/user-attachments/assets/95c8b12f-f722-4488-8e5e-2130dd9b018e)
+
 
 ### Gameplay
 We control the mole by `arrows` and `space`.
